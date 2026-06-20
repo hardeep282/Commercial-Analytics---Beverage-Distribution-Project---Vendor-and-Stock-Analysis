@@ -1,2 +1,2 @@
-## __**Commercial-Analytics---Beverage-Distribution-Project---Vendor-and-Stock-Analysis**__
+## _**Commercial-Analytics---Beverage-Distribution-Project---Vendor-and-Stock-Analysis**_
 
