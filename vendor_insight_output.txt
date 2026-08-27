@@ -1,0 +1,55 @@
+VENDOR PERFORMANCE AI INSIGHT
+========================================
+
+# Beverage Vendor Performance Analysis
+
+## Executive Summary
+
+Your top 10 vendors represent **65% of total revenue** (~$294M), with several concerning patterns that require immediate attention.
+
+---
+
+## Concentration Risk
+
+**Moderate-to-High Concern**
+
+- **Diageo alone commands 15.2%** of your revenue—if they face supply disruptions or change terms, you're significantly exposed
+- Your **top 3 vendors control 31.5%** of revenue (Diageo, Martignetti, Pernod Ricard)
+- The flip side: you have reasonable diversification across the remaining vendors, with no other single vendor exceeding 7.2%
+
+---
+
+## Margin Concerns
+
+**Critical Issues Identified**
+
+| Vendor | Revenue | Margin | Problem |
+|--------|---------|--------|---------|
+| **Martignetti** | $41M | **-37.1%** | Losing ~$15M annually |
+| **M S Walker** | $15.4M | **-33.3%** | Losing ~$5M annually |
+| **Ultra Beverage** | $17.8M | **-17.4%** | Losing ~$3M annually |
+
+These three vendors represent **$74M in revenue but are destroying profitability.** You're essentially paying them to take your business.
+
+**Underperformers:**
+- Constellation Brands (10.1%) and E&J Gallo (11.4%) deliver weak margins despite significant volume
+
+**Bright Spot:**
+- Bacardi delivers your **best margin at 33.4%** with modest revenue—potential growth opportunity
+
+---
+
+## Top 3 Recommendations
+
+### 1. Immediately Renegotiate or Exit Negative-Margin Relationships
+Martignetti, M S Walker, and Ultra Beverage are costing you approximately **$23M in annual losses**. Demand pricing corrections within 30 days or begin transition planning. No volume justifies losing money on every sale.
+
+### 2. Rebalance Toward High-Margin Vendors
+Shift volume toward Bacardi (33.4%), Pernod Ricard (25.8%), and Diageo (22.4%). Even a 10% volume shift from loss-makers to these vendors could recover millions in margin.
+
+### 3. Reduce Diageo Dependency
+While Diageo performs well on margin, 15.2% concentration is risky. Develop secondary suppliers in their key categories to create negotiating leverage and supply chain resilience.
+
+---
+
+*Bottom line: You have a margin crisis masquerading as a vendor management problem. Fix the three money-losing relationships first—everything else is secondary.*
