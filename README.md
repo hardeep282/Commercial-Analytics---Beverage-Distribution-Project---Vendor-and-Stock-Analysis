@@ -23,6 +23,10 @@ Bronze → Silver → Gold data pipeline built on SQL Server Express:
 
 Key data decisions: micro-vendors under $10K revenue excluded from averages (a single vendor was distorting margin calculations by -1,487%); freight costs handled as vendor-level (MAX, not SUM) since they repeat across SKUs; three risk classifications (loss-making, dead stock, profitable-but-slow) calculated independently rather than additively.
 
+## Note on Data
+
+The raw dataset used in this project was purchased and is not included in this repository due to licensing restrictions on redistribution. All analysis, SQL scripts, notebooks, and results in this repo are original work built on that dataset. The schema includes vendor-level sales, purchase, and freight data across ~10,500 SKUs and 128 vendors — sufficient detail is provided in `SQL_Analysis/` to reproduce the pipeline against a similarly structured dataset.
+
 ## Tools Used
 
 - **SQL Server** — data warehousing, view architecture, cost/margin logic
@@ -47,14 +51,14 @@ Key data decisions: micro-vendors under $10K revenue excluded from averages (a s
 1. Clone this repo
 2. Install dependencies: `pip install -r requirements.txt`
 3. Copy `.env.example` to `.env` and add your own Anthropic API key
-4. Set up SQL Server Express with the provided schema/scripts in `SQL_Analysis/`
+4. Set up SQL Server Express with a similarly structured dataset and run the scripts in `SQL_Analysis/`
 5. Run `vendor_insights.py` to generate a live AI commercial summary from the vendor data
 
 ## Folder Guide
 
 | Folder | Contents |
 |---|---|
-| `Data/` | Source dataset(s) |
+| `Data/` | Not included — raw dataset was purchased and isn't licensed for redistribution. See note above. |
 | `SQL_Analysis/` | Bronze-Silver-Gold SQL scripts and views |
 | `Notebooks/` | Forecasting, clustering, and classification notebooks |
 | `Excel_Analysis/` | Interactive Excel workbook |
