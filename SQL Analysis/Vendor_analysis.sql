@@ -1,24 +1,74 @@
 
 
+-- ========================================================================================
+-- Beverage Distribution — Commercial Performance Analytics, Sales Planning & KPI Reporting
+-- Hardeep Bamrah
+-- ========================================================================================
 
+
+-- Selcting Raw Table to perform further operations
 
 USE Vendor_sales;
 
 
-
 --- Understanding rows and previewing data
 
-SELECT count(*) AS TotalRows FROM vendor_sales_summary;
+SELECT count(*) AS TotalRows 
+FROM dbo.vendor_sales_summary;
 
-SELECT TOP 50 * FROM vendor_sales_summary;
-GO
+
+SELECT * FROM dbo.vendor_sales_summary;
+
+SELECT 
+     VendorName,
+     Brand,
+     SUM(TotalSalesDollars) AS TotalRevenue,
+     SUM(FreightCost)   AS TotalFreight,
+     SUM(TotalExciseTax) AS TotalExcise,
+     COUNT(Description)    AS TotalSKUs
+
+
+     FROM dbo.vendor_sales_summary
+     
+     WHERE VendorName = 'DIAGEO NORTH AMERICA INC' AND Brand = '4261'
+     GROUP BY VendorName, Brand;
+
+
+
+
+SELECT
+    VendorName,
+    ROUND(SUM(TotalSalesQuantity), 0) AS AnnualUnits,
+    ROUND(SUM(TotalSalesDollars), 2)  AS AnnualRevenue
+FROM dbo.vendor_sales_summary
+WHERE VendorName = 'DIAGEO NORTH AMERICA INC'
+GROUP BY VendorName;
+
+
+
+-- Testing rows at granular level to understand how a freight cost is distributed --
+
+SELECT 
+     VendorName,
+     Brand,             
+     SUM(TotalSalesDollars)   AS Revenue,
+     SUM(FreightCost)         AS Freight,   
+     SUM(TotalExciseTax)      AS Exceise, 
+     COUNT(Description)       AS Describe      
+FROM dbo.vendor_sales_summary
+WHERE VendorName = 'MARTIGNETTI COMPANIES'
+GROUP BY VendorName, Brand;
+     
+
+
+
+
 
 
 
 -- =============================================
 -- VIEW: dbo.vw_VendorRevenueSummary
 -- PURPOSE: Revenue and profit KPIs by vendor
--- FEEDS: Power BI Page 1 — Executive Summary
 -- =============================================
 
 IF OBJECT_ID('dbo.vw_VendorRevenueSummary', 'V') IS NOT NULL
@@ -34,13 +84,25 @@ SELECT
     ROUND(SUM(GrossProfit), 2)                AS TotalGrossProfit,
     ROUND(AVG(ProfitMargin), 2)               AS AvgMarginPct,
     ROUND(SUM(TotalPurchaseDollars), 2)       AS TotalPurchaseCost,
-    ROUND(
-        SUM(TotalSalesDollars) * 100.0
-        / SUM(SUM(TotalSalesDollars)) OVER(),
-    2)                                        AS RevenueSharePct
+
+    ROUND(SUM(TotalSalesDollars) * 100 / 
+          SUM(SUM(TotalSalesDollars)) OVER(), 2) AS RevenueSharePct
+
 FROM dbo.vendor_sales_summary
 GROUP BY VendorName;
 GO
+
+
+
+
+SELECT 
+    SUM(TotalRevenue)      AS TotalRevenue,
+    SUM(TotalGrossProfit)  AS TotalGrossProfit,
+    SUM(TotalPurchaseCost) AS TotalPurchaseCost,
+    ROUND(SUM(TotalGrossProfit) * 100.0 / 
+          SUM(TotalRevenue), 2) AS BlendedMarginPct
+FROM dbo.vw_VendorRevenueSummary
+
 
 
 -- CHECK AFTER CREATING:
@@ -48,50 +110,43 @@ SELECT * FROM dbo.vw_VendorRevenueSummary ORDER BY TotalRevenue DESC;
 GO
 
 
-
-
--- ================================================
--- CREATE VIEW: vw_LossMakingAnalysis or Commercial KPI's
--- Purpose: Identifies vendors with loss-making products
--- Used in: Power BI Page 3 (Risk Dashboard)
--- ================================================
-
-
-
-IF OBJECT_ID('dbo.vw_LossMakingAnalysis', 'V') IS NOT NULL
-    DROP VIEW dbo.vw_LossMakingAnalysis;
-GO
-
-CREATE VIEW dbo.vw_LossMakingAnalysis AS
+-- Check the distribution of profit margins
+-- to find outliers pulling averages off
 SELECT
-    VendorName,
+    MIN(ProfitMargin)                    AS MinMargin,
+    MAX(ProfitMargin)                    AS MaxMargin,
+    AVG(ProfitMargin)                    AS AvgMargin,
+    -- How many SKUs have extreme negative margins
+    SUM(CASE WHEN ProfitMargin < -100 THEN 1 ELSE 0 END) AS ExtremeNegativeCount,                     
+    SUM(CASE WHEN ProfitMargin > 100 THEN 1 ELSE 0 END) AS ExtremePositiveCount,
+    COUNT(*)                             AS TotalSKUs
+FROM dbo.vendor_sales_summary;
+
+
+
+-- Assessing ProfitMargin distribution before vendor-level analysis.
+-- A review of margin values showed a small number of SKUs with extremely
+-- negative margins, far below normal business ranges.
+-- These outliers materially skew the overall average margin and can lead
+-- to misleading conclusions when comparing vendor performance.
+-- To improve analytical reliability, SKUs with ProfitMargin below -100%
+-- are treated as extreme outliers and excluded from the main analysis.
+-- These records should still be reviewed separately for possible returns,
+-- credits, pricing anomalies, or data quality issues.
+
+
+
+
+SELECT TOP 20
     Description,
+    VendorName,
     TotalSalesDollars,
     GrossProfit,
-    ProfitMargin,
-    StockTurnover,
-    TotalPurchaseDollars,
+    ProfitMargin
+FROM dbo.vendor_sales_summary
+WHERE ProfitMargin < -100
+ORDER BY ProfitMargin ASC;
 
-    CASE
-        WHEN GrossProfit < 0 THEN 'Loss Making'
-        WHEN GrossProfit >= 0 AND ProfitMargin < 10 THEN 'Very Low Margin'
-        WHEN ProfitMargin >= 10 AND ProfitMargin < 20 THEN 'Low Margin'
-        WHEN ProfitMargin >= 20 AND ProfitMargin < 30 THEN 'Healthy'
-        ELSE 'High Margin'
-    END AS MarginCategory,
-
-    CASE
-        WHEN StockTurnover < 1.0 THEN 'Dead Stock Risk'
-        WHEN StockTurnover >= 1.0 AND StockTurnover < 1.5 THEN 'Slow Moving'
-        ELSE 'Healthy Turnover'
-    END AS TurnoverCategory
-FROM dbo.vendor_sales_summary;
-GO
-
-
--- CHECK AFTER CREATING:
-SELECT * FROM dbo.vw_LossMakingAnalysis;
-GO
 
 
 
@@ -132,7 +187,6 @@ SELECT
     -- Tier 1 = top 25% vendors by revenue
     NTILE(4) OVER (ORDER BY TotalRevenue DESC) AS RevenueTier,
 
-    
     CASE NTILE(4) OVER (ORDER BY TotalRevenue DESC)
         WHEN 1 THEN 'Tier 1 — Premium'
         WHEN 2 THEN 'Tier 2 — Core'
@@ -149,7 +203,7 @@ SELECT
 FROM VendorRevenue;
 GO
 
-
+-- CHECK AFTER CREATING:
 SELECT * FROM dbo.vw_VendorTiering;
 GO
 
@@ -172,64 +226,254 @@ GO
 CREATE VIEW dbo.vw_PortfolioHealth AS
 SELECT
     VendorName,
+    VendorNumber,
+    Brand,
     Description,
     PurchasePrice,
     ActualPrice,
-    TotalSalesDollars,
-    TotalSalesQuantity,
+    Volume,
     TotalPurchaseQuantity,
+    TotalPurchaseDollars,
+    TotalSalesQuantity,
+    TotalSalesDollars,
+    TotalSalesPrice,
+    TotalExciseTax,
+    FreightCost,
     GrossProfit,
     ProfitMargin,
     StockTurnover,
-    FreightCost,
-    TotalExciseTax,
+    SalesToPurchaseRatio,
 
     -- Markup %
-    ROUND(
-        ((ActualPrice - PurchasePrice) / NULLIF(PurchasePrice, 0)) * 100,
-        2
-    ) AS MarkupPct,
+    ROUND((ActualPrice - PurchasePrice)/ NULLIF(PurchasePrice, 0) * 100, 2) AS MarkupPct,
+        
 
-    -- Freight burden %
-    ROUND(
-        (FreightCost / NULLIF(TotalSalesDollars, 0)) * 100,
-        2
-    ) AS FreightBurdenPct,
+    -- Freight burden % is now FIXED by using MAX instead of SUM
+    -- Uses vendor total freight / vendor total revenue earlier which has created redundancy 
+    -- Avoids dividing repeated freight by single SKU revenue
+  
+    ROUND(MAX(FreightCost) OVER(PARTITION BY VendorName) 
+             / NULLIF( SUM(TotalSalesDollars) OVER(PARTITION BY VendorName), 0) * 100, 2) AS FreightBurdenPct,
 
-    -- Excise burden %
-    ROUND(
-        (TotalExciseTax / NULLIF(TotalSalesDollars, 0)) * 100,
-        2
-    ) AS ExciseBurdenPct,
 
+    -- Excise burden % (correct — SKU level cost)
+    ROUND(TotalExciseTax / NULLIF(TotalSalesDollars, 0) * 100,
+    2) AS ExciseBurdenPct,
+   
+   
     -- Net profit after excise
-    ROUND(
-        GrossProfit - TotalExciseTax,
-        2
-    ) AS NetProfitAfterExcise,
+    ROUND(GrossProfit - TotalExciseTax, 2) AS NetProfitAfterExcise,
 
-    -- Composite health status
+
+    -- Net margin after excise %
+    ROUND((GrossProfit - TotalExciseTax)/ NULLIF(TotalSalesDollars, 0) * 100, 2) AS NetMarginAfterExcisePct,
+
+
+    -- Composite status of SKUs based on stockTurnover, GrossProfit, ProfitMargin --
+    -- Threshold of 20 is taken as to categorise SKUs --
+
     CASE
-        WHEN GrossProfit < 0 THEN 'Loss Making'
-        WHEN ProfitMargin >= 20 AND StockTurnover >= 1.0 THEN 'Healthy'
-        WHEN ProfitMargin >= 20 AND StockTurnover < 1.0 THEN 'Profitable but Slow'
+        WHEN GrossProfit < 0 THEN 'Loss Making'     
+        WHEN ProfitMargin >= 20 AND StockTurnover >= 1.0 THEN 'Healthy'       
+        WHEN ProfitMargin >= 20 AND StockTurnover < 1.0 THEN 'Profitable but Slow'           
         WHEN ProfitMargin >= 0 AND ProfitMargin < 20 AND StockTurnover >= 1.0 THEN 'Selling but Thin Margin'
-        ELSE 'At Risk'
-    END AS HealthStatus
-FROM dbo.vendor_sales_summary;
+        ELSE 'At Risk'                                                                         
+    END AS HealthStatus,
+
+    -- Margin category --
+    CASE
+        WHEN GrossProfit < 0    THEN 'Loss Making'
+        WHEN ProfitMargin < 10  THEN 'Very Low Margin'
+        WHEN ProfitMargin < 20  THEN 'Low Margin'
+        WHEN ProfitMargin < 30  THEN 'Healthy'
+        ELSE                         'High Margin'
+    END AS MarginCategory,
+
+
+    -- Turnover category
+    CASE
+        WHEN StockTurnover < 1.0 THEN 'Dead Stock Risk'           
+        WHEN StockTurnover >= 1.0 AND StockTurnover < 1.5 THEN 'Slow Moving'          
+        WHEN StockTurnover >= 1.5 AND StockTurnover < 3.0 THEN 'Healthy Turnover'           
+        ELSE 'Fast Moving' 
+    END AS TurnoverCategory,
+
+
+    -- Volume category is being used basically to categorised and to understand which of the  
+    -- vendors or products are in which category, which will help comparison easier.
+    CASE
+        WHEN Volume >= 1750 THEN 'Large Format'
+        WHEN Volume >= 1000 THEN 'Standard Plus'
+        WHEN Volume >= 750  THEN 'Standard'
+        ELSE                     'Small Format'
+    END AS VolumeCategory
+
+FROM dbo.vendor_sales_summary
+WHERE StockTurnover <= 10.0 OR StockTurnover IS NULL;
+  
 GO
          
 
-SELECT * FROM dbo.vw_VendorTiering;
+SELECT * FROM dbo.vw_PortfolioHealth;
 GO
+
+
+
+-- Understanding particular Vendor at Granular level
+
+SELECT TOP 5
+    VendorName,
+    Description,
+    FreightCost,
+    TotalSalesDollars,
+    FreightBurdenPct
+FROM dbo.vw_PortfolioHealth
+WHERE VendorName = 'DIAGEO NORTH AMERICA INC'
+ORDER BY FreightBurdenPct DESC;
+
+GO
+
+
+
+SELECT 
+     HealthStatus,
+     MarginCategory,
+     TurnoverCategory,
+     COUNT(*) AS  SKUCount
+FROM dbo.vw_PortfolioHealth
+GROUP BY HealthStatus, MarginCategory,TurnoverCategory
+ORDER BY SKUCount DESC
+
+
+
+
+
+SELECT
+    MarginCategory,
+    COUNT(*)                            AS SKUCount,
+    ROUND(COUNT(*) * 100.0
+        / SUM(COUNT(*)) OVER(), 2)      AS PctOfPortfolio,
+
+    -- Avg markup (what we have now - can mislead)
+    ROUND(AVG(MarkupPct), 2)            AS AvgMarkupPct,
+
+    -- Blended markup (from totals - more accurate)
+    ROUND(
+        SUM(GrossProfit) * 100.0
+        / NULLIF(SUM(TotalPurchaseDollars), 0),
+    2)                                  AS BlendedMarkupPct,
+
+    -- Blended margin (from totals - more accurate)
+    ROUND(
+        SUM(GrossProfit) * 100.0
+        / NULLIF(SUM(TotalSalesDollars), 0),
+    2)                                  AS BlendedMarginPct
+
+FROM dbo.vw_PortfolioHealth
+GROUP BY MarginCategory
+ORDER BY BlendedMarginPct DESC;
+
+
+
+
+
+-- Blended Markup from totals per category
+-- This WILL follow the correct pattern
+
+SELECT
+    MarginCategory,
+    COUNT(*)                            AS SKUCount,
+
+    -- Unit price average (what you have now)
+    ROUND(AVG(MarkupPct), 2)            AS AvgMarkupPct,
+
+    -- Blended from totals (more meaningful)
+    ROUND(
+        SUM(GrossProfit) * 100.0
+        / NULLIF(SUM(TotalPurchaseDollars), 0),
+    2)                                  AS BlendedMarkupPct,
+
+    -- For comparison
+    ROUND(
+        SUM(GrossProfit) * 100.0
+        / NULLIF(SUM(TotalSalesDollars), 0),
+    2)                                  AS BlendedMarginPct
+
+FROM dbo.vw_PortfolioHealth
+GROUP BY MarginCategory
+ORDER BY BlendedMarginPct DESC;
+
+
 
 
 
 
 -- ================================================
+-- CREATE VIEW: vw_LossMakingAnalysis 
+-- Purpose: Identifies vendors with loss-making products
+-- Used in: Power BI Page 3 (Risk Dashboard)
+-- ================================================
+
+
+
+IF OBJECT_ID('dbo.vw_LossMakingAnalysis', 'V') IS NOT NULL
+    DROP VIEW dbo.vw_LossMakingAnalysis;
+GO
+
+CREATE VIEW dbo.vw_LossMakingAnalysis AS
+SELECT
+    VendorName,
+    Description,
+    TotalSalesDollars,
+    TotalPurchaseDollars,
+    GrossProfit,
+    ProfitMargin,
+    StockTurnover,
+    MarkupPct,
+    FreightBurdenPct,
+    ExciseBurdenPct,
+    NetMarginAfterExcisePct,
+
+    -- Pulled directly from vw_PortfolioHealth
+    -- No recalculation needed
+    MarginCategory,
+    TurnoverCategory,
+    HealthStatus
+
+FROM dbo.vw_PortfolioHealth
+
+-- Filter to only problematic SKUs
+-- This is the purpose of this view
+WHERE GrossProfit < 0
+   OR ProfitMargin < 20
+   OR TurnoverCategory = 'Dead Stock Risk';
+GO
+
+
+-- CHECK AFTER CREATING:
+SELECT * FROM dbo.vw_LossMakingAnalysis;
+GO
+
+
+
+
+-- Finding exact HealthStatus values in data
+-- These are exaact SKUs including spaces and capitalisation
+SELECT 
+    HealthStatus,
+    COUNT(*) AS SKUCount,
+    MIN(StockTurnover) AS Minimum_Value,
+    MAX(StockTurnover) AS Maximum_Value,
+    AVG(StockTurnover) AS Average_Value
+FROM dbo.vw_PortfolioHealth
+GROUP BY HealthStatus
+ORDER BY SKUCount DESC;
+
+
+-- ================================================
 -- CREATE VIEW: vw_LogisticsCostSummary
 -- Purpose: Freight, excise and COGS by vendor
--- Used in: Power BI Page 2 (Commercial Deep Dive)  
+-- Will be Used in: Power BI Page 2 (Commercial Deep Dive)  
 -- The COGS ratio (Cost of Goods Sold to Sales) measures the 
 -- percentage of revenue consumed by the direct costs of producing goods or services, 
 -- calculated as  
@@ -238,59 +482,130 @@ GO
 -- ================================================
 
 
+SELECT
+    AVG(NetMarginAfterAllCostsPct)  AS AvgNetMargin,
+    MIN(NetMarginAfterAllCostsPct)  AS MinNetMargin,
+    MAX(NetMarginAfterAllCostsPct)  AS MaxNetMargin,
+    COUNT(*)                        AS VendorCount
+FROM dbo.vw_LogisticsCostSummary;
+
+
+
 IF OBJECT_ID('dbo.vw_LogisticsCostSummary', 'V') IS NOT NULL
     DROP VIEW dbo.vw_LogisticsCostSummary;
 GO
 
 CREATE VIEW dbo.vw_LogisticsCostSummary AS
+
 SELECT
     VendorName,
-    ROUND(SUM(TotalSalesDollars), 2)      AS TotalRevenue,
-    ROUND(SUM(TotalPurchaseDollars), 2)   AS TotalCOGS,
-    ROUND(SUM(FreightCost), 2)            AS TotalFreight,
-    ROUND(SUM(TotalExciseTax), 2)         AS TotalExciseTax,
-    ROUND(SUM(GrossProfit), 2)            AS TotalGrossProfit,
+    VendorNumber,
+    ROUND(SUM(TotalSalesDollars), 2)        AS TotalRevenue,
+    ROUND(SUM(TotalPurchaseDollars), 2)     AS TotalCOGS,
+    ROUND(SUM(TotalExciseTax), 2)           AS TotalExciseTax,
 
-    -- COGS ratio: what % of revenue goes to purchasing
+    -- FreightCost FIXED using MAX not SUM
+    -- FreightCost repeats across all SKUs per vendor
+    -- MAX extracts vendor total freight once
+    ROUND(MAX(FreightCost), 2)              AS TotalFreight,
+
+    -- COGS as % of revenue
     ROUND(
         SUM(TotalPurchaseDollars) * 100.0
         / NULLIF(SUM(TotalSalesDollars), 0),
-    2) AS COGSRatioPct,
+    2)                                      AS COGSRatioPct,
 
-    -- Freight as % of revenue
+    -- Freight as % of revenue FIXED
     ROUND(
-        SUM(FreightCost) * 100.0
+        MAX(FreightCost) * 100.0
         / NULLIF(SUM(TotalSalesDollars), 0),
-    2) AS FreightPctOfRevenue,
+    2)                                      AS FreightPctOfRevenue,
 
-    -- Excise as % of revenue
+    -- Excise as % of revenue (correct — SKU level cost)
     ROUND(
         SUM(TotalExciseTax) * 100.0
         / NULLIF(SUM(TotalSalesDollars), 0),
-    2) AS ExcisePctOfRevenue,
-
-    -- Total cost burden = COGS + Freight + Excise
-    ROUND(
-        SUM(TotalPurchaseDollars)
-        + SUM(FreightCost)
-        + SUM(TotalExciseTax),
-    2) AS TotalCostBurden,
+    2)                                      AS ExcisePctOfRevenue,
 
     -- Net margin after ALL costs
     ROUND(
         (SUM(TotalSalesDollars)
         - SUM(TotalPurchaseDollars)
-        - SUM(FreightCost)
-        - SUM(TotalExciseTax))
-        * 100.0
+        - MAX(FreightCost)
+        - SUM(TotalExciseTax)) * 100.0
         / NULLIF(SUM(TotalSalesDollars), 0),
-    2) AS NetMarginAfterAllCostsPct
+    2)                                      AS NetMarginAfterAllCostsPct,
+
+    -- Total cost burden %
+    ROUND(
+        (SUM(TotalPurchaseDollars)
+        + MAX(FreightCost)
+        + SUM(TotalExciseTax)) * 100.0
+        / NULLIF(SUM(TotalSalesDollars), 0),
+    2)                                      AS TotalCostBurdenPct,
+
+    COUNT(Description)                      AS TotalSKUs
+
 FROM dbo.vendor_sales_summary
-GROUP BY VendorName;
+GROUP BY VendorName, VendorNumber;
 GO
 
 
+
+-- DIAGEO specifically
+SELECT
+    VendorName,
+    TotalRevenue,
+    TotalCOGS,
+    TotalFreight,
+    TotalExciseTax,
+    ROUND(TotalRevenue
+          - TotalCOGS
+          - TotalFreight
+          - TotalExciseTax, 2)     AS NetProfit,
+    NetMarginAfterAllCostsPct
+FROM dbo.vw_LogisticsCostSummary
+WHERE VendorName = 'DIAGEO NORTH AMERICA INC';
+
+-- Portfolio average excluding micro-vendors
+SELECT
+    ROUND(AVG(NetMarginAfterAllCostsPct), 2)  AS AvgNetMargin,
+    COUNT(*)                                   AS VendorCount,
+    MIN(NetMarginAfterAllCostsPct)             AS MinMargin,
+    MAX(NetMarginAfterAllCostsPct)             AS MaxMargin
+FROM dbo.vw_LogisticsCostSummary
+WHERE TotalRevenue >= 10000;
+
+
+
+
+
 SELECT * FROM dbo.vw_LogisticsCostSummary;
+
+
+SELECT TOP 5
+    VendorName,
+    TotalRevenue,
+    TotalFreight,
+    FreightPctOfRevenue,
+    ExcisePctOfRevenue,
+    NetMarginAfterAllCostsPct
+FROM dbo.vw_LogisticsCostSummary
+ORDER BY TotalRevenue DESC;
+
+
+
+
+
+SELECT 
+    VendorName,
+    VendorNumber,
+    ROUND(SUM(TotalPurchaseDollars),2) AS COGS
+
+    FROM dbo.vendor_sales_summary
+    GROUP BY VendorName, VendorNumber;
+
+
 
 
 
@@ -400,6 +715,7 @@ IF OBJECT_ID('dbo.vw_PricingAnalysis', 'V') IS NOT NULL
 GO
 
 CREATE VIEW dbo.vw_PricingAnalysis AS
+
 WITH ProductPricing AS (
     SELECT
         VendorName,
@@ -442,8 +758,8 @@ WITH ProductPricing AS (
 RankedByMarkup AS (
     SELECT *,
         -- Rank products within each vendor by markup %
-        -- PARTITION BY VendorName = rank separately per vendor
-        -- This is the key difference from Query 6
+        -- PARTITION BY VendorName = ranking separately per vendor
+        -- This is the key difference from above Query 6
         -- Without PARTITION: one global rank across all products
         -- With PARTITION: separate rank for each vendor's products
         DENSE_RANK() OVER (
@@ -484,7 +800,7 @@ SELECT
 FROM RankedByMarkup;
 GO
 
--- WHAT THIS TEACHES YOU:
+
 -- PARTITION BY = restarts the window function per group
 --   Without it: rank all 10692 rows together
 --   With it: rank each vendors products separately
@@ -531,9 +847,11 @@ ORDER BY MarkupRange DESC;
 -- New concept: Subquery + COALESCE + NULLIF
 -- ================================================
 
+
+
+
 IF OBJECT_ID('dbo.vw_FullCostAnalysis', 'V') IS NOT NULL
     DROP VIEW dbo.vw_FullCostAnalysis;
-
 GO
 
 CREATE VIEW dbo.vw_FullCostAnalysis AS
@@ -547,96 +865,97 @@ SELECT
     TotalExciseTax,
     TotalGrossProfit,
 
-    -- COALESCE returns the first non-NULL value
-    -- Protects against NULL values breaking calculations
-    -- If FreightCost is NULL treat it as 0
-    COALESCE(TotalFreight, 0)   AS FreightSafe,
+    COALESCE(TotalFreight, 0)               AS FreightSafe,
 
     -- COGS ratio %
-    -- Formula: What % of revenue goes to buying stock
     ROUND(
         TotalCOGS * 100.0
         / NULLIF(TotalRevenue, 0),
-    2) AS COGSRatioPct,
+    2)                                      AS COGSRatioPct,
 
-    -- Freight burden %
+    -- Freight burden % FIXED
     ROUND(
         TotalFreight * 100.0
         / NULLIF(TotalRevenue, 0),
-    2) AS FreightBurdenPct,
+    2)                                      AS FreightBurdenPct,
 
     -- Excise burden %
     ROUND(
         TotalExciseTax * 100.0
         / NULLIF(TotalRevenue, 0),
-    2) AS ExciseBurdenPct,
+    2)                                      AS ExciseBurdenPct,
 
-    -- Total cost burden in dollars
+    -- Total cost burden
     ROUND(
         TotalCOGS + TotalFreight + TotalExciseTax,
-    2) AS TotalAllCosts,
+    2)                                      AS TotalAllCosts,
 
-    -- Net profit after ALL costs
+    -- Net profit after all costs
     ROUND(
         TotalRevenue - TotalCOGS
         - TotalFreight - TotalExciseTax,
-    2) AS NetProfitAfterAllCosts,
+    2)                                      AS NetProfitAfterAllCosts,
 
-    -- Net margin % after ALL costs
-    -- This is your most realistic profitability KPI
+    -- Net margin % after all costs
     ROUND(
         (TotalRevenue - TotalCOGS
          - TotalFreight - TotalExciseTax)
-        * 100.0 / NULLIF(TotalRevenue, 0),
-    2) AS NetMarginPct,
+        * 100.0
+        / NULLIF(TotalRevenue, 0),
+    2)                                      AS NetMarginPct,
 
-    -- Performance vs average
-    -- This is the subquery -- it calculates the average
-    -- net margin across ALL vendors first
-    -- then compares each vendor to that average
+    -- Performance vs average FIXED
+    -- Subquery now uses MAX freight per vendor
+    -- to match the main query calculation
     CASE
         WHEN
             ROUND(
                 (TotalRevenue - TotalCOGS
                  - TotalFreight - TotalExciseTax)
-                * 100.0 / NULLIF(TotalRevenue, 0), 2)
+                * 100.0
+                / NULLIF(TotalRevenue, 0), 2)
             >
-            -- SUBQUERY: calculates grand average net margin
-            -- runs once, returns one number
-            -- the outer query compares every vendor to it
-            (SELECT AVG(
-                (v.TotalSalesDollars - v.TotalPurchaseDollars
-                 - v.FreightCost - v.TotalExciseTax)
-                * 100.0 / NULLIF(v.TotalSalesDollars, 0)
-             )
-             FROM vendor_sales_summary v)
+            (SELECT AVG(NetMargin)
+             FROM (
+                 SELECT
+                     VendorName,
+                     ROUND(
+                         (SUM(TotalSalesDollars)
+                          - SUM(TotalPurchaseDollars)
+                          - MAX(FreightCost)
+                          - SUM(TotalExciseTax))
+                         * 100.0
+                         / NULLIF(SUM(TotalSalesDollars), 0),
+                     2) AS NetMargin
+                 FROM vendor_sales_summary
+                 GROUP BY VendorName
+             ) AS VendorMargins)
         THEN 'Above Average'
         ELSE 'Below Average'
-    END AS PerformanceVsAverage
+    END                                     AS PerformanceVsAverage
 
 FROM (
-    -- THIS IS THE OUTER SUBQUERY
-    -- It pre-aggregates all vendors into one clean row each
-    -- The main SELECT above then works on this clean data
-    -- Instead of repeating SUM() everywhere
     SELECT
         VendorName,
         COUNT(Description)                  AS NumberOfSKUs,
         ROUND(SUM(TotalSalesDollars), 2)    AS TotalRevenue,
         ROUND(SUM(TotalPurchaseDollars), 2) AS TotalCOGS,
-        ROUND(SUM(FreightCost), 2)          AS TotalFreight,
+
+        -- FIXED: MAX is taken for freight instead of SUM
+        ROUND(MAX(FreightCost), 2)          AS TotalFreight,
+
         ROUND(SUM(TotalExciseTax), 2)       AS TotalExciseTax,
         ROUND(SUM(GrossProfit), 2)          AS TotalGrossProfit
     FROM vendor_sales_summary
     GROUP BY VendorName
 ) AS VendorAggregated;
-
 GO
 
 
 SELECT * FROM vw_FullCostAnalysis;
 
--- WHAT THIS TEACHES YOU:
+-- This Query is built to understand only Non negative 
+-- gross profit values
 -- NULLIF(value, 0): if value = 0 return NULL instead
 --   prevents divide by zero errors crashing your query
 -- COALESCE(value, 0): if value is NULL return 0 instead
@@ -645,5 +964,610 @@ SELECT * FROM vw_FullCostAnalysis;
 --   then SELECT from the result as if it were a table
 -- Subquery in WHERE/CASE: calculate a single comparison
 --   value on the fly without needing a CTE
--- The combination of NULLIF and COALESCE = data quality
---   protection -- shows professional SQL thinking
+-- The combination of NULLIF and COALESCE is used for data quality
+--   protection 
+
+
+-- =====================================================
+-- 
+-- VIEW: dbo.vw_CleanAnalysis
+-- PURPOSE: Viable SKUs only for pricing and margin
+--          analysis where outliers distort averages
+-- FILTER LOGIC:
+--   GrossProfit > 0 = only profitable SKUs
+--   ProfitMargin BETWEEN 0 AND 100 = realistic margins
+--   TotalSalesQuantity > 0 = only SKUs that sold
+--   TotalSalesDollars > 0  = only SKUs with revenue
+-- NOTE: Loss-making SKUs deliberately excluded here
+--       They are fully analysed in vw_fullcostanalysis
+--       and vw_PortfolioHealth views
+--       This view exists ONLY for pricing and margin
+--       distribution analysis without outlier distortion
+-- FEEDS: Excel pricing tab, Power BI Page 2 margin charts
+-- =====================================================
+
+
+
+
+IF OBJECT_ID('dbo.vw_CleanAnalysis', 'V') IS NOT NULL
+    DROP VIEW dbo.vw_CleanAnalysis;
+GO
+
+CREATE VIEW dbo.vw_CleanAnalysis AS
+SELECT
+    VendorName,
+    VendorNumber,
+    Brand,
+    Description,
+    PurchasePrice,
+    ActualPrice,
+    Volume,
+    TotalPurchaseQuantity,
+    TotalPurchaseDollars,
+    TotalSalesQuantity,
+    TotalSalesDollars,
+    TotalSalesPrice,
+    TotalExciseTax,
+    FreightCost,
+    GrossProfit,
+    ProfitMargin,
+    StockTurnover,
+    SalesToPurchaseRatio,
+
+    -- Markup %
+    ROUND(
+        (ActualPrice - PurchasePrice)
+        / NULLIF(PurchasePrice, 0) * 100,
+    2) AS MarkupPct,
+
+    -- Gross margin %
+    ROUND(
+        (ActualPrice - PurchasePrice)
+        / NULLIF(ActualPrice, 0) * 100,
+    2) AS GrossMarginPct,
+
+    -- Freight burden % FIXED
+    -- Vendor total freight / vendor total revenue
+    -- Same fix as vw_PortfolioHealth
+    ROUND(
+        MAX(FreightCost)
+            OVER(PARTITION BY VendorName)
+        / NULLIF(
+            SUM(TotalSalesDollars)
+                OVER(PARTITION BY VendorName),
+            0) * 100,
+    2) AS FreightBurdenPct,
+
+    -- Excise burden % (correct — SKU level)
+    ROUND(
+        TotalExciseTax
+        / NULLIF(TotalSalesDollars, 0) * 100,
+    2) AS ExciseBurdenPct,
+
+    -- Revenue per unit sold
+    ROUND(
+        TotalSalesDollars
+        / NULLIF(TotalSalesQuantity, 0),
+    2) AS RevenuePerUnit,
+
+    -- Cost per unit purchased
+    ROUND(
+        TotalPurchaseDollars
+        / NULLIF(TotalPurchaseQuantity, 0),
+    2) AS CostPerUnit,
+
+    -- Net profit after excise
+    ROUND(
+        GrossProfit - TotalExciseTax,
+    2) AS NetProfitAfterExcise,
+
+    -- Net margin after excise %
+    ROUND(
+        (GrossProfit - TotalExciseTax)
+        / NULLIF(TotalSalesDollars, 0) * 100,
+    2) AS NetMarginAfterExcisePct,
+
+    -- Health classification on clean data
+    CASE
+        WHEN ProfitMargin >= 30 AND StockTurnover >= 1.0
+            THEN 'Star Product'
+        WHEN ProfitMargin >= 20 AND StockTurnover >= 1.0
+            THEN 'Healthy'
+        WHEN ProfitMargin >= 20 AND StockTurnover < 1.0
+            THEN 'Profitable but Slow'
+        WHEN ProfitMargin < 20 AND StockTurnover >= 1.0
+            THEN 'Selling but Thin Margin'
+        ELSE 'Needs Review'
+    END AS HealthStatus,
+
+    -- Volume category
+    CASE
+        WHEN Volume >= 1750 THEN 'Large Format'
+        WHEN Volume >= 1000 THEN 'Standard Plus'
+        WHEN Volume >= 750  THEN 'Standard'
+        ELSE                     'Small Format'
+    END AS VolumeCategory
+
+FROM dbo.vendor_sales_summary
+WHERE
+    -- Only profitable SKUs
+    GrossProfit > 0
+
+    -- Realistic margin range -- removes calculation errors
+    AND ProfitMargin BETWEEN 0 AND 100
+
+    -- Only SKUs that actually sold
+    AND TotalSalesQuantity > 0
+
+    -- Only SKUs with actual revenue
+    AND TotalSalesDollars > 0
+
+    -- Only SKUs with a valid purchase price
+    AND PurchasePrice > 0
+
+    -- Only SKUs with a valid selling price
+    AND ActualPrice > 0
+
+    -- Selling price must be higher than purchase price
+    -- If not it is a data error or pricing mistake
+    AND ActualPrice > PurchasePrice;
+GO
+
+
+
+SELECT TOP 10
+    VendorName,
+    Description,
+    FreightBurdenPct,
+    ExciseBurdenPct,
+    MarkupPct,
+    GrossMarginPct
+FROM dbo.vw_CleanAnalysis
+ORDER BY FreightBurdenPct DESC;
+
+
+
+
+-- Test 1: How many SKUs pass the clean filter?
+-- Compare to total 10,692 to understand what % is clean
+SELECT COUNT(*) AS CleanSKUs
+FROM dbo.vw_CleanAnalysis;
+
+-- Test 2: Confirm no negatives exist in clean view
+SELECT
+    MIN(GrossProfit)    AS MinProfit,
+    MAX(GrossProfit)    AS MaxProfit,
+    MIN(ProfitMargin)   AS MinMargin,
+    MAX(ProfitMargin)   AS MaxMargin,
+    AVG(ProfitMargin)   AS AvgMargin
+FROM dbo.vw_CleanAnalysis;
+
+-- Test 3: Vendor summary on clean data
+-- This is what your Excel pivot table should now show
+SELECT
+    VendorName,
+    COUNT(Description)              AS CleanSKUs,
+    ROUND(SUM(TotalSalesDollars),2) AS TotalRevenue,
+    ROUND(SUM(GrossProfit),2)       AS TotalProfit,
+    ROUND(AVG(ProfitMargin),2)      AS AvgMarginPct,
+    ROUND(AVG(MarkupPct),2)         AS AvgMarkupPct,
+    ROUND(AVG(StockTurnover),3)     AS AvgTurnover
+FROM dbo.vw_CleanAnalysis
+GROUP BY VendorName
+ORDER BY TotalRevenue DESC;
+
+
+
+
+
+-- =====================================================
+-- VIEW: dbo.vw_ParetoAnalysis
+-- PURPOSE: Revenue concentration and Pareto analysis
+--          Identifies which vendors follow the 80/20 rule
+--          Shows cumulative revenue contribution
+-- FEEDS: Power BI Page 1, Excel Executive Summary
+-- =====================================================
+
+IF OBJECT_ID('dbo.vw_ParetoAnalysis', 'V') IS NOT NULL
+    DROP VIEW dbo.vw_ParetoAnalysis;
+GO
+
+CREATE VIEW dbo.vw_ParetoAnalysis AS
+
+WITH VendorRevenue AS (
+    -- Total revenue per vendor
+    SELECT
+        VendorName,
+        COUNT(Description)                   AS SKUCount,
+        ROUND(SUM(TotalSalesDollars), 2)     AS TotalRevenue,
+        ROUND(SUM(GrossProfit), 2)           AS TotalProfit,
+        ROUND(AVG(ProfitMargin), 2)          AS AvgMargin
+    FROM dbo.vendor_sales_summary
+    GROUP BY VendorName
+),
+
+VendorRanked AS (
+    -- Rank vendors by revenue highest to lowest
+    -- This has been done and is essential for cumulative calculation
+    SELECT
+        VendorName,
+        SKUCount,
+        TotalRevenue,
+        TotalProfit,
+        AvgMargin,
+
+        -- Revenue rank -- 1 = highest revenue vendor
+        DENSE_RANK() OVER (ORDER BY TotalRevenue DESC) AS RevenueRank,
+
+        -- Each vendors share of total revenue
+        ROUND(TotalRevenue * 100.0 / SUM(TotalRevenue) OVER(),2) AS RevenueSharePct,
+           
+        -- Grand total for cumulative calculation
+        SUM(TotalRevenue) OVER() AS GrandTotalRevenue
+
+    FROM VendorRevenue
+),
+
+VendorCumulative AS (
+    -- Step 3: Calculate cumulative revenue
+    -- SUM() OVER with ORDER BY = running total
+    -- This is the core of Pareto analysis
+    SELECT
+        VendorName,
+        SKUCount,
+        TotalRevenue,
+        TotalProfit,
+        AvgMargin,
+        RevenueRank,
+        RevenueSharePct,
+        GrandTotalRevenue,
+
+        -- Running cumulative revenue
+        -- SUM(TotalRevenue) adds up all vendors
+        -- from rank 1 down to current row
+        ROUND(
+            SUM(TotalRevenue) OVER (ORDER BY TotalRevenue DESC ROWS BETWEEN 
+                                    UNBOUNDED PRECEDING AND CURRENT ROW),2) AS CumulativeRevenue,
+
+        -- Cumulative revenue as % of grand total
+        -- This is your Pareto curve value
+        ROUND(
+            SUM(TotalRevenue) OVER (ORDER BY TotalRevenue DESC ROWS BETWEEN 
+                                    UNBOUNDED PRECEDING AND CURRENT ROW) * 100.0 / GrandTotalRevenue,2) AS CumulativeRevenuePct
+    FROM VendorRanked
+)
+
+-- Step 4: Add Pareto classification
+-- Which vendors sit in the 80% bucket vs the 20% tail
+SELECT
+    VendorName,
+    SKUCount,
+    TotalRevenue,
+    TotalProfit,
+    AvgMargin,
+    RevenueRank,
+    RevenueSharePct,
+    CumulativeRevenue,
+    CumulativeRevenuePct,
+
+    -- Pareto band classification
+    CASE
+        WHEN CumulativeRevenuePct <= 80 THEN 'Top 80% Revenue Band'           
+        WHEN CumulativeRevenuePct <= 95 THEN 'Mid 15% Revenue Band'            
+        ELSE
+            'Tail 5% Revenue Band'
+    END AS ParetoBand,
+
+    -- Is Vendor in the critical 80% group?
+    CASE
+        WHEN CumulativeRevenuePct <= 80 THEN 'Critical Vendor'  
+        ELSE
+            'Non Critical Vendor'
+    END AS VendorCriticality
+
+FROM VendorCumulative;
+GO
+
+
+-- Testing 
+
+-- See the Pareto curve clearly
+SELECT
+    RevenueRank,
+    VendorName,
+    TotalRevenue,
+    RevenueSharePct,
+    CumulativeRevenuePct,
+    ParetoBand,
+    VendorCriticality
+FROM dbo.vw_ParetoAnalysis
+ORDER BY RevenueRank;
+
+-- The headline finding
+-- How many vendors make up 80% of revenue?
+SELECT
+    ParetoBand,
+    COUNT(VendorName)              AS VendorCount,
+    ROUND(SUM(TotalRevenue), 2)    AS BandRevenue,
+    ROUND(AVG(RevenueSharePct), 2) AS AvgSharePct
+FROM dbo.vw_ParetoAnalysis
+GROUP BY ParetoBand
+ORDER BY BandRevenue DESC;
+
+
+
+
+
+
+-- =====================================================
+-- 
+-- VIEW: dbo.vw_profit_leakage
+-- PURPOSE: Identifies where profit is being lost
+--          across four leakage categories:
+--          1. Excise tax burden
+--          2. Freight cost erosion
+--          3. Low margin pricing
+--          4. Dead stock carrying cost
+-- Power BI Risk page, Excel Risk tab
+-- =====================================================
+
+
+
+
+IF OBJECT_ID('dbo.vw_ProfitLeakage', 'V') IS NOT NULL
+    DROP VIEW dbo.vw_ProfitLeakage;
+GO
+
+CREATE VIEW dbo.vw_ProfitLeakage AS
+
+WITH VendorBase AS (
+    SELECT
+        VendorName,
+        VendorNumber,
+        ROUND(SUM(TotalSalesDollars), 2)      AS TotalRevenue,
+        ROUND(SUM(GrossProfit), 2)            AS TotalGrossProfit,
+        ROUND(SUM(TotalPurchaseDollars), 2)    AS TotalCOGS,
+        ROUND(SUM(TotalExciseTax), 2)          AS TotalExciseTax,
+        COUNT(Description)                     AS TotalSKUs,
+        ROUND(MAX(FreightCost), 2)             AS TotalFreight,
+
+        ROUND(SUM(CASE
+            WHEN GrossProfit < 0
+            THEN ABS(GrossProfit)
+            ELSE 0 END), 2)                   AS LossMakingLeakage,
+
+        ROUND(SUM(CASE
+            WHEN StockTurnover < 1.0
+            THEN TotalSalesDollars
+            ELSE 0 END), 2)                   AS DeadStockRevenue,
+
+        SUM(CASE
+            WHEN StockTurnover < 1.0
+            THEN 1 ELSE 0 END)                AS DeadStockSKUs,
+
+        SUM(CASE
+            WHEN GrossProfit < 0
+            THEN 1 ELSE 0 END)                AS LossMakingSKUs
+
+    FROM dbo.vendor_sales_summary
+    GROUP BY VendorName, VendorNumber
+)
+SELECT
+    VendorName,
+    VendorNumber,
+    TotalRevenue,
+    TotalGrossProfit,
+    TotalCOGS,
+    TotalSKUs,
+    LossMakingSKUs,
+    DeadStockSKUs,
+
+    -- EXCISE LEAKAGE
+    TotalExciseTax                            AS ExciseLeakage,
+    ROUND(TotalExciseTax * 100.0
+        / NULLIF(TotalRevenue, 0), 2)         AS ExciseLeakagePct,
+
+    -- FREIGHT LEAKAGE
+    TotalFreight                              AS FreightLeakage,
+    ROUND(TotalFreight * 100.0
+        / NULLIF(TotalRevenue, 0), 2)         AS FreightLeakagePct,
+
+    -- LOSS MAKING LEAKAGE
+    LossMakingLeakage,
+    ROUND(LossMakingLeakage * 100.0
+        / NULLIF(TotalRevenue, 0), 2)         AS LossMakingLeakagePct,
+
+    -- DEAD STOCK
+    DeadStockRevenue,
+    ROUND(DeadStockRevenue * 100.0
+        / NULLIF(TotalRevenue, 0), 2)         AS DeadStockRevenuePct,
+    ROUND(DeadStockSKUs * 100.0
+        / NULLIF(TotalSKUs, 0), 2)            AS DeadStockSKUsPct,
+
+    -- LOSS MAKING SKU PCT
+    ROUND(LossMakingSKUs * 100.0
+        / NULLIF(TotalSKUs, 0), 2)            AS LossMakingSKUsPct,
+
+    -- TOTAL LEAKAGE
+    ROUND(
+        TotalExciseTax
+        + TotalFreight
+        + LossMakingLeakage, 2)              AS TotalLeakageAmount,
+
+    ROUND(
+        (TotalExciseTax
+        + TotalFreight
+        + LossMakingLeakage) * 100.0
+        / NULLIF(TotalRevenue, 0), 2)        AS TotalLeakagePct,
+
+    -- POTENTIAL PROFIT (what profit could be without leakage)
+    ROUND(
+        TotalGrossProfit
+        + TotalExciseTax
+        + TotalFreight
+        + LossMakingLeakage, 2)              AS PotentialProfit,
+
+    ROUND(
+        (TotalGrossProfit
+        + TotalExciseTax
+        + TotalFreight
+        + LossMakingLeakage) * 100.0
+        / NULLIF(TotalRevenue, 0), 2)        AS PotentialMarginPct,
+
+    -- SEVERITY
+    CASE
+        WHEN (TotalExciseTax + TotalFreight
+              + LossMakingLeakage) * 100.0
+             / NULLIF(TotalRevenue, 0) > 30
+            THEN 'Critical Leakage'
+        WHEN (TotalExciseTax + TotalFreight
+              + LossMakingLeakage) * 100.0
+             / NULLIF(TotalRevenue, 0) > 15
+            THEN 'High Leakage'
+        WHEN (TotalExciseTax + TotalFreight
+              + LossMakingLeakage) * 100.0
+             / NULLIF(TotalRevenue, 0) > 5
+            THEN 'Moderate Leakage'
+        ELSE 'Low Leakage'
+    END                                      AS LeakageSeverity
+
+FROM VendorBase;
+GO
+
+
+
+
+SELECT * FROM vw_ProfitLeakage;
+
+SELECT
+    ROUND(SUM(TotalRevenue), 2)          AS TotalRevenue,
+    ROUND(SUM(ExciseLeakage), 2)        AS TotalExcise,
+    ROUND(SUM(FreightLeakage), 2)          AS TotalFreight,
+    ROUND(SUM(LossMakingLeakage), 2)     AS TotalLossLeakage,
+    ROUND(SUM(TotalLeakageAmount), 2)    AS TotalLeakage
+FROM dbo.vw_ProfitLeakage;
+
+
+
+ 
+
+ -- Check what makes up the leakage for top vendor
+SELECT TOP 5
+    VendorName,
+    ROUND(SUM(TotalSalesDollars), 2)    AS TotalRevenue,
+    ROUND(SUM(TotalExciseTax), 2)       AS ExciseTotal,
+    ROUND(MAX(FreightCost), 2)          AS FreightTotal,
+    ROUND(SUM(CASE WHEN GrossProfit < 0 
+        THEN ABS(GrossProfit) 
+        ELSE 0 END), 2)                 AS LossAmount,
+    ROUND(SUM(TotalExciseTax) 
+        + MAX(FreightCost)
+        + SUM(CASE WHEN GrossProfit < 0 
+            THEN ABS(GrossProfit) 
+            ELSE 0 END), 2)             AS TotalLeakage
+FROM dbo.vendor_sales_summary
+GROUP BY VendorName
+ORDER BY TotalLeakage DESC;
+
+
+
+
+SELECT
+    LeakageSeverity,
+    COUNT(*)                            AS VendorCount,
+    ROUND(SUM(TotalRevenue), 2)         AS TotalRevenue,
+    ROUND(SUM(FreightLeakage), 2)         AS TotalFreight,
+    ROUND(SUM(ExciseLeakage), 2)       AS TotalExcise,
+    ROUND(SUM(LossMakingLeakage), 2)    AS TotalLossLeakage,
+    ROUND(SUM(TotalLeakageAmount), 2)   AS TotalLeakage,
+    ROUND(AVG(TotalLeakagePct), 2)      AS AvgLeakagePct
+FROM dbo.vw_ProfitLeakage
+GROUP BY LeakageSeverity
+ORDER BY TotalLeakage DESC;
+
+
+
+SELECT TOP 10
+    VendorName,
+    TotalRevenue,
+    FreightLeakage,
+    ExciseLeakage,
+    LossMakingLeakage,
+    TotalLeakageAmount,
+    TotalLeakagePct,
+    LeakageSeverity
+FROM dbo.vw_ProfitLeakage
+WHERE LeakageSeverity = 'Critical Leakage'
+ORDER BY TotalLeakagePct DESC;
+
+
+
+-- Top 10 vendors by total leakage amount
+SELECT TOP 10
+    VendorName,
+    TotalRevenue,
+    ExciseLeakage,
+    FreightLeakage,
+    LossMakingLeakage,
+    TotalLeakageAmount,
+    TotalLeakagePct,
+    LeakageSeverity
+FROM dbo.vw_ProfitLeakage
+ORDER BY TotalLeakageAmount DESC;
+
+
+
+
+-- COMPLETE HEADLINE KPI CHECK
+-- This is to confirm all numbers for CV and interview
+
+SELECT
+    -- Total portfolio
+    COUNT(*)                                AS TotalSKUs,
+    COUNT(DISTINCT VendorName)              AS TotalVendors,
+    ROUND(SUM(TotalSalesDollars), 2)        AS TotalRevenue,
+    ROUND(SUM(GrossProfit), 2)              AS TotalGrossProfit,
+    ROUND(SUM(GrossProfit) * 100.0
+        / NULLIF(SUM(TotalSalesDollars),0),2) AS BlendedMarginPct,
+
+    -- Loss making
+    SUM(CASE WHEN MarginCategory = 'Loss Making'
+        THEN 1 ELSE 0 END)                  AS LossMakingSKUs,
+    ROUND(SUM(CASE WHEN MarginCategory = 'Loss Making'
+        THEN 1 ELSE 0 END) * 100.0
+        / COUNT(*), 2)                      AS LossMakingPct,
+
+    -- Dead stock
+    SUM(CASE WHEN TurnoverCategory = 'Dead Stock Risk'
+        THEN 1 ELSE 0 END)                  AS DeadStockSKUs,
+    ROUND(SUM(CASE WHEN TurnoverCategory = 'Dead Stock Risk'
+        THEN 1 ELSE 0 END) * 100.0
+        / COUNT(*), 2)                      AS DeadStockPct,
+
+    -- Profitable but slow
+    SUM(CASE WHEN HealthStatus = 'Profitable but Slow'
+        THEN 1 ELSE 0 END)                  AS ProfitableSlowSKUs,
+    ROUND(SUM(CASE WHEN HealthStatus = 'Profitable but Slow'
+        THEN 1 ELSE 0 END) * 100.0
+        / COUNT(*), 2)                      AS ProfitableSlowPct,
+
+    -- Average turnover
+    ROUND(AVG(StockTurnover), 3)            AS AvgStockTurnover
+
+FROM dbo.vw_PortfolioHealth;
+
+--- To get full details of different views which are created
+
+
+
+SELECT
+    name AS ViewName,
+    create_date AS Created,
+    modify_date AS LastModified
+FROM sys.views
+WHERE name LIKE 'vw_%'
+   OR name LIKE 'silver_%'
+   OR name LIKE 'gold_%'
+ORDER BY name;
+
+
