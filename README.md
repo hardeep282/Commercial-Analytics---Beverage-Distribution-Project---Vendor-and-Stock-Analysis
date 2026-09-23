@@ -82,6 +82,7 @@ The raw dataset used in this project was purchased and is not included in this r
 4. Load a similarly structured dataset into SQL Server Express and run `SQL Analysis/Vendor_analysis.sql` to create the views
 5. Run `python vendor_insights.py` to generate an AI commercial summary
 
+
 ## Folder Guide
 
 | Folder / File | Contents |
@@ -93,3 +94,5 @@ The raw dataset used in this project was purchased and is not included in this r
 | `Power BI/` | Power BI dashboard file |
 | `Screenshots/` | Dashboard and output screenshots |
 | `vendor_insights.py` | GenAI commercial insight generator (Claude API) |
+| `requirements.txt` | Python dependencies (`pip install -r requirements.txt`) |
+| `.env.example` | Template for the Anthropic API key; copy to `.env` and add your own key |
