@@ -1,0 +1,65 @@
+VENDOR PERFORMANCE AI INSIGHT
+========================================
+
+# Vendor Portfolio Analysis
+
+## 1. Portfolio Position
+
+The portfolio generates $451,620,184 in revenue across 126 vendors, delivering net profit of $109,108,916 (24.2% of revenue) after COGS, freight and excise. Total cost leakage stands at $24,960,716 (5.53% of revenue), of which $5,990,689 (1.33% of revenue) is controllable through freight and loss-making SKU management.
+
+## 2. Concentration Risk
+
+The top 10 vendors by revenue account for $293,619,717, representing 65.0% of total portfolio revenue. The largest vendor, Diageo North America Inc, holds 15.22% revenue share alone. The top three vendors (Diageo North America Inc, Martignetti Companies, and Pernod Ricard USA) together represent 31.44% of revenue, creating meaningful dependency on a small number of supplier relationships.
+
+## 3. Margin Position Among Top 10 Revenue Vendors
+
+Among the top 10 vendors by revenue, five vendors operate below the portfolio blended gross margin of 28.7%: Diageo North America Inc (25.9%), Pernod Ricard USA (25.3%), Jim Beam Brands Company (24.1%), Brown-Forman Corp (26.8%), and Ultra Beverage Company LLP (25.8%). 
+
+The strongest margin performers among the top 10 by revenue are Constellation Brands Inc (36.4%), E & J Gallo Winery (33.8%), and Martignetti Companies (32.0%). Notably, the portfolio's largest revenue contributor, Diageo North America Inc, operates 2.8 percentage points below the portfolio average margin.
+
+## 4. Profit Leakage Analysis
+
+**Non-controllable leakage:** $18,970,027 (4.20% of revenue) consists of statutory excise tax and cannot be reduced through operational action.
+
+**Controllable leakage:** $5,990,689 (1.33% of revenue), comprising:
+- Freight: $1,640,475
+- Losses on loss-making SKUs: $4,350,214
+
+**Vendors driving controllable leakage:** Among the top 10 vendors by controllable leakage, the top three account for 36.4% of total controllable leakage:
+- Martignetti Companies: $874,765 (14.6% of total controllable leakage), with 304 loss-making SKUs generating $729,836 in losses
+- Ultra Beverage Company LLP: $811,485 (13.5% of total controllable leakage), with 215 loss-making SKUs generating $743,431 in losses
+- M S Walker Inc: $497,449 (8.3% of total controllable leakage), with 182 loss-making SKUs generating $441,897 in losses
+
+Perfecta Wines shows the highest severity rating (High) among the top 10 by controllable leakage, with controllable leakage at 5.92% of its revenue and losses on loss-making SKUs at 5.55% of its revenue.
+
+## 5. Top 3 Recommendations
+
+### Recommendation 1: Conduct SKU-level review of Ultra Beverage Company LLP and Perfecta Wines
+
+These two vendors show the highest loss intensity on loss-making SKUs as a percentage of their own revenue among the top 10 by controllable leakage. Rationalising or repricing their loss-making SKUs offers the most concentrated recovery opportunity.
+
+**Evidence:** Ultra Beverage Company LLP has 215 loss-making SKUs generating $743,431 in losses (4.18% of its $17,802,646 revenue). Perfecta Wines has 208 loss-making SKUs generating $431,713 in losses (5.55% of its $7,779,747 revenue). Combined, these two vendors account for $1,175,144 in losses on loss-making SKUs.
+
+### Recommendation 2: Review the 304 loss-making SKUs at Martignetti Companies
+
+As the second-largest revenue vendor and the largest contributor to controllable leakage among the top 10 by controllable leakage, Martignetti Companies warrants priority attention for SKU rationalisation given the scale of potential recovery.
+
+**Evidence:** Martignetti Companies contributes $874,765 in controllable leakage (14.6% of total controllable leakage), with $729,836 from losses on 304 loss-making SKUs (1.78% of its $40,960,118 revenue). The vendor carries 1,388 SKUs, meaning 21.9% of its SKU count is loss-making.
+
+### Recommendation 3: Investigate margin improvement opportunities with below-average margin vendors in the top 10 by revenue
+
+Five of the top 10 vendors by revenue operate below the 28.7% portfolio blended gross margin. Given their combined revenue scale, even modest margin improvements would materially impact portfolio profitability.
+
+**Evidence:** The five below-margin vendors among the top 10 by revenue are Diageo North America Inc (25.9% margin on $68,739,835 revenue), Pernod Ricard USA (25.3% margin on $32,279,544 revenue), Jim Beam Brands Company (24.1% margin on $31,898,621 revenue), Brown-Forman Corp (26.8% margin on $18,476,612 revenue), and Ultra Beverage Company LLP (25.8% margin on $17,802,646 revenue).
+
+## 6. Data Limitations
+
+This data cannot tell management:
+
+- **Time period and trends:** No period is specified, so it is not possible to assess whether leakage or margins are improving or deteriorating
+- **Root causes of losses:** The data identifies loss-making SKUs but not why they lose money (pricing errors, low volume, high handling costs, spoilage)
+- **Customer or channel profitability:** Losses may concentrate in specific accounts or channels rather than being inherent to the SKUs
+- **Negotiation outcomes:** The data cannot predict whether vendors would accept margin or freight renegotiations
+- **SKU-level detail:** Individual SKU performance is not provided, only counts of loss-making SKUs per vendor
+- **Freight cost drivers:** Whether freight costs stem from delivery frequency, distance, minimum order sizes, or carrier rates is not shown
+- **Vendor substitutability:** The data does not indicate whether products from below-margin vendors could be sourced elsewhere or whether they are exclusive arrangements
