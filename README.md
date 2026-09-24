@@ -12,7 +12,7 @@ End-to-end commercial analytics project analysing a beverage distributor's vendo
 - **20.3% of SKUs are loss-making** (2,127 SKUs), running a blended margin of -42.6%
 - **Pareto concentration:** 17 of 126 vendors (13.5%) generate 80% of revenue ($360.4M); the 91-vendor tail contributes 5%
 - **Top 10 vendors = 65.0% of revenue**; Diageo alone accounts for 15.2%, a notable concentration risk
-- Demand forecasting (Holt-Winters ETS) achieved **9.84% MAPE**, rated Excellent
+- Demand forecasting (Holt-Winters ETS, built in Excel) achieved **9.84% MAPE**, rated Excellent
 - Random Forest classification: **95% accuracy, 0.86 F1** (after resolving data leakage from profit-margin features)
 
 ## SQL Architecture
@@ -29,7 +29,7 @@ Built on SQL Server Express (`Vendor_sales` database) in four layers:
 | `vw_VendorRevenueSummary` | Revenue, gross profit, blended margin and revenue share by vendor | GenAI insight tool |
 | `vw_VendorTiering` | Revenue tiers via NTILE quartiles (Premium / Core / Standard / Tail) | Power BI: Commercial Deep Dive |
 | `vw_ParetoAnalysis` | Cumulative revenue %, 80/15/5 Pareto bands, critical-vendor flag | Power BI: Executive Summary; Excel Executive Summary |
-| `vw_ProfitLeakage` | Excise, freight and loss-making leakage per vendor, split into controllable vs non-controllable, with severity rating | Power BI: Risk Dashboard; Excel Risk tab |
+| `vw_ProfitLeakage` | Excise, freight and loss-making leakage per vendor, split into controllable vs non-controllable, with severity rating | Power BI: Risk Dashboard; Excel Risk tab; GenAI insight tool |
 | `vw_LossMakingAnalysis` | SKUs that are loss-making, below 20% margin, or at dead stock risk | Power BI: Risk Dashboard |
 | `vw_LogisticsCostSummary` | COGS ratio, freight and excise as % of revenue, net margin after all costs | Power BI: Commercial Deep Dive |
 | `vw_FullCostAnalysis` | Net profit after all costs, benchmarked against the average of vendors with revenue ≥ $10K | Ad hoc analysis |
@@ -57,10 +57,10 @@ The raw dataset used in this project was purchased and is not included in this r
 ## Tools Used
 
 - **SQL Server:** layered view architecture, CTEs, window functions (NTILE, DENSE_RANK, LAG, running SUM OVER), NULLIF/COALESCE data-quality guards, built-in validation checks
-- **Python** (pandas, statsmodels, scikit-learn): forecasting, clustering, classification
-- **Excel:** interactive workbook (Executive Summary, Vendor Analysis, Risk Dashboard, Pricing, Forecast, Seasonal Index, MAPE Tracker, Ad Hoc Analysis)
+- **Python** (pandas, scikit-learn, statsmodels): exploratory analysis, vendor segmentation (clustering) and Random Forest classification
+- **Excel:** interactive workbook including the Holt-Winters (ETS) demand forecast with seasonal index and MAPE tracker, plus Executive Summary, Vendor Analysis, Risk Dashboard, Pricing and Ad Hoc Analysis sheets
 - **Power BI:** 3-page dashboard (Executive Summary, Commercial Deep Dive, Risk Dashboard) with a custom DAX measures table
-- **Anthropic Claude API:** generates plain-English commercial insight summaries from live vendor data
+- **Anthropic Claude API:** generates evidence-based commercial insight summaries from live vendor data
 
 ## Dashboards
 
@@ -75,7 +75,14 @@ The raw dataset used in this project was purchased and is not included in this r
 
 ## GenAI Insight Tool
 
-`vendor_insights.py` pulls the top 10 vendors (revenue, gross profit, blended margin and revenue share) from `vw_VendorRevenueSummary` via pyodbc, sends them to the Claude API with a commercial-analyst prompt, and saves the summary to a local text file. The API key is read from a local `.env` file and never stored in code.
+`vendor_insights.py` turns the SQL results into a written commercial summary using the Claude API:
+
+1. **Python pulls the facts** from three queries: portfolio totals with the leakage split (`vw_ProfitLeakage`), the top 10 vendors by revenue (`vw_VendorRevenueSummary`), and the top 10 vendors by controllable leakage.
+2. **Python does the arithmetic.** Every percentage, rank and count (for example, which vendors sit below the portfolio margin) is calculated in code and passed to the model ready-made, so the model never has to count or calculate.
+3. **The model writes the narrative under strict evidence rules:** use only the figures provided, cite the figures behind every recommendation, keep each figure with its own vendor, recommend only actions the data supports, and state what the data cannot show. It runs at temperature 0 for repeatable output.
+4. **Output is verified against the source data before publishing.** `vendor_insight_output.txt` is a verified sample.
+
+The API key is read from a local `.env` file and never stored in code.
 
 ## How to Run
 
@@ -92,9 +99,10 @@ The raw dataset used in this project was purchased and is not included in this r
 | `Data/` | Not included; the raw dataset was purchased and isn't licensed for redistribution (see Note on Data) |
 | `SQL Analysis/` | Full SQL script: data profiling, view definitions and validation checks |
 | `Notebooks/` | EDA, vendor performance analysis, and segmentation/prediction notebooks |
-| `Excel Analysis/` | Interactive Excel workbook |
+| `Excel Analysis/` | Interactive Excel workbook, including the Holt-Winters demand forecast |
 | `Power BI/` | Power BI dashboard file |
 | `Screenshots/` | Dashboard and output screenshots |
 | `vendor_insights.py` | GenAI commercial insight generator (Claude API) |
+| `vendor_insight_output.txt` | Verified sample output from the GenAI tool |
 | `requirements.txt` | Python dependencies (`pip install -r requirements.txt`) |
 | `.env.example` | Template for the Anthropic API key; copy to `.env` and add your own key |
