@@ -58,7 +58,7 @@ The raw dataset used in this project was purchased and is not included in this r
 
 - **SQL Server:** layered view architecture, CTEs, window functions (NTILE, DENSE_RANK, LAG, running SUM OVER), NULLIF/COALESCE data-quality guards, built-in validation checks
 - **Python** (pandas, scikit-learn, statsmodels): exploratory analysis, vendor segmentation (clustering) and Random Forest classification
-- **Excel:** interactive workbook including the Holt-Winters (ETS) demand forecast with seasonal index and MAPE tracker, plus Executive Summary, Vendor Analysis, Risk Dashboard, Pricing and Ad Hoc Analysis sheets
+- **Excel:** interactive workbook including the Holt-Winters (ETS) demand forecast with seasonal index and MAPE tracker, plus Executive Summary, Vendor Analysis, Risk Dashboard, Pricing and Ad Hoc Analysis sheets. Dashboards report blended margins (gross profit ÷ revenue) and separate controllable leakage from non-controllable excise
 - **Power BI:** 3-page dashboard (Executive Summary, Commercial Deep Dive, Risk Dashboard) with a custom DAX measures table
 - **Anthropic Claude API:** generates evidence-based commercial insight summaries from live vendor data
 
@@ -67,10 +67,7 @@ The raw dataset used in this project was purchased and is not included in this r
 **Power BI — Executive Summary**
 ![Executive Summary](Screenshots/Executive_Summary_Power_BI.png)
 
-**Power BI — Risk Dashboard**
-![Risk Dashboard](Screenshots/Risk_Dashboard_PowerBI.png)
-
-**Demand Forecast**
+**Excel — Demand Forecast (Holt-Winters ETS)**
 ![Demand Forecast](Screenshots/Demand_Forecast.png)
 
 ## GenAI Insight Tool
