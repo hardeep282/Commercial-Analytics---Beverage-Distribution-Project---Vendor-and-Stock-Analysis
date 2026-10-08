@@ -64,11 +64,23 @@ The raw dataset used in this project was purchased and is not included in this r
 
 ## Dashboards
 
-**Power BI — Executive Summary**
-![Executive Summary](Screenshots/Executive_Summary_Power_BI.png)
+**Excel — Executive Summary**
+![Excel Executive Summary](Screenshots/Executive_Summary_Excel.png)
+
+**Excel — Vendor Analysis**
+![Excel Vendor Analysis](Screenshots/Vendor_Analysis_Excel.png)
+
+**Excel — Risk Dashboard**
+![Excel Risk Dashboard](Screenshots/Risk_Dashboard_Excel.png)
+
+**Excel — Pricing and Margin Analysis**
+![Excel Pricing and Margin Analysis](Screenshots/Pricing_Excel.png)
 
 **Excel — Demand Forecast (Holt-Winters ETS)**
 ![Demand Forecast](Screenshots/Demand_Forecast.png)
+
+**Power BI — Executive Summary**
+![Power BI Executive Summary](Screenshots/Executive_Summary_Power_BI.png)
 
 ## GenAI Insight Tool
 
