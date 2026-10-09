@@ -1,6 +1,34 @@
 table vw_PortfolioHealth
 	lineageTag: 7bf03e9a-724f-49a4-b48b-e2fbe5caf4b7
 
+	/// Revenue at SKU level. Dynamic format ($K/$M) keeps totals readable whatever the model culture.
+	measure 'SKU Revenue' = SUM ( vw_PortfolioHealth[TotalSalesDollars] )
+		lineageTag: ac768b92-9299-489a-bbf2-37563fdb78cb
+
+		formatStringDefinition =
+				VAR v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH (
+				        TRUE (),
+				        v >= 1000000, "\$#,0.00,,""M""",
+				        v >= 100000, "\$#,0.0,""K""",
+				        "\$#,0"
+				    )
+
+	/// Gross profit at SKU level. Dynamic format ($K/$M) keeps totals readable whatever the model culture.
+	measure 'SKU Gross Profit' = SUM ( vw_PortfolioHealth[GrossProfit] )
+		lineageTag: a1b22adc-45a9-422e-a42f-338f471d9544
+
+		formatStringDefinition =
+				VAR v = ABS ( SELECTEDMEASURE () )
+				RETURN
+				    SWITCH (
+				        TRUE (),
+				        v >= 1000000, "\$#,0.00,,""M""",
+				        v >= 100000, "\$#,0.0,""K""",
+				        "\$#,0"
+				    )
+
 	column VendorName
 		dataType: string
 		lineageTag: 4135fb8c-5327-4e7a-9f48-2ec7feb235ce

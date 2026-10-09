@@ -445,7 +445,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Controllable leakage (amber) vs statutory excise (grey), in millions'"
+                  "Value": "'Controllable (amber) vs statutory excise (grey), $M'"
                 }
               }
             },

@@ -47,41 +47,31 @@
             },
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "vw_PortfolioHealth"
-                        }
-                      },
-                      "Property": "TotalSalesDollars"
+                    "SourceRef": {
+                      "Entity": "vw_PortfolioHealth"
                     }
                   },
-                  "Function": 0
+                  "Property": "SKU Revenue"
                 }
               },
-              "queryRef": "Sum(vw_PortfolioHealth.TotalSalesDollars)",
+              "queryRef": "vw_PortfolioHealth.SKU Revenue",
               "nativeQueryRef": "Revenue",
               "displayName": "Revenue"
             },
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "vw_PortfolioHealth"
-                        }
-                      },
-                      "Property": "GrossProfit"
+                    "SourceRef": {
+                      "Entity": "vw_PortfolioHealth"
                     }
                   },
-                  "Function": 0
+                  "Property": "SKU Gross Profit"
                 }
               },
-              "queryRef": "Sum(vw_PortfolioHealth.GrossProfit)",
+              "queryRef": "vw_PortfolioHealth.SKU Gross Profit",
               "nativeQueryRef": "Gross profit",
               "displayName": "Gross profit"
             },
@@ -122,18 +112,13 @@
         "sort": [
           {
             "field": {
-              "Aggregation": {
+              "Measure": {
                 "Expression": {
-                  "Column": {
-                    "Expression": {
-                      "SourceRef": {
-                        "Entity": "vw_PortfolioHealth"
-                      }
-                    },
-                    "Property": "GrossProfit"
+                  "SourceRef": {
+                    "Entity": "vw_PortfolioHealth"
                   }
                 },
-                "Function": 0
+                "Property": "SKU Gross Profit"
               }
             },
             "direction": "Ascending"
@@ -241,7 +226,7 @@
                 }
               }
             ],
-            "metadata": "Sum(vw_PortfolioHealth.GrossProfit)"
+            "metadata": "vw_PortfolioHealth.SKU Gross Profit"
           }
         }
       ],
