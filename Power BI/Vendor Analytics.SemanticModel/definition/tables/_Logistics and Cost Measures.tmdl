@@ -1,0 +1,64 @@
+table '_Logistics and Cost Measures'
+	lineageTag: 4086a9f7-5660-4771-bb1a-aacad7277a7f
+
+	measure 'Total Freight Cost' = SUM(vw_LogisticsCostSummary[TotalFreight])
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 7a87a4a4-f92b-49bd-8313-7a6369d8c974
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Total Excise Tax' = SUM(vw_LogisticsCostSummary[TotalExciseTax])
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 1003d57f-8eb2-4fbf-ab3f-1c423716b04e
+
+	measure 'Total Profit Leakage' = ```
+			SUM(vw_ProfitLeakage[Total leakage amount])
+			
+			```
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 1f59d666-29ef-4b08-8982-219c40a562a3
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Leakage % of Revenue' = DIVIDE([Total Profit Leakage],[Total Revenue])
+		lineageTag: d5c40050-db28-4c07-831f-6775ab8ed183
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Avg Net Margin After All Costs %' =
+			
+			AVERAGEX(
+			    FILTER(
+			        vw_LogisticsCostSummary,
+			        vw_LogisticsCostSummary[TotalRevenue] >= 10000
+			    ),
+			    vw_LogisticsCostSummary[NetMarginAfterAllCostsPct]
+			)
+		lineageTag: 23c0c3d2-a091-4a14-b41e-4e6889224480
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Dummy
+		dataType: string
+		isHidden
+		lineageTag: ea4a2127-c765-4602-b727-5626c6fb45a4
+		summarizeBy: none
+		sourceColumn: Dummy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition '_Logistics and Cost Measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Dummy = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Dummy", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -10,3 +10,7 @@ __pycache__/
 venv/
 vendor_insight_output.txt
 Data/
+
+# Power BI project: data cache and per-user settings
+**/.pbi/cache.abf
+**/.pbi/localSettings.json

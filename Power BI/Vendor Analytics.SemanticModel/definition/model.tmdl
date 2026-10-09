@@ -1,0 +1,34 @@
+model Model
+	culture: en-IN
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["vendor_sales_summary","Vendor_Revenue","Vendor_Tiering","Vendor_Rankings","Pareto_Analysis","Loss_Making_Analysis","_Revenue Measures","_Commercial_Measures","_Logistics and Cost Measures","_Pareto_Conc_Measures","_Dynamic_Title_Measure","vw_PortfolioHealth","vw_ProfitLeakage","vw_CleanAnalysis","vw_FullCostAnalysis","vw_LogisticsCostSummary","_Conditional_Formatting"]
+
+annotation PBI_ProTooling = ["MCP-PBIModeling","DevMode"]
+
+ref table vendor_sales_summary
+ref table Vendor_Revenue
+ref table Vendor_Tiering
+ref table Vendor_Rankings
+ref table Pareto_Analysis
+ref table Loss_Making_Analysis
+ref table '_Revenue Measures'
+ref table _Commercial_Measures
+ref table '_Logistics and Cost Measures'
+ref table _Pareto_Conc_Measures
+ref table _Dynamic_Title_Measure
+ref table vw_PortfolioHealth
+ref table vw_ProfitLeakage
+ref table vw_CleanAnalysis
+ref table vw_FullCostAnalysis
+ref table vw_LogisticsCostSummary
+ref table _Conditional_Formatting
+
+ref cultureInfo en-IN
+

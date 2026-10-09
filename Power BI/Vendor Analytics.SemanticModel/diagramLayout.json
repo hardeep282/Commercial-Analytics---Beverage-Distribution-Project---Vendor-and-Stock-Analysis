@@ -1,0 +1,243 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 112
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1318.8013030760892,
+            "y": 0
+          },
+          "nodeIndex": "Loss_Making_Analysis",
+          "nodeLineageTag": "7eb56f2b-95b7-46e5-a601-a8d398b76b55",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 268.06436163791966,
+            "y": 744.12284207492564
+          },
+          "nodeIndex": "Pareto_Analysis",
+          "nodeLineageTag": "30e9133a-55ac-41a0-b94e-089c8ee04723",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 1051.7157496785594,
+            "y": 111.1166044348858
+          },
+          "nodeIndex": "Vendor_Rankings",
+          "nodeLineageTag": "7df656a5-5759-4cbb-bb1e-b397970c1886",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 14
+        },
+        {
+          "location": {
+            "x": 731.92128544800073,
+            "y": 494.25651613176274
+          },
+          "nodeIndex": "Vendor_Revenue",
+          "nodeLineageTag": "1e538d5e-d490-4c36-9e4b-81fac6495c63",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 11
+        },
+        {
+          "location": {
+            "x": 347.39554930983911,
+            "y": 0
+          },
+          "nodeIndex": "vendor_sales_summary",
+          "nodeLineageTag": "4481fba3-4907-425b-a9b1-bb59f25633cd",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 12
+        },
+        {
+          "location": {
+            "x": 312.89898910595906,
+            "y": 394.612650120119
+          },
+          "nodeIndex": "Vendor_Tiering",
+          "nodeLineageTag": "b86e14bd-9940-4758-ad46-7e01eeca826a",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 13
+        },
+        {
+          "location": {
+            "x": 1779.329785022524,
+            "y": 234.65126031327389
+          },
+          "nodeIndex": "_Revenue Measures",
+          "nodeLineageTag": "a14b4fd6-cc08-4135-9ba8-f21ea182de39",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 16
+        },
+        {
+          "location": {
+            "x": 2043.3567702102619,
+            "y": 196.31792697994058
+          },
+          "nodeIndex": "_Commercial_Measures",
+          "nodeLineageTag": "f15b688e-288a-47a2-ae14-6861804f4d86",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 1814.0504220646662,
+            "y": 379.65126031327395
+          },
+          "nodeIndex": "_Logistics and Cost Measures",
+          "nodeLineageTag": "4086a9f7-5660-4771-bb1a-aacad7277a7f",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 2061.4107405857376,
+            "y": 342.98459364660732
+          },
+          "nodeIndex": "_Pareto_Conc_Measures",
+          "nodeLineageTag": "4e1ec1e6-1eaf-467c-9707-ac400d04bae1",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 1803.7710591068089,
+            "y": 93.98457838781826
+          },
+          "nodeIndex": "_Dynamic_Title_Measure",
+          "nodeLineageTag": "c0d1bb7c-38fd-45e3-8bd9-cad0167c5688",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 677.77105910680859,
+            "y": 0
+          },
+          "nodeIndex": "vw_PortfolioHealth",
+          "nodeLineageTag": "7bf03e9a-724f-49a4-b48b-e2fbe5caf4b7",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 591.79804429454634,
+            "y": 992.061421037463
+          },
+          "nodeIndex": "vw_CleanAnalysis",
+          "nodeLineageTag": "851dc24f-a4bd-4c8a-90de-9f3a7020a562",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1010.7980442945468,
+            "y": 888.72808770412951
+          },
+          "nodeIndex": "vw_ProfitLeakage",
+          "nodeLineageTag": "d89f3ab1-a719-4eda-9f56-9a61ae484210",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1501.8250498273362,
+            "y": 823.72808770412951
+          },
+          "nodeIndex": "vw_FullCostAnalysis",
+          "nodeLineageTag": "b8b4244f-3326-4b9e-9c20-5aa4800a146a",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1263.0961468391122,
+            "y": 500.39475437079625
+          },
+          "nodeIndex": "vw_LogisticsCostSummary",
+          "nodeLineageTag": "145cf705-bdda-4ca4-9380-fda66eec09a9",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2368.096146839112,
+            "y": 341.72808770412951
+          },
+          "nodeIndex": "_Conditional_Formatting",
+          "nodeLineageTag": "f51cdce2-411f-4844-a891-47d770574e09",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 50,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

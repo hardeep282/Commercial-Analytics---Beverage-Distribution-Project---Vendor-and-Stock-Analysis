@@ -1,0 +1,271 @@
+table vw_PortfolioHealth
+	lineageTag: 7bf03e9a-724f-49a4-b48b-e2fbe5caf4b7
+
+	column VendorName
+		dataType: string
+		lineageTag: 4135fb8c-5327-4e7a-9f48-2ec7feb235ce
+		summarizeBy: none
+		sourceColumn: VendorName
+
+		annotation SummarizationSetBy = Automatic
+
+	column VendorNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: aa9f29b3-5169-4108-be24-ed395f22e398
+		summarizeBy: sum
+		sourceColumn: VendorNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: int64
+		formatString: 0
+		lineageTag: f43cb911-f602-4c21-9729-9e00614a72c4
+		summarizeBy: sum
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		dataType: string
+		lineageTag: 18b8d38a-a6ff-43f1-8f30-e5980a7b8d1d
+		summarizeBy: none
+		sourceColumn: Description
+
+		annotation SummarizationSetBy = Automatic
+
+	column PurchasePrice
+		dataType: double
+		lineageTag: a5a7f6ad-5d29-4e8b-9e90-a9f8a3a3605e
+		summarizeBy: sum
+		sourceColumn: PurchasePrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ActualPrice
+		dataType: double
+		lineageTag: 8f6962c0-7fe8-4522-a66e-04795a892f32
+		summarizeBy: sum
+		sourceColumn: ActualPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Volume
+		dataType: double
+		lineageTag: 54389ae3-e2ab-4928-81b8-f42efff838c3
+		summarizeBy: sum
+		sourceColumn: Volume
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalPurchaseQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 6a0d57ef-21a1-48a0-af97-7be46e32623c
+		summarizeBy: sum
+		sourceColumn: TotalPurchaseQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalPurchaseDollars
+		dataType: double
+		lineageTag: 3f53e1e8-a352-46b3-853e-e640fc3df512
+		summarizeBy: sum
+		sourceColumn: TotalPurchaseDollars
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalSalesQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 28f66654-c3fa-4464-ad68-a0ac106e2383
+		summarizeBy: sum
+		sourceColumn: TotalSalesQuantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalSalesDollars
+		dataType: double
+		lineageTag: b1ebba6a-7a92-47e2-8eb0-65f6a75e4290
+		summarizeBy: sum
+		sourceColumn: TotalSalesDollars
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalSalesPrice
+		dataType: double
+		lineageTag: f2e66fa9-fc47-4468-8cd9-043e53de01d8
+		summarizeBy: sum
+		sourceColumn: TotalSalesPrice
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalExciseTax
+		dataType: double
+		lineageTag: 131c1468-4b35-4ed6-8d69-b66c3b136aa3
+		summarizeBy: sum
+		sourceColumn: TotalExciseTax
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FreightCost
+		dataType: double
+		lineageTag: 944684f5-1dc3-4539-9238-3a0576f73fce
+		summarizeBy: sum
+		sourceColumn: FreightCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column GrossProfit
+		dataType: double
+		lineageTag: 97a285ff-6874-4023-a953-911cd66e45ab
+		summarizeBy: sum
+		sourceColumn: GrossProfit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ProfitMargin
+		dataType: double
+		lineageTag: 28651c8b-ec85-4541-8f8e-8f276656b0fd
+		summarizeBy: sum
+		sourceColumn: ProfitMargin
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column StockTurnover
+		dataType: double
+		lineageTag: ac9b4137-78eb-480b-8f6f-a6e796a559e2
+		summarizeBy: sum
+		sourceColumn: StockTurnover
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SalesToPurchaseRatio
+		dataType: double
+		lineageTag: 3a353c90-43e0-40ad-92ba-a1acc4d3e43c
+		summarizeBy: sum
+		sourceColumn: SalesToPurchaseRatio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MarkupPct
+		dataType: double
+		lineageTag: a42970ac-b43f-4218-b311-962fd07e163a
+		summarizeBy: sum
+		sourceColumn: MarkupPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FreightBurdenPct
+		dataType: double
+		lineageTag: 13098c8f-82ad-4c4e-88b5-79ae2b2b56b8
+		summarizeBy: sum
+		sourceColumn: FreightBurdenPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ExciseBurdenPct
+		dataType: double
+		lineageTag: c4747aa6-de3a-46eb-a385-2beb0f9d9146
+		summarizeBy: sum
+		sourceColumn: ExciseBurdenPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NetProfitAfterExcise
+		dataType: double
+		lineageTag: 0937320e-3483-475b-9461-cbd260a8c2fb
+		summarizeBy: sum
+		sourceColumn: NetProfitAfterExcise
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NetMarginAfterExcisePct
+		dataType: double
+		lineageTag: 8a399d25-6aff-41f1-88dd-176874e723cf
+		summarizeBy: sum
+		sourceColumn: NetMarginAfterExcisePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column HealthStatus
+		dataType: string
+		lineageTag: 2c987650-f522-4bfd-b6a6-4168e224c285
+		summarizeBy: none
+		sourceColumn: HealthStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column MarginCategory
+		dataType: string
+		lineageTag: b7131024-f352-4f14-bf70-fcb20819547d
+		summarizeBy: none
+		sourceColumn: MarginCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column TurnoverCategory
+		dataType: string
+		lineageTag: 430546ea-6d2e-4d36-b91f-5e093f83e36b
+		summarizeBy: none
+		sourceColumn: TurnoverCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column VolumeCategory
+		dataType: string
+		lineageTag: 92f3e0b9-33aa-47bd-89a4-125acb3c6fb1
+		summarizeBy: none
+		sourceColumn: VolumeCategory
+
+		annotation SummarizationSetBy = Automatic
+
+	partition vw_PortfolioHealth = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases(".\SQLEXPRESS"),
+				    Vendor_sales = Source{[Name="Vendor_sales"]}[Data],
+				    dbo_vw_PortfolioHealth = Vendor_sales{[Schema="dbo",Item="vw_PortfolioHealth"]}[Data]
+				in
+				    dbo_vw_PortfolioHealth
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

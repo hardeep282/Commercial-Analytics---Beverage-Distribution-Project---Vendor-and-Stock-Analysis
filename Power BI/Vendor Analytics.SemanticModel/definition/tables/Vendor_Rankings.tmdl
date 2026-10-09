@@ -1,0 +1,150 @@
+table Vendor_Rankings
+	lineageTag: 7df656a5-5759-4cbb-bb1e-b397970c1886
+
+	column VendorName
+		dataType: string
+		lineageTag: b546e5e2-1d34-444e-b48d-32a0e16807d2
+		summarizeBy: none
+		sourceColumn: VendorName
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalRevenue
+		dataType: double
+		lineageTag: fc8efb0f-3125-4389-86f0-2c7a542ef416
+		summarizeBy: sum
+		sourceColumn: TotalRevenue
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalProfit
+		dataType: double
+		lineageTag: a09cbe70-56fe-44f7-a25a-1eb318a4b134
+		summarizeBy: sum
+		sourceColumn: TotalProfit
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column AvgMargin
+		dataType: double
+		lineageTag: 052e1d11-131c-4329-b5fe-e9215bd577b8
+		summarizeBy: sum
+		sourceColumn: AvgMargin
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column AvgTurnover
+		dataType: double
+		lineageTag: 6325348f-9afa-4c15-85c4-63b3a6446ef8
+		summarizeBy: sum
+		sourceColumn: AvgTurnover
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SKUCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 94e4f250-7415-4569-a5e5-01bdc0459536
+		summarizeBy: sum
+		sourceColumn: SKUCount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column RevenueRank
+		dataType: int64
+		formatString: 0
+		lineageTag: 44b323b5-aa64-4add-ac0c-2e72ae083016
+		summarizeBy: sum
+		sourceColumn: RevenueRank
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MarginRank
+		dataType: int64
+		formatString: 0
+		lineageTag: a7f73699-d073-4210-b0f0-39dab548e9ee
+		summarizeBy: sum
+		sourceColumn: MarginRank
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TurnoverRank
+		dataType: int64
+		formatString: 0
+		lineageTag: 15b94137-3b0e-4265-83ca-c4a4b19a4e0d
+		summarizeBy: sum
+		sourceColumn: TurnoverRank
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CompositePerformanceScore
+		dataType: double
+		lineageTag: d7618467-35e3-4948-ae8e-8b519499bf69
+		summarizeBy: sum
+		sourceColumn: CompositePerformanceScore
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BlendedMargin
+		dataType: double
+		lineageTag: 47858ffe-d231-454e-a370-4c477c95834f
+		summarizeBy: sum
+		sourceColumn: BlendedMargin
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IsMicroVendor
+		dataType: int64
+		formatString: 0
+		lineageTag: 5ebcd96d-9483-40ac-af36-7edea3d003f4
+		summarizeBy: sum
+		sourceColumn: IsMicroVendor
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Vendor_Rankings = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases(".\SQLEXPRESS"),
+				    Vendor_sales = Source{[Name="Vendor_sales"]}[Data],
+				    dbo_vw_VendorRankings = Vendor_sales{[Schema="dbo",Item="vw_VendorRankings"]}[Data]
+				in
+				    dbo_vw_VendorRankings
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

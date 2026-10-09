@@ -1,0 +1,165 @@
+table Loss_Making_Analysis
+	lineageTag: 7eb56f2b-95b7-46e5-a601-a8d398b76b55
+
+	column VendorName
+		dataType: string
+		lineageTag: f3b5ffdb-c136-4dbb-834e-4a4be88eeec6
+		summarizeBy: none
+		sourceColumn: VendorName
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		dataType: string
+		lineageTag: 851f0d2b-41e3-4562-a3c9-be58e385fb53
+		summarizeBy: none
+		sourceColumn: Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalSalesDollars
+		dataType: double
+		lineageTag: c2c454aa-ec81-45c0-aaca-6f7cc5692734
+		summarizeBy: sum
+		sourceColumn: TotalSalesDollars
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column GrossProfit
+		dataType: double
+		lineageTag: 4816967e-bde6-433a-a693-ada3f5ce5063
+		summarizeBy: sum
+		sourceColumn: GrossProfit
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ProfitMargin
+		dataType: double
+		lineageTag: 520e975a-ef36-4c78-a31b-8074c9736592
+		summarizeBy: sum
+		sourceColumn: ProfitMargin
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column StockTurnover
+		dataType: double
+		lineageTag: 93cca3ce-b606-415c-b058-04971365d84f
+		summarizeBy: sum
+		sourceColumn: StockTurnover
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalPurchaseDollars
+		dataType: double
+		lineageTag: 5f6a4b61-71b4-42bb-ab5b-607d0f96580c
+		summarizeBy: sum
+		sourceColumn: TotalPurchaseDollars
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column MarginCategory
+		dataType: string
+		lineageTag: 9eaf7407-701b-4224-84d0-5618e9840b30
+		summarizeBy: none
+		sourceColumn: MarginCategory
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TurnoverCategory
+		dataType: string
+		lineageTag: 15bf5934-e0d4-4f50-921b-45e2298e134d
+		summarizeBy: none
+		sourceColumn: TurnoverCategory
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MarkupPct
+		dataType: double
+		lineageTag: 1d1d1d29-5d9d-44c7-a543-3917fc5ad733
+		summarizeBy: sum
+		sourceColumn: MarkupPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FreightBurdenPct
+		dataType: double
+		lineageTag: 0521eed6-3c10-4ce5-8065-a46c1e6c6541
+		summarizeBy: sum
+		sourceColumn: FreightBurdenPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ExciseBurdenPct
+		dataType: double
+		lineageTag: 56d17a30-cb76-4249-a9b9-dcd66dcb7aed
+		summarizeBy: sum
+		sourceColumn: ExciseBurdenPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NetMarginAfterExcisePct
+		dataType: double
+		lineageTag: f3d582c1-1bf5-4ff6-877e-9bff75d29844
+		summarizeBy: sum
+		sourceColumn: NetMarginAfterExcisePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column HealthStatus
+		dataType: string
+		lineageTag: aa93ff04-026a-4ae5-8457-e8381bd9d119
+		summarizeBy: none
+		sourceColumn: HealthStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Loss_Making_Analysis = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases(".\SQLEXPRESS"),
+				    Vendor_sales = Source{[Name="Vendor_sales"]}[Data],
+				    dbo_vw_LossMakingAnalysis = Vendor_sales{[Schema="dbo",Item="vw_LossMakingAnalysis"]}[Data]
+				in
+				    dbo_vw_LossMakingAnalysis
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

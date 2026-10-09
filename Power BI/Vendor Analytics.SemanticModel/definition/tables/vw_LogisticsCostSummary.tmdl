@@ -1,0 +1,129 @@
+table vw_LogisticsCostSummary
+	lineageTag: 145cf705-bdda-4ca4-9380-fda66eec09a9
+
+	column VendorName
+		dataType: string
+		lineageTag: e5347a71-5aa1-4561-9cee-7d80c4d41832
+		summarizeBy: none
+		sourceColumn: VendorName
+
+		annotation SummarizationSetBy = Automatic
+
+	column VendorNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 68700d15-16cb-4617-8e01-a43ee413ced8
+		summarizeBy: sum
+		sourceColumn: VendorNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalRevenue
+		dataType: double
+		lineageTag: 74fcf645-ba45-49f6-9081-2c9181600cba
+		summarizeBy: sum
+		sourceColumn: TotalRevenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalCOGS
+		dataType: double
+		lineageTag: a1d1df7b-912c-4e9a-9266-7980000ab764
+		summarizeBy: sum
+		sourceColumn: TotalCOGS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalExciseTax
+		dataType: double
+		lineageTag: d3138303-005c-4d89-b6f2-6a553601df69
+		summarizeBy: sum
+		sourceColumn: TotalExciseTax
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalFreight
+		dataType: double
+		lineageTag: 135c99ad-a348-4c59-9b23-744c3b2a35e3
+		summarizeBy: sum
+		sourceColumn: TotalFreight
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column COGSRatioPct
+		dataType: double
+		lineageTag: 0fc53339-d3fe-4bec-b58d-c432df8895c0
+		summarizeBy: sum
+		sourceColumn: COGSRatioPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FreightPctOfRevenue
+		dataType: double
+		lineageTag: 67523a77-12df-4e6c-a3fd-eb8d9def616d
+		summarizeBy: sum
+		sourceColumn: FreightPctOfRevenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ExcisePctOfRevenue
+		dataType: double
+		lineageTag: c938270b-4c34-440a-8883-01c9e31cc293
+		summarizeBy: sum
+		sourceColumn: ExcisePctOfRevenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NetMarginAfterAllCostsPct
+		dataType: double
+		lineageTag: de2134de-145b-4618-a371-fd7f4f51f452
+		summarizeBy: sum
+		sourceColumn: NetMarginAfterAllCostsPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalCostBurdenPct
+		dataType: double
+		lineageTag: 56620693-0f31-4d85-828c-7461137721c5
+		summarizeBy: sum
+		sourceColumn: TotalCostBurdenPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalSKUs
+		dataType: int64
+		formatString: 0
+		lineageTag: ee4000eb-0830-4bba-bc26-105a14866507
+		summarizeBy: sum
+		sourceColumn: TotalSKUs
+
+		annotation SummarizationSetBy = Automatic
+
+	partition vw_LogisticsCostSummary = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases(".\SQLEXPRESS"),
+				    Vendor_sales = Source{[Name="Vendor_sales"]}[Data],
+				    dbo_vw_LogisticsCostSummary = Vendor_sales{[Schema="dbo",Item="vw_LogisticsCostSummary"]}[Data]
+				in
+				    dbo_vw_LogisticsCostSummary
+

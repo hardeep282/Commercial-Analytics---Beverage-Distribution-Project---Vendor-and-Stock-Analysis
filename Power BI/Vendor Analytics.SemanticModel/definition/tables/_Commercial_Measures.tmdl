@@ -1,0 +1,86 @@
+table _Commercial_Measures
+	lineageTag: f15b688e-288a-47a2-ae14-6861804f4d86
+
+	measure 'Loss Making Rate %' = DIVIDE([Loss Making SKUs], [SKUs by Health Category])
+		formatString: 0.0%
+		lineageTag: fb9d82c2-5a54-466d-b6f8-c9aea0162865
+
+		changedProperty = IsHidden
+
+	measure 'Loss Making SKUs' =
+			CALCULATE(COUNTROWS(vw_PortfolioHealth),
+			                                   vw_PortfolioHealth[HealthStatus] = "Loss Making")
+		formatString: 0
+		lineageTag: bbdd8f69-23dc-453f-a068-992ab6ffc841
+
+		changedProperty = IsHidden
+
+	measure Revenue_SKUs_in_Loss =
+			CALCULATE(SUM(vw_PortfolioHealth[TotalSalesDollars]),
+			                                vw_PortfolioHealth[HealthStatus]="Loss Making")
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 22c8dc54-328e-4e49-9186-c6c34dfab9cc
+
+		changedProperty = IsHidden
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Dead Stock SKUs' = ```
+			CALCULATE(COUNTROWS(vw_PortfolioHealth), 
+			                            vw_PortfolioHealth[StockTurnover] < 1.0)
+			```
+		formatString: 0
+		lineageTag: a6db626e-aa8d-4cd7-ba46-045e45f04e40
+
+	measure 'Dead Stock Rate %' = DIVIDE([Dead Stock SKUs], [SKUs by Health Category])
+		formatString: 0.0%
+		lineageTag: 3bfed3d5-00e0-455c-aea3-8701bf1c7ba4
+
+	measure 'Profit Leakage' = SUM(vw_ProfitLeakage[Total leakage amount])
+		formatString: \$#,0.0;(\$#,0.0);\$#,0.0
+		lineageTag: a984a48e-6236-42b9-9ec9-e3da9fb601bd
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Healthy SKUs' = CALCULATE(COUNTROWS(vw_PortfolioHealth),vw_PortfolioHealth[HealthStatus] = "Healthy")
+		formatString: 0
+		lineageTag: 5285c34c-fa6f-482f-b672-fc6526ba995d
+
+	measure 'Profitable but slow SKUs' = CALCULATE(COUNTROWS(vw_PortfolioHealth),vw_PortfolioHealth[HealthStatus] = "Profitable but slow")
+		formatString: 0
+		lineageTag: f13d27cd-0601-4362-8341-b871c9349cef
+
+	measure 'AT Risk SKUs' = CALCULATE(COUNTROWS(vw_PortfolioHealth),vw_PortfolioHealth[HealthStatus] = "At Risk")
+		formatString: 0
+		lineageTag: 4e45c628-6d1c-4d84-8791-807c6416b2da
+
+	measure 'Loss Making Dead Stock SKUs' =
+			CALCULATE(COUNTROWS(vw_PortfolioHealth),
+			                             vw_PortfolioHealth[HealthStatus] = "Loss Making",
+			                             vw_PortfolioHealth[StockTurnover] < 1)
+		formatString: 0
+		lineageTag: cf041cd6-244f-48c2-9eb6-7ab12a232706
+
+	column Column1
+		dataType: string
+		isHidden
+		lineageTag: a2a1409e-7a3b-46fa-b333-8859dddfcfc5
+		summarizeBy: none
+		sourceColumn: Column1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Commercial_Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t])
+				in
+				    Source
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

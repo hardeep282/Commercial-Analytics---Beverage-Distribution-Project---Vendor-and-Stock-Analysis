@@ -1,0 +1,60 @@
+table _Pareto_Conc_Measures
+	lineageTag: 4e1ec1e6-1eaf-467c-9707-ac400d04bae1
+
+	measure 'Top 10 Vendor Revenue' = ```
+			CALCULATE(SUM(Pareto_Analysis[TotalRevenue]),
+			                                  TOPN(10, 
+			                                      ALL(Pareto_Analysis),
+			                                      Pareto_Analysis[TotalRevenue],
+			                                      DESC
+			                                      )
+			                                    )
+			```
+		lineageTag: db3d2bd2-7c9d-4288-bf1f-b813f84bbc83
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Top 10 Revenue Concentration %' =
+			DIVIDE([Top 10 Vendor Revenue],
+			                                        [Total Revenue],
+			                                        0)*100
+		formatString: 0.00%;-0.00%;0.00%
+		lineageTag: e5ff92ad-b631-419c-a868-013bc6df594e
+
+	measure 'Healthy SKU %' =
+			DIVIDE(
+			                    CALCULATE(
+			                         COUNTROWS(vw_PortfolioHealth),
+			                         vw_PortfolioHealth[HealthStatus] = "Healthy"
+			                    ),
+			                    [Total SKUs],
+			                    0
+			) * 100
+		lineageTag: 329cc954-d65c-47a0-8c5a-f278e03a0b1a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Dummy
+		dataType: string
+		isHidden
+		lineageTag: ae6bb0a8-d9b5-46ad-b30d-a091a75af166
+		summarizeBy: none
+		sourceColumn: Dummy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Pareto_Conc_Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Dummy = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Dummy", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

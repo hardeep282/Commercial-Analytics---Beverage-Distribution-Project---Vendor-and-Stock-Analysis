@@ -1,0 +1,294 @@
+table vw_ProfitLeakage
+	lineageTag: d89f3ab1-a719-4eda-9f56-9a61ae484210
+
+	column VendorName
+		dataType: string
+		lineageTag: 5ca8945b-c75d-4700-9a79-e914456a165f
+		summarizeBy: none
+		sourceColumn: VendorName
+
+		annotation SummarizationSetBy = Automatic
+
+	column VendorNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: f46fff70-a08c-42dd-a294-b38f0ead570e
+		summarizeBy: sum
+		sourceColumn: VendorNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalRevenue
+		dataType: double
+		lineageTag: 27213a75-b296-4882-b63e-8c47805fbf18
+		summarizeBy: sum
+		sourceColumn: TotalRevenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalGrossProfit
+		dataType: double
+		lineageTag: dc818d0a-89a1-4ba8-8c38-758e7c41aa87
+		summarizeBy: sum
+		sourceColumn: TotalGrossProfit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalCOGS
+		dataType: double
+		lineageTag: 77b0062a-bb54-4f60-be4b-84f7324e03b5
+		summarizeBy: sum
+		sourceColumn: TotalCOGS
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalSKUs
+		dataType: int64
+		formatString: 0
+		lineageTag: 30128299-3680-418c-a2f4-4e39b8080346
+		summarizeBy: sum
+		sourceColumn: TotalSKUs
+
+		annotation SummarizationSetBy = Automatic
+
+	column LossMakingSKUs
+		dataType: int64
+		formatString: 0
+		lineageTag: 75186bef-7775-46b6-bf7e-d520f17ae80f
+		summarizeBy: sum
+		sourceColumn: LossMakingSKUs
+
+		annotation SummarizationSetBy = Automatic
+
+	column DeadStockSKUs
+		dataType: int64
+		formatString: 0
+		lineageTag: b2f5d521-a002-45f1-b989-82822ab38d53
+		summarizeBy: sum
+		sourceColumn: DeadStockSKUs
+
+		annotation SummarizationSetBy = Automatic
+
+	column ExciseLeakage
+		dataType: double
+		lineageTag: c84232da-a36e-4bf7-b910-9c85a5057f70
+		summarizeBy: sum
+		sourceColumn: ExciseLeakage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ExciseLeakagePct
+		dataType: double
+		lineageTag: 03c87d4d-876e-4851-823d-a36331afa92d
+		summarizeBy: sum
+		sourceColumn: ExciseLeakagePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FreightLeakage
+		dataType: double
+		lineageTag: 80a90d33-b6d9-41b3-b184-4443498243d9
+		summarizeBy: sum
+		sourceColumn: FreightLeakage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FreightLeakagePct
+		dataType: double
+		lineageTag: f586c43e-4c3b-4928-8322-e59a2e2201fd
+		summarizeBy: sum
+		sourceColumn: FreightLeakagePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LossMakingLeakage
+		dataType: double
+		lineageTag: c63d8e8d-4b6b-4523-859d-15c5ce02233a
+		summarizeBy: sum
+		sourceColumn: LossMakingLeakage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LossMakingLeakagePct
+		dataType: double
+		lineageTag: 5c834716-053f-4cfc-ae62-dce01734103b
+		summarizeBy: sum
+		sourceColumn: LossMakingLeakagePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DeadStockRevenue
+		dataType: double
+		lineageTag: d9922dc5-fbb6-4c5f-912a-7c1e716d64cd
+		summarizeBy: sum
+		sourceColumn: DeadStockRevenue
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DeadStockRevenuePct
+		dataType: double
+		lineageTag: 8f423f7d-58c7-4d7d-8ad1-4a7fc44221a0
+		summarizeBy: sum
+		sourceColumn: DeadStockRevenuePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column DeadStockSKUsPct
+		dataType: double
+		lineageTag: 1ede56f0-01b6-4a8d-b5bb-91f556385846
+		summarizeBy: sum
+		sourceColumn: DeadStockSKUsPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LossMakingSKUsPct
+		dataType: double
+		lineageTag: da03e47c-71a5-4517-8a67-3ace79364cc4
+		summarizeBy: sum
+		sourceColumn: LossMakingSKUsPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Total leakage amount'
+		dataType: double
+		lineageTag: df299a5e-dd8e-446a-a595-51c58509217b
+		summarizeBy: sum
+		sourceColumn: Total leakage amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalLeakagePct
+		dataType: double
+		lineageTag: dad68f24-695c-4b66-8ec5-70948b59913a
+		summarizeBy: sum
+		sourceColumn: TotalLeakagePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PotentialProfit
+		dataType: double
+		lineageTag: 4966bbf9-5edf-4604-9b92-5ad273599f06
+		summarizeBy: sum
+		sourceColumn: PotentialProfit
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PotentialMarginPct
+		dataType: double
+		lineageTag: 35fc1250-0eda-408a-8985-a7972decd6ab
+		summarizeBy: sum
+		sourceColumn: PotentialMarginPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column LeakageSeverity
+		dataType: string
+		lineageTag: 194d9eea-60e8-47a6-b876-8b17df9a6f93
+		summarizeBy: none
+		sourceColumn: LeakageSeverity
+
+		annotation SummarizationSetBy = Automatic
+
+	column NetProfitAfterAllCosts
+		dataType: double
+		lineageTag: 09e099a8-06af-4dc3-81c5-11be71910850
+		summarizeBy: sum
+		sourceColumn: NetProfitAfterAllCosts
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NetMarginAfterAllCostsPct
+		dataType: double
+		lineageTag: d9433549-928c-4947-928f-9da936846b57
+		summarizeBy: sum
+		sourceColumn: NetMarginAfterAllCostsPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ControllableLeakage
+		dataType: double
+		lineageTag: 49e25551-cbd9-44b0-931a-54544ecf0bed
+		summarizeBy: sum
+		sourceColumn: ControllableLeakage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ControllableLeakagePct
+		dataType: double
+		lineageTag: ef2f759a-a4cf-47ea-b104-c35024817d10
+		summarizeBy: sum
+		sourceColumn: ControllableLeakagePct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column NonControllableCost
+		dataType: double
+		lineageTag: 51050382-4b35-4fd0-9081-897c8add95e4
+		summarizeBy: sum
+		sourceColumn: NonControllableCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ControllableLeakageSeverity
+		dataType: string
+		lineageTag: 7d340050-01bc-4236-a545-b260bcff2c41
+		summarizeBy: none
+		sourceColumn: ControllableLeakageSeverity
+
+		annotation SummarizationSetBy = Automatic
+
+	partition vw_ProfitLeakage = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases(".\SQLEXPRESS"),
+				    Vendor_sales = Source{[Name="Vendor_sales"]}[Data],
+				    dbo_vw_ProfitLeakage = Vendor_sales{[Schema="dbo",Item="vw_ProfitLeakage"]}[Data],
+				    #"Renamed Columns" = Table.RenameColumns(dbo_vw_ProfitLeakage,{{"TotalLeakageAmount", "Total leakage amount"}})
+				in
+				    #"Renamed Columns"
+

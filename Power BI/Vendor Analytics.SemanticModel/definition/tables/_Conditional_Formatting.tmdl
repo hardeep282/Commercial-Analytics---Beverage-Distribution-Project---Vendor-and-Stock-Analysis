@@ -1,0 +1,47 @@
+table _Conditional_Formatting
+	lineageTag: f51cdce2-411f-4844-a891-47d770574e09
+
+	measure 'Margin Colour' =
+			
+			IF(
+			    [Blended Margin %] >= 0.25, "#1D9E75",   -- green: healthy
+			    IF(
+			        [Blended Margin %] >= 0.15, "#E67E22", -- amber: moderate
+			        "#C0392B"                             -- red: poor
+			    )
+			)
+		lineageTag: 0344d377-1da3-4306-8126-aed446afe1d1
+
+	measure '-- Loss Making Colour-- Red if loss making SKUs above 15% of portfolio-- Amber if between 10-15%-- Green if below 10%Loss Making Colour' =
+			
+			IF(
+			    [Loss Making Rate %] > 0.15, "#C0392B",
+			    IF(
+			        [Loss Making Rate %] > 0.10, "#E67E22",
+			        "#1D9E75"
+			    )
+			)
+		lineageTag: 389574ab-a407-4abe-b3ac-08a0800169ca
+
+	column Dummy
+		dataType: string
+		isHidden
+		lineageTag: 733e376a-11cb-4257-b7b1-9cb9272f7e79
+		summarizeBy: none
+		sourceColumn: Dummy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Conditional_Formatting = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Dummy = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Dummy", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,225 @@
+table vendor_sales_summary
+	lineageTag: 4481fba3-4907-425b-a9b1-bb59f25633cd
+
+	column VendorNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 14a4cdd2-817d-4c41-928a-38f2bdc849c8
+		summarizeBy: sum
+		sourceColumn: VendorNumber
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column VendorName
+		dataType: string
+		lineageTag: 71e8e52d-6724-456b-a85e-3ae51cef6a98
+		summarizeBy: none
+		sourceColumn: VendorName
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: int64
+		formatString: 0
+		lineageTag: e971a3e8-96d0-4a55-bb86-a289fa32a4de
+		summarizeBy: sum
+		sourceColumn: Brand
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		dataType: string
+		lineageTag: 45023fe6-6031-4e44-b4e2-ac6d9257d943
+		summarizeBy: none
+		sourceColumn: Description
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PurchasePrice
+		dataType: double
+		lineageTag: 84436022-0552-4fb6-a9ec-67f79aba9277
+		summarizeBy: sum
+		sourceColumn: PurchasePrice
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ActualPrice
+		dataType: double
+		lineageTag: be11c5c7-d91f-4171-a201-7035f8445b86
+		summarizeBy: sum
+		sourceColumn: ActualPrice
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Volume
+		dataType: double
+		lineageTag: 4f012927-68b9-459b-ba94-9ff083111daf
+		summarizeBy: sum
+		sourceColumn: Volume
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalPurchaseQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 02f57632-543e-407d-84e4-fa2b1353c8c5
+		summarizeBy: sum
+		sourceColumn: TotalPurchaseQuantity
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalPurchaseDollars
+		dataType: double
+		lineageTag: 3f3633b4-89d1-4b15-a871-3e3cbe03f3c6
+		summarizeBy: sum
+		sourceColumn: TotalPurchaseDollars
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalSalesQuantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 88006510-322b-414f-9aee-0c1ad3688720
+		summarizeBy: sum
+		sourceColumn: TotalSalesQuantity
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalSalesDollars
+		dataType: double
+		lineageTag: 99160405-7a5c-4257-9020-391f44ead1e8
+		summarizeBy: sum
+		sourceColumn: TotalSalesDollars
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalSalesPrice
+		dataType: double
+		lineageTag: 9acf699a-d926-43fd-8294-d601c42ba4a2
+		summarizeBy: sum
+		sourceColumn: TotalSalesPrice
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalExciseTax
+		dataType: double
+		lineageTag: 69b1abd4-6dd1-4373-87cd-dcf911a44468
+		summarizeBy: sum
+		sourceColumn: TotalExciseTax
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column FreightCost
+		dataType: double
+		lineageTag: c10c2233-5ed0-412e-8561-aa0683e291cd
+		summarizeBy: sum
+		sourceColumn: FreightCost
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column GrossProfit
+		dataType: double
+		lineageTag: 2b9e19fb-29d0-4563-be26-8fa3e86b97ee
+		summarizeBy: sum
+		sourceColumn: GrossProfit
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ProfitMargin
+		dataType: double
+		lineageTag: ebbd5f38-24ad-4733-899c-fe68e24f14a9
+		summarizeBy: sum
+		sourceColumn: ProfitMargin
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column StockTurnover
+		dataType: double
+		lineageTag: 5d88e9e5-f3c0-4d77-ad0c-680eca904045
+		summarizeBy: sum
+		sourceColumn: StockTurnover
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SalestoPurchaseRatio
+		dataType: double
+		lineageTag: 815e802e-096f-420c-b79b-6cb9f7e544cc
+		summarizeBy: sum
+		sourceColumn: SalestoPurchaseRatio
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition vendor_sales_summary = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases(".\SQLEXPRESS"),
+				    Vendor_sales = Source{[Name="Vendor_sales"]}[Data],
+				    dbo_vendor_sales_summary = Vendor_sales{[Schema="dbo",Item="vendor_sales_summary"]}[Data]
+				in
+				    dbo_vendor_sales_summary
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,87 @@
+relationship AutoDetected_686fafef-2e52-4c3e-ad10-2629a8c51b7a
+	fromColumn: vendor_sales_summary.VendorName
+	toColumn: Vendor_Revenue.VendorName
+
+relationship AutoDetected_5bb91736-49c6-4f8e-af49-3f5aa5e1e3dc
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Vendor_Tiering.VendorName
+	toColumn: Vendor_Revenue.VendorName
+
+relationship AutoDetected_217b2633-9b99-47bc-81da-329c4f2706fb
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Vendor_Rankings.VendorName
+	toColumn: Vendor_Revenue.VendorName
+
+relationship AutoDetected_03eff9b8-0496-4922-8c1c-e247c1d29a27
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Pareto_Analysis.VendorName
+	toColumn: Vendor_Revenue.VendorName
+
+relationship AutoDetected_36c04567-2e37-4239-8194-82fa5d398cf4
+	fromColumn: Loss_Making_Analysis.VendorName
+	toColumn: Vendor_Revenue.VendorName
+
+relationship AutoDetected_b5070584-883b-4528-8d18-9c214125a7f8
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Vendor_Rankings.TotalProfit
+	toColumn: Vendor_Tiering.TotalProfit
+
+relationship AutoDetected_5c065bdc-380c-4b96-bf8b-3bce9f484c25
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: Pareto_Analysis.TotalProfit
+	toColumn: Vendor_Tiering.TotalProfit
+
+relationship AutoDetected_69fd3cee-0b1d-4fde-8b8b-8ea9738cc17d
+	fromColumn: vw_PortfolioHealth.VendorName
+	toColumn: Vendor_Revenue.VendorName
+
+relationship AutoDetected_37c392fd-2d9f-4d21-b1e3-77e7ef5305f5
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: vw_ProfitLeakage.VendorName
+	toColumn: Vendor_Revenue.VendorName
+
+relationship AutoDetected_0102936a-c979-406a-b175-49f81c67c3f8
+	fromColumn: vw_CleanAnalysis.VendorName
+	toColumn: Vendor_Revenue.VendorName
+
+relationship AutoDetected_2ed59dd2-cc91-4e38-9967-0e402627e249
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: vw_FullCostAnalysis.VendorName
+	toColumn: Vendor_Revenue.VendorName
+
+relationship AutoDetected_327fb70a-0f16-45ae-b412-8fa00000f6f1
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: vw_FullCostAnalysis.TotalGrossProfit
+	toColumn: vw_ProfitLeakage.TotalGrossProfit
+
+relationship AutoDetected_2176e786-9d8c-4823-baa0-4b600315b120
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: vw_LogisticsCostSummary.VendorName
+	toColumn: Vendor_Revenue.VendorName
+
+relationship AutoDetected_6756630a-5448-4ce5-8547-7719d2377810
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: vw_LogisticsCostSummary.TotalCOGS
+	toColumn: vw_ProfitLeakage.TotalCOGS
+
+relationship AutoDetected_de9f6eb5-4da0-48bb-974c-828b67f3b2ac
+	isActive: false
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: vw_LogisticsCostSummary.TotalCOGS
+	toColumn: vw_FullCostAnalysis.TotalCOGS
+

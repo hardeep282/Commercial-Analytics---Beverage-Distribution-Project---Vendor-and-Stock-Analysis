@@ -1,0 +1,108 @@
+table Vendor_Revenue
+	lineageTag: 1e538d5e-d490-4c36-9e4b-81fac6495c63
+
+	column VendorName
+		dataType: string
+		lineageTag: fe20321b-5012-479c-ba24-9c4a49a559b5
+		summarizeBy: none
+		sourceColumn: VendorName
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column NumberOfSKUs
+		dataType: int64
+		formatString: 0
+		lineageTag: 52f2037c-724c-4f06-a16b-3959d912d99f
+		summarizeBy: sum
+		sourceColumn: NumberOfSKUs
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalRevenue
+		dataType: double
+		lineageTag: 83ce6bb5-af1f-4704-a774-6b799e770b25
+		summarizeBy: sum
+		sourceColumn: TotalRevenue
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalGrossProfit
+		dataType: double
+		lineageTag: 480ba8f1-c7ce-48a8-900b-d1fe6e6f17f6
+		summarizeBy: sum
+		sourceColumn: TotalGrossProfit
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column AvgMarginPct
+		dataType: double
+		lineageTag: 2a570886-909c-4687-a43d-b311f57c80af
+		summarizeBy: sum
+		sourceColumn: AvgMarginPct
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalPurchaseCost
+		dataType: double
+		lineageTag: 775ce8c0-49de-4cb8-9934-c184b763317f
+		summarizeBy: sum
+		sourceColumn: TotalPurchaseCost
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column RevenueSharePct
+		dataType: double
+		lineageTag: e4eb4ad1-6cba-4209-91a3-c5993edc7f4e
+		summarizeBy: sum
+		sourceColumn: RevenueSharePct
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column BlendedMarginPct
+		dataType: double
+		lineageTag: 21d5faef-6004-4b0c-a3a7-a854b82a3af3
+		summarizeBy: sum
+		sourceColumn: BlendedMarginPct
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Vendor_Revenue = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases(".\SQLEXPRESS"),
+				    Vendor_sales = Source{[Name="Vendor_sales"]}[Data],
+				    dbo_vw_VendorRevenueSummary = Vendor_sales{[Schema="dbo",Item="vw_VendorRevenueSummary"]}[Data]
+				in
+				    dbo_vw_VendorRevenueSummary
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

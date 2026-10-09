@@ -1,0 +1,151 @@
+table Pareto_Analysis
+	lineageTag: 30e9133a-55ac-41a0-b94e-089c8ee04723
+
+	column VendorName
+		dataType: string
+		lineageTag: fe5a8221-a413-48a1-9dc4-30fdb5707301
+		summarizeBy: none
+		sourceColumn: VendorName
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SKUCount
+		dataType: int64
+		formatString: 0
+		lineageTag: 0984f5ce-ab31-4e0b-8da4-4105ffb44df4
+		summarizeBy: sum
+		sourceColumn: SKUCount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TotalRevenue
+		dataType: double
+		lineageTag: bacf9702-dd09-4861-be25-58ce4c8291f3
+		summarizeBy: sum
+		sourceColumn: TotalRevenue
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TotalProfit
+		dataType: double
+		lineageTag: 5ba521a0-2d33-43fd-af33-3090ab7b5445
+		summarizeBy: sum
+		sourceColumn: TotalProfit
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column AvgMargin
+		dataType: double
+		lineageTag: 099d4b10-62ec-48c6-8730-82ba21b7bf49
+		summarizeBy: sum
+		sourceColumn: AvgMargin
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column RevenueRank
+		dataType: int64
+		formatString: 0
+		lineageTag: b876b536-18a3-428b-abcd-10f90bb076ea
+		summarizeBy: sum
+		sourceColumn: RevenueRank
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column RevenueSharePct
+		dataType: double
+		lineageTag: cea826e8-6fc7-474e-b697-03caf817a16e
+		summarizeBy: sum
+		sourceColumn: RevenueSharePct
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CumulativeRevenue
+		dataType: double
+		lineageTag: c4437851-fd50-4590-86eb-17a2b618f0f0
+		summarizeBy: sum
+		sourceColumn: CumulativeRevenue
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CumulativeRevenuePct
+		dataType: double
+		lineageTag: 27a17446-d6cc-46bd-b450-e5ad5bcd6680
+		summarizeBy: sum
+		sourceColumn: CumulativeRevenuePct
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ParetoBand
+		dataType: string
+		lineageTag: ddb13b70-06b1-4787-a5aa-066b2df27bb3
+		summarizeBy: none
+		sourceColumn: ParetoBand
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column VendorCriticality
+		dataType: string
+		lineageTag: 27955d60-f907-4b12-b6a6-3916f90da0cd
+		summarizeBy: none
+		sourceColumn: VendorCriticality
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column BlendedMargin
+		dataType: double
+		lineageTag: 01fc8b2c-2be2-4b7c-937f-32c98d625850
+		summarizeBy: sum
+		sourceColumn: BlendedMargin
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Pareto_Analysis = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Databases(".\SQLEXPRESS"),
+				    Vendor_sales = Source{[Name="Vendor_sales"]}[Data],
+				    dbo_vw_ParetoAnalysis = Vendor_sales{[Schema="dbo",Item="vw_ParetoAnalysis"]}[Data]
+				in
+				    dbo_vw_ParetoAnalysis
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
