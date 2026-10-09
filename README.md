@@ -27,11 +27,11 @@ Built on SQL Server Express (`Vendor_sales` database) in four layers:
 | View | Purpose | Feeds |
 |---|---|---|
 | `vw_VendorRevenueSummary` | Revenue, gross profit, blended margin and revenue share by vendor | GenAI insight tool |
-| `vw_VendorTiering` | Revenue tiers via NTILE quartiles (Premium / Core / Standard / Tail) | Power BI: Commercial Deep Dive |
-| `vw_ParetoAnalysis` | Cumulative revenue %, 80/15/5 Pareto bands, critical-vendor flag | Power BI: Executive Summary; Excel Executive Summary |
-| `vw_ProfitLeakage` | Excise, freight and loss-making leakage per vendor, split into controllable vs non-controllable, with severity rating | Power BI: Risk Dashboard; Excel Risk tab; GenAI insight tool |
-| `vw_LossMakingAnalysis` | SKUs that are loss-making, below 20% margin, or at dead stock risk | Power BI: Risk Dashboard |
-| `vw_LogisticsCostSummary` | COGS ratio, freight and excise as % of revenue, net margin after all costs | Power BI: Commercial Deep Dive |
+| `vw_VendorTiering` | Revenue tiers via NTILE quartiles (Premium / Core / Standard / Tail) | Power BI: revenue-tier filter, Commercial Deep Dive |
+| `vw_ParetoAnalysis` | Cumulative revenue %, 80/15/5 Pareto bands, critical-vendor flag | Power BI: Executive Summary, Commercial Deep Dive, Pareto-band filter; Excel Executive Summary |
+| `vw_ProfitLeakage` | Excise, freight and loss-making leakage per vendor, split into controllable vs non-controllable, with severity rating | Power BI: Risk Dashboard, Commercial Deep Dive, Vendor Detail; Excel Risk tab; GenAI insight tool |
+| `vw_LossMakingAnalysis` | SKUs that are loss-making, below 20% margin, or at dead stock risk | Ad hoc analysis |
+| `vw_LogisticsCostSummary` | COGS ratio, freight and excise as % of revenue, net margin after all costs | Power BI: Commercial Deep Dive KPIs |
 | `vw_FullCostAnalysis` | Net profit after all costs, benchmarked against the average of vendors with revenue ≥ $10K | Ad hoc analysis |
 | `vw_VendorRankings` | DENSE_RANK on revenue, blended margin and turnover with a composite score, flagging revenue-vs-margin misalignment | Ad hoc analysis |
 | `vw_PricingAnalysis` | Markup vs gross margin, within-vendor markup ranking (DENSE_RANK, LAG) to surface pricing inconsistency | Ad hoc analysis |
@@ -59,10 +59,40 @@ The raw dataset used in this project was purchased and is not included in this r
 - **SQL Server:** layered view architecture, CTEs, window functions (NTILE, DENSE_RANK, LAG, running SUM OVER), NULLIF/COALESCE data-quality guards, built-in validation checks
 - **Python** (pandas, scikit-learn, statsmodels): exploratory analysis, vendor segmentation (clustering) and Random Forest classification
 - **Excel:** interactive workbook including the Holt-Winters (ETS) demand forecast with seasonal index and MAPE tracker, plus Executive Summary, Vendor Analysis, Risk Dashboard, Pricing and Ad Hoc Analysis sheets. Dashboards report blended margins (gross profit ÷ revenue) and separate controllable leakage from non-controllable excise
-- **Power BI:** 3-page dashboard (Executive Summary, Commercial Deep Dive, Risk Dashboard) with a custom DAX measures table
+- **Power BI:** 4-page interactive report (Executive Summary, Commercial Deep Dive, Risk Dashboard, Vendor Detail drillthrough) on a star-schema model with DAX measures, version-controlled as a Power BI Project (PBIP)
 - **Anthropic Claude API:** generates evidence-based commercial insight summaries from live vendor data
 
+## Power BI Report
+
+**Data model: star schema.** `Vendor_Revenue` (one row per vendor, 126 vendors) is the vendor dimension. Every other table, from SKU-level facts (`vw_PortfolioHealth`, 10,495 SKUs) to vendor-level views (`vw_ProfitLeakage`, `vw_LogisticsCostSummary`, Pareto and tiering), relates to it **many-to-one with single-direction filtering**. Vendor attributes used for slicing (revenue tier, Pareto band, leakage severity) live on the dimension, so one filter flows to every fact without bi-directional relationships.
+
+**Pages**
+
+| Page | Question it answers | Highlights |
+|---|---|---|
+| Executive Summary | How is the portfolio performing? | Revenue, gross profit, blended margin, vendors, top-10 share; top 15 vendors coloured by margin health; margin mix; Pareto bands |
+| Commercial Deep Dive | Which vendors drive revenue and margin? | Freight, excise, average net margin, leakage %; Pareto curve; controllable vs excise leakage by tier; revenue vs margin scatter; vendor scorecard |
+| Risk Dashboard | Where is profit leaking and which stock is at risk? | Total and controllable leakage, loss-making and dead-stock rates; top 10 vendors by controllable leakage; SKU health; severity; loss-making products |
+| Vendor Detail (drillthrough) | What does one vendor look like? | Rank, tier, band and severity; revenue share, margins, controllable leakage; health mix; SKUs needing action |
+
+**Interactivity:** left navigation rail, slicers synced across pages (vendor, revenue tier, Pareto band), a Clear filters button, drillthrough to Vendor Detail by right-click or the *Open vendor detail* button, cross-filtering, tooltips, and rule-based colour (margin and severity thresholds defined as DAX measures).
+
+**Stored as a Power BI Project (PBIP).** The model is saved as TMDL and the report as PBIR text files, so every measure, relationship and visual change is reviewable in Git. The imported data cache is excluded by `.gitignore`, so the licensed dataset never enters the repository. Open `Power BI/Vendor Analytics.pbip` in Power BI Desktop and refresh against SQL Server to load data.
+
 ## Dashboards
+
+**Power BI — Executive Summary**
+![Power BI Executive Summary](Screenshots/PowerBI_Executive_Summary.png)
+
+**Power BI — Commercial Deep Dive**
+![Power BI Commercial Deep Dive](Screenshots/PowerBI_Commercial_Deep_Dive.png)
+
+**Power BI — Risk Dashboard**
+![Power BI Risk Dashboard](Screenshots/PowerBI_Risk_Dashboard.png)
+
+**Power BI — Vendor Detail (drillthrough, Martignetti)**
+![Power BI Vendor Detail](Screenshots/PowerBI_Vendor_Detail.png)
+
 
 **Excel — Executive Summary**
 ![Excel Executive Summary](Screenshots/Executive_Summary_Excel.png)
@@ -78,9 +108,6 @@ The raw dataset used in this project was purchased and is not included in this r
 
 **Excel — Demand Forecast (Holt-Winters ETS)**
 ![Demand Forecast](Screenshots/Demand_Forecast.png)
-
-**Power BI — Executive Summary**
-![Power BI Executive Summary](Screenshots/Executive_Summary_Power_BI.png)
 
 ## GenAI Insight Tool
 
@@ -100,6 +127,7 @@ The API key is read from a local `.env` file and never stored in code.
 3. Copy `.env.example` to `.env` and add your own Anthropic API key
 4. Load a similarly structured dataset into SQL Server Express and run `SQL Analysis/Vendor_analysis.sql` to create the views
 5. Run `python vendor_insights.py` to generate an AI commercial summary
+6. Open `Power BI/Vendor Analytics.pbip` in Power BI Desktop and select **Refresh** to load the report from your SQL Server
 
 ## Folder Guide
 
@@ -109,7 +137,7 @@ The API key is read from a local `.env` file and never stored in code.
 | `SQL Analysis/` | Full SQL script: data profiling, view definitions and validation checks |
 | `Notebooks/` | EDA, vendor performance analysis, and segmentation/prediction notebooks |
 | `Excel Analysis/` | Interactive Excel workbook, including the Holt-Winters demand forecast |
-| `Power BI/` | Power BI dashboard file |
+| `Power BI/` | Power BI Project: open `Vendor Analytics.pbip`; model in `.SemanticModel` (TMDL), report in `.Report` (PBIR); no data included |
 | `Screenshots/` | Dashboard and output screenshots |
 | `vendor_insights.py` | GenAI commercial insight generator (Claude API) |
 | `vendor_insight_output.txt` | Verified sample output from the GenAI tool |
