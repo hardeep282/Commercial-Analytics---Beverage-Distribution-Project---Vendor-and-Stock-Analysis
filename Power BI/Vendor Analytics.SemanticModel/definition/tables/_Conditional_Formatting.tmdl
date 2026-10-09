@@ -26,7 +26,7 @@ table _Conditional_Formatting
 	measure 'Severity Colour' =
 			// Light red/amber/green cell backgrounds for LeakageSeverity in tables
 			SWITCH(
-			    SELECTEDVALUE(vw_ProfitLeakage[LeakageSeverity]),
+			    SELECTEDVALUE(Vendor_Revenue[LeakageSeverity]),
 			    "Critical Leakage", "#F4C7C3",
 			    "High Leakage", "#FBDDC2",
 			    "Moderate Leakage", "#FFF1BF",

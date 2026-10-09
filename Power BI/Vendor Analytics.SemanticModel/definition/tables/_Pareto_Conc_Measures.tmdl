@@ -29,6 +29,12 @@ table _Pareto_Conc_Measures
 		formatString: 0.0%
 		lineageTag: 329cc954-d65c-47a0-8c5a-f278e03a0b1a
 
+	measure 'Cumulative Revenue %' =
+			// Running share of total revenue by vendor rank (source column is in percent units)
+			DIVIDE(SUM(Pareto_Analysis[CumulativeRevenuePct]), 100)
+		formatString: 0%
+		lineageTag: 4abc5e55-d91e-496f-9e3b-a8a735bfbd60
+
 	column Dummy
 		dataType: string
 		isHidden

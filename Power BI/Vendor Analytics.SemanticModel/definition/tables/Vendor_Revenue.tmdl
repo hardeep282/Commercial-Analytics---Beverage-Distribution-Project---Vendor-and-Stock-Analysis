@@ -92,6 +92,47 @@ table Vendor_Revenue
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	column TierLabel = LOOKUPVALUE(Vendor_Tiering[TierLabel], Vendor_Tiering[VendorName], Vendor_Revenue[VendorName])
+		dataType: string
+		lineageTag: 86166fda-5475-4c32-983f-abc9dc560c55
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column ParetoBandOrder = SWITCH(LOOKUPVALUE(Pareto_Analysis[ParetoBand], Pareto_Analysis[VendorName], Vendor_Revenue[VendorName]), "Top 80% Revenue Band", 1, "Mid 15% Revenue Band", 2, "Tail 5% Revenue Band", 3, 4)
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 72de9458-602b-481e-8b96-ccda980407f2
+		summarizeBy: none
+
+		annotation SummarizationSetBy = User
+
+	column ParetoBand = LOOKUPVALUE(Pareto_Analysis[ParetoBand], Pareto_Analysis[VendorName], Vendor_Revenue[VendorName])
+		dataType: string
+		lineageTag: 41b1fd03-4655-40c8-a7f3-7736671fd74c
+		summarizeBy: none
+		sortByColumn: ParetoBandOrder
+
+		annotation SummarizationSetBy = Automatic
+
+	column SeverityOrder = SWITCH(LOOKUPVALUE(vw_ProfitLeakage[LeakageSeverity], vw_ProfitLeakage[VendorName], Vendor_Revenue[VendorName]), "Critical Leakage", 1, "High Leakage", 2, "Moderate Leakage", 3, "Low Leakage", 4, 5)
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 848e6c56-be30-48a2-abc2-0857cd8f394a
+		summarizeBy: none
+
+		annotation SummarizationSetBy = User
+
+	column LeakageSeverity = LOOKUPVALUE(vw_ProfitLeakage[LeakageSeverity], vw_ProfitLeakage[VendorName], Vendor_Revenue[VendorName])
+		dataType: string
+		lineageTag: 71420e04-9a1f-48ce-b2f8-e008f731b938
+		summarizeBy: none
+		sortByColumn: SeverityOrder
+
+		annotation SummarizationSetBy = Automatic
+
 	partition Vendor_Revenue = m
 		mode: import
 		source =

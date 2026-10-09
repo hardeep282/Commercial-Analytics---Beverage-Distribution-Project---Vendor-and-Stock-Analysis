@@ -9,6 +9,19 @@ table _Dynamic_Title_Measure
 			    "Vendor Detail: " & SELECTEDVALUE(Vendor_Revenue[VendorName]))
 		lineageTag: 37858950-8545-425f-88d2-6bd1d9258618
 
+	measure 'Selected Vendor Profile' =
+			VAR v = SELECTEDVALUE(Vendor_Revenue[VendorName])
+			RETURN
+			    IF(
+			        ISBLANK(v),
+			        "Right-click a vendor on any page > Drill through > Vendor Detail",
+			        "Rank #" & [Vendor Revenue Rank] & " of " & COUNTROWS(ALL(Vendor_Revenue)) & " by revenue  |  "
+			            & SELECTEDVALUE(Vendor_Revenue[TierLabel]) & "  |  "
+			            & SELECTEDVALUE(Vendor_Revenue[ParetoBand]) & "  |  "
+			            & SELECTEDVALUE(Vendor_Revenue[LeakageSeverity])
+			    )
+		lineageTag: 7c0f51c7-bf68-402f-b86f-e621c4c51ff0
+
 	column Dummy
 		dataType: string
 		isHidden
