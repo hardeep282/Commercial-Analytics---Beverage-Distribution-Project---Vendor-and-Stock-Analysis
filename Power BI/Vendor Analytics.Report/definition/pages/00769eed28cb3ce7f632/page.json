@@ -3,8 +3,8 @@
   "name": "00769eed28cb3ce7f632",
   "displayName": "Risk Dashboard",
   "displayOption": "FitToPage",
-  "height": 1080,
-  "width": 1920,
+  "height": 720,
+  "width": 1280,
   "objects": {
     "background": [
       {
@@ -14,7 +14,31 @@
               "color": {
                 "expr": {
                   "Literal": {
-                    "Value": "'#ac95da'"
+                    "Value": "'#F4F6F8'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F4F6F8'"
                   }
                 }
               }

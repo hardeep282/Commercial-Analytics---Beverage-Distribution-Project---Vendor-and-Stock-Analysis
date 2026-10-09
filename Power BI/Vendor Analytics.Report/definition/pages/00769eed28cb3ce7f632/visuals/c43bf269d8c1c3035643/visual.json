@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
-  "name": "4297edc576dc252bc39f",
+  "name": "c43bf269d8c1c3035643",
   "position": {
-    "x": 687.037037037037,
-    "y": 637.037037037037,
-    "z": 6000,
-    "height": 442.59259259259255,
-    "width": 550,
-    "tabOrder": 6000
+    "x": 648,
+    "y": 216,
+    "z": 16000,
+    "height": 236,
+    "width": 300,
+    "tabOrder": 16000
   },
   "visual": {
     "visualType": "clusteredBarChart",
@@ -26,8 +26,8 @@
                   "Property": "HealthStatus"
                 }
               },
-              "queryRef": "Portfolio_Health.HealthStatus",
-              "nativeQueryRef": "Count of HealthStatus",
+              "queryRef": "vw_PortfolioHealth.HealthStatus",
+              "nativeQueryRef": "HealthStatus",
               "active": true
             }
           ]
@@ -36,22 +36,18 @@
           "projections": [
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "vw_PortfolioHealth"
-                        }
-                      },
-                      "Property": "Description"
+                    "SourceRef": {
+                      "Entity": "_Revenue Measures"
                     }
                   },
-                  "Function": 5
+                  "Property": "SKUs by Health Category"
                 }
               },
-              "queryRef": "CountNonNull(Portfolio_Health.Description)",
-              "nativeQueryRef": "Count of Description"
+              "queryRef": "_Revenue Measures.SKUs by Health Category",
+              "nativeQueryRef": "SKUs",
+              "displayName": "SKUs"
             }
           ]
         }
@@ -60,18 +56,13 @@
         "sort": [
           {
             "field": {
-              "Aggregation": {
+              "Measure": {
                 "Expression": {
-                  "Column": {
-                    "Expression": {
-                      "SourceRef": {
-                        "Entity": "vw_PortfolioHealth"
-                      }
-                    },
-                    "Property": "Description"
+                  "SourceRef": {
+                    "Entity": "_Revenue Measures"
                   }
                 },
-                "Function": 5
+                "Property": "SKUs by Health Category"
               }
             },
             "direction": "Descending"
@@ -81,6 +72,57 @@
       }
     },
     "objects": {
+      "valueAxis": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "gridlineShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "labelColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2D3D'"
+                    }
+                  }
+                }
+              }
+            },
+            "showAxisTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
       "labels": [
         {
           "properties": {
@@ -91,24 +133,62 @@
                 }
               }
             },
-            "enableTitleDataLabel": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            },
+            "labelPrecision": {
+              "expr": {
+                "Literal": {
+                  "Value": "1L"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#5D6D7E'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "legend": [
+        {
+          "properties": {
+            "show": {
               "expr": {
                 "Literal": {
                   "Value": "false"
                 }
               }
             },
-            "enableDetailDataLabel": {
+            "position": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "'Top'"
                 }
               }
             },
-            "enableBackground": {
+            "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "9D"
                 }
               }
             }
@@ -164,89 +244,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#C0392B'"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "selector": {
-            "data": [
-              {
-                "scopeId": {
-                  "Comparison": {
-                    "ComparisonKind": 0,
-                    "Left": {
-                      "Column": {
-                        "Expression": {
-                          "SourceRef": {
-                            "Entity": "vw_PortfolioHealth"
-                          }
-                        },
-                        "Property": "HealthStatus"
-                      }
-                    },
-                    "Right": {
-                      "Literal": {
-                        "Value": "'Loss Making'"
-                      }
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#C0392B'"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "selector": {
-            "data": [
-              {
-                "scopeId": {
-                  "Comparison": {
-                    "ComparisonKind": 0,
-                    "Left": {
-                      "Column": {
-                        "Expression": {
-                          "SourceRef": {
-                            "Entity": "vw_PortfolioHealth"
-                          }
-                        },
-                        "Property": "HealthStatus"
-                      }
-                    },
-                    "Right": {
-                      "Literal": {
-                        "Value": "'At Risk'"
-                      }
-                    }
-                  }
-                }
-              }
-            ]
-          }
-        },
-        {
-          "properties": {
-            "fill": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#E67E22'"
+                      "Value": "'#D9B300'"
                     }
                   }
                 }
@@ -287,7 +285,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#E67E22'"
+                      "Value": "'#F0B27A'"
                     }
                   }
                 }
@@ -320,10 +318,174 @@
               }
             ]
           }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E67E22'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "vw_PortfolioHealth"
+                          }
+                        },
+                        "Property": "HealthStatus"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'At Risk'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#C0392B'"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "data": [
+              {
+                "scopeId": {
+                  "Comparison": {
+                    "ComparisonKind": 0,
+                    "Left": {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Entity": "vw_PortfolioHealth"
+                          }
+                        },
+                        "Property": "HealthStatus"
+                      }
+                    },
+                    "Right": {
+                      "Literal": {
+                        "Value": "'Loss Making'"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
         }
       ]
     },
     "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E1E5EA'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
       "title": [
         {
           "properties": {
@@ -337,7 +499,46 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'SKU Count by Health Status'"
+                  "Value": "'How healthy is the SKU portfolio?'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            },
+            "bold": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#1F2D3D'"
+                    }
+                  }
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'left'"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Segoe UI Semibold'"
                 }
               }
             }
@@ -350,7 +551,45 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'SKU count by health status'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            },
+            "fontColor": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#5D6D7E'"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'How healthy is the SKU portfolio?'"
                 }
               }
             }
