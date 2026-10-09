@@ -72,8 +72,8 @@
                 }
               },
               "queryRef": "_Commercial_Measures.Controllable Leakage",
-              "nativeQueryRef": "Controllable leakage",
-              "displayName": "Controllable leakage"
+              "nativeQueryRef": "Controllable",
+              "displayName": "Controllable"
             },
             {
               "field": {
@@ -87,8 +87,8 @@
                 }
               },
               "queryRef": "Vendor_Revenue.LeakageSeverity",
-              "nativeQueryRef": "Leakage severity",
-              "displayName": "Leakage severity"
+              "nativeQueryRef": "Severity",
+              "displayName": "Severity"
             }
           ]
         }

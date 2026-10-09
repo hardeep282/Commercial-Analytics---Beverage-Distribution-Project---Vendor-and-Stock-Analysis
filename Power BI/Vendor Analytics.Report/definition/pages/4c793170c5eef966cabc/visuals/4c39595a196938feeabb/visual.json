@@ -213,6 +213,13 @@
                   }
                 }
               }
+            },
+            "labelPosition": {
+              "expr": {
+                "Literal": {
+                  "Value": "'OutsideEnd'"
+                }
+              }
             }
           }
         }
@@ -438,7 +445,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Controllable leakage (amber) vs statutory excise (grey), '"
+                  "Value": "'Controllable leakage (amber) vs statutory excise (grey), in millions'"
                 }
               }
             },

@@ -228,6 +228,13 @@
                   }
                 }
               }
+            },
+            "labelPosition": {
+              "expr": {
+                "Literal": {
+                  "Value": "'OutsideEnd'"
+                }
+              }
             }
           }
         }
