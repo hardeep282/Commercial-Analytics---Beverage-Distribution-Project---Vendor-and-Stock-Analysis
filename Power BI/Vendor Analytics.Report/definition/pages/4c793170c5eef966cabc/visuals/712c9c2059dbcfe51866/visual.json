@@ -4,10 +4,10 @@
   "position": {
     "x": 16,
     "y": 680,
-    "z": 18000,
+    "z": 17000,
     "height": 30,
     "width": 168,
-    "tabOrder": 18000
+    "tabOrder": 17000
   },
   "visual": {
     "visualType": "textbox",

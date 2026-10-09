@@ -9,6 +9,11 @@ table _Dynamic_Title_Measure
 			    "Vendor Detail: " & SELECTEDVALUE(Vendor_Revenue[VendorName]))
 		lineageTag: 37858950-8545-425f-88d2-6bd1d9258618
 
+	measure 'Selected Vendor Name' =
+			// Vendor name for the drillthrough page header
+			SELECTEDVALUE(Vendor_Revenue[VendorName], "No vendor selected")
+		lineageTag: 66879e56-fb20-40ea-b059-a0ff0ee4f20e
+
 	measure 'Selected Vendor Profile' =
 			VAR v = SELECTEDVALUE(Vendor_Revenue[VendorName])
 			RETURN

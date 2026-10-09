@@ -3,11 +3,11 @@
   "name": "db5c44281f4d32d171d4",
   "position": {
     "x": 216,
-    "y": 8,
-    "z": 13000,
-    "height": 36,
+    "y": 4,
+    "z": 11000,
+    "height": 50,
     "width": 1048,
-    "tabOrder": 13000
+    "tabOrder": 11000
   },
   "visual": {
     "visualType": "card",
@@ -23,11 +23,11 @@
                       "Entity": "_Dynamic_Title_Measure"
                     }
                   },
-                  "Property": "Selected Vendor Title"
+                  "Property": "Selected Vendor Name"
                 }
               },
-              "queryRef": "_Dynamic_Title_Measure.Selected Vendor Title",
-              "nativeQueryRef": "Selected Vendor Title"
+              "queryRef": "_Dynamic_Title_Measure.Selected Vendor Name",
+              "nativeQueryRef": "Selected Vendor Name"
             }
           ]
         }
@@ -40,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "16D"
+                  "Value": "20D"
                 }
               }
             },

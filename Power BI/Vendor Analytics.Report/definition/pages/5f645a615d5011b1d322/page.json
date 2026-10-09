@@ -84,6 +84,7 @@
     ]
   },
   "type": "Drillthrough",
+  "visibility": "HiddenInViewMode",
   "objects": {
     "background": [
       {
