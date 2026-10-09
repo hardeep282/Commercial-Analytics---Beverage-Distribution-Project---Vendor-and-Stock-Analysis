@@ -52,7 +52,7 @@ The script ends with a set of data checks (for example, confirming that gross pr
 
 ## Note on Data
 
-The raw dataset used in this project was purchased and is not included in this repository due to licensing restrictions on redistribution. All analysis, SQL, notebooks and results in this repo are original work built on that dataset. The schema covers SKU-level sales, purchase, excise and freight data for ~10,700 SKU rows across 126 vendors; the view definitions in `SQL Analysis/` document the full pipeline for reproduction against a similarly structured dataset.
+The raw dataset was purchased via Topmate and is not redistributed here, out of respect for the original creator. All analysis, SQL, notebooks, dashboards and results in this repo are my own work built on that dataset. The schema covers SKU-level sales, purchase, excise and freight data for ~10,700 SKU rows across 126 vendors; the view definitions in `SQL Analysis/` document the full pipeline for reproduction against a similarly structured dataset.
 
 ## Tools Used
 
@@ -133,7 +133,7 @@ The API key is read from a local `.env` file and never stored in code.
 
 | Folder / File | Contents |
 |---|---|
-| `Data/` | Not included; the raw dataset was purchased and isn't licensed for redistribution (see Note on Data) |
+| `Data/` | Not included; the raw dataset was purchased via Topmate and is not redistributed (see Note on Data) |
 | `SQL Analysis/` | Full SQL script: data profiling, view definitions and validation checks |
 | `Notebooks/` | EDA, vendor performance analysis, and segmentation/prediction notebooks |
 | `Excel Analysis/` | Interactive Excel workbook, including the Holt-Winters demand forecast |
