@@ -77,7 +77,7 @@ The raw dataset was purchased via Topmate and is not redistributed here, out of 
 
 **Interactivity:** left navigation rail, slicers synced across pages (vendor, revenue tier, Pareto band), a Clear filters button, drillthrough to Vendor Detail by right-click or the *Open vendor detail* button, cross-filtering, tooltips, and rule-based colour (margin and severity thresholds defined as DAX measures).
 
-**Stored as a Power BI Project (PBIP).** The model is saved as TMDL and the report as PBIR text files, so every measure, relationship and visual change is reviewable in Git. The imported data cache is excluded by `.gitignore`, so the licensed dataset never enters the repository. Open `Power BI/Vendor Analytics.pbip` in Power BI Desktop and refresh against SQL Server to load data.
+**Stored as a Power BI Project (PBIP).** The model is saved as TMDL and the report as PBIR text files, so every measure, relationship and visual change is reviewable in Git. The imported data cache is excluded by `.gitignore`, so the purchased dataset never enters the repository. Open `Power BI/Vendor Analytics.pbip` in Power BI Desktop and refresh against SQL Server to load data.
 
 ## Dashboards
 
