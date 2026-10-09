@@ -40,6 +40,12 @@ table '_Logistics and Cost Measures'
 		formatString: 0.0%
 		lineageTag: 23c0c3d2-a091-4a14-b41e-4e6889224480
 
+	measure 'Net Margin After All Costs %' =
+			// Blended: total net profit after COGS, freight and excise / total revenue
+			DIVIDE(SUM(vw_ProfitLeakage[NetProfitAfterAllCosts]), SUM(vw_ProfitLeakage[TotalRevenue]))
+		formatString: 0.0%
+		lineageTag: 9f44f553-b1d0-47dc-a8c4-6729cdbeceaf
+
 	column Dummy
 		dataType: string
 		isHidden

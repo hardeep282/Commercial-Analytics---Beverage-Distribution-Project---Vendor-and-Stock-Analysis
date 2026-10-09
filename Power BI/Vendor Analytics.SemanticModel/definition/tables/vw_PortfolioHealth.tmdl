@@ -95,6 +95,7 @@ table vw_PortfolioHealth
 
 	column TotalSalesDollars
 		dataType: double
+		formatString: \$#,0
 		lineageTag: b1ebba6a-7a92-47e2-8eb0-65f6a75e4290
 		summarizeBy: sum
 		sourceColumn: TotalSalesDollars
@@ -135,6 +136,7 @@ table vw_PortfolioHealth
 
 	column GrossProfit
 		dataType: double
+		formatString: \$#,0
 		lineageTag: 97a285ff-6874-4023-a953-911cd66e45ab
 		summarizeBy: sum
 		sourceColumn: GrossProfit
@@ -145,21 +147,23 @@ table vw_PortfolioHealth
 
 	column ProfitMargin
 		dataType: double
+		formatString: 0.0
 		lineageTag: 28651c8b-ec85-4541-8f8e-8f276656b0fd
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: ProfitMargin
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column StockTurnover
 		dataType: double
+		formatString: 0.00
 		lineageTag: ac9b4137-78eb-480b-8f6f-a6e796a559e2
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: StockTurnover
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 

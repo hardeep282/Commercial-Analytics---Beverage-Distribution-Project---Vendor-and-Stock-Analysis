@@ -61,6 +61,26 @@ table _Commercial_Measures
 		formatString: 0
 		lineageTag: cf041cd6-244f-48c2-9eb6-7ab12a232706
 
+	measure 'Controllable Leakage' =
+			// Freight + losses on loss-making SKUs: the leakage management can act on
+			SUM(vw_ProfitLeakage[ControllableLeakage])
+		formatString: \$#,0
+		lineageTag: 9a118963-b5c4-48b3-8de9-2d25bc342b3f
+
+	measure 'Non-Controllable Cost (Excise)' =
+			// Statutory excise tax: reported, but not a recoverable leak
+			SUM(vw_ProfitLeakage[NonControllableCost])
+		formatString: \$#,0
+		lineageTag: 57cd5e00-07e8-4392-b78c-6ed0c161a62f
+
+	measure 'Controllable Leakage % of Revenue' = DIVIDE([Controllable Leakage], [Total Revenue])
+		formatString: 0.0%
+		lineageTag: bda5a9f8-074b-463e-bc29-9cda5a02af6c
+
+	measure 'Loss-Making SKU Losses' = SUM(vw_ProfitLeakage[LossMakingLeakage])
+		formatString: \$#,0
+		lineageTag: 827c7a5d-b2b1-4a50-9bdf-495e0ae13920
+
 	column Column1
 		dataType: string
 		isHidden
