@@ -1,5 +1,5 @@
 model Model
-	culture: en-GB
+	culture: en-IN
 	defaultPowerBIDataSourceVersion: powerBI_V3
 	sourceQueryCulture: en-GB
 	dataAccessOptions
@@ -30,5 +30,5 @@ ref table vw_FullCostAnalysis
 ref table vw_LogisticsCostSummary
 ref table _Conditional_Formatting
 
-ref cultureInfo en-GB
+ref cultureInfo en-IN
 
