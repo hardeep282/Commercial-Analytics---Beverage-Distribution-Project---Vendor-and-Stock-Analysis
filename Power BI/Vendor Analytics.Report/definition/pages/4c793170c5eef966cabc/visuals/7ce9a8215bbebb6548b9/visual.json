@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
   "name": "7ce9a8215bbebb6548b9",
   "position": {
     "x": 216,
@@ -48,44 +48,6 @@
               "queryRef": "Vendor_Revenue.TierLabel",
               "nativeQueryRef": "Revenue tier",
               "displayName": "Revenue tier"
-            }
-          ]
-        },
-        "X": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Revenue Measures"
-                    }
-                  },
-                  "Property": "Total Revenue"
-                }
-              },
-              "queryRef": "_Revenue Measures.Total Revenue",
-              "nativeQueryRef": "Revenue",
-              "displayName": "Revenue"
-            }
-          ]
-        },
-        "Y": {
-          "projections": [
-            {
-              "field": {
-                "Measure": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "_Revenue Measures"
-                    }
-                  },
-                  "Property": "Blended Margin %"
-                }
-              },
-              "queryRef": "_Revenue Measures.Blended Margin %",
-              "nativeQueryRef": "Blended margin",
-              "displayName": "Blended margin"
             }
           ]
         },
@@ -139,6 +101,45 @@
               "queryRef": "_Commercial_Measures.Controllable Leakage",
               "nativeQueryRef": "Controllable leakage",
               "displayName": "Controllable leakage"
+            }
+          ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Revenue Measures"
+                    }
+                  },
+                  "Property": "Total Revenue"
+                }
+              },
+              "queryRef": "_Revenue Measures.Total Revenue",
+              "nativeQueryRef": "Revenue",
+              "active": true,
+              "displayName": "Revenue"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Revenue Measures"
+                    }
+                  },
+                  "Property": "Blended Margin %"
+                }
+              },
+              "queryRef": "_Revenue Measures.Blended Margin %",
+              "nativeQueryRef": "Blended margin",
+              "displayName": "Blended margin"
             }
           ]
         }

@@ -10054,6 +10054,16 @@ cultureInfo en-IN
 			            },
 			            "Weight": 0.9
 			          }
+			        },
+			        {
+			          "Controllable (freight + loss-making SKUs)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
 			        }
 			      ]
 			    },
@@ -10067,7 +10077,7 @@ cultureInfo en-IN
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "Profit leakage": {
+			          "Total leakage": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -10118,6 +10128,16 @@ cultureInfo en-IN
 			      },
 			      "State": "Generated",
 			      "Terms": [
+			        {
+			          "Excise (statutory)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
 			        {
 			          "Excise (non-controllable)": {
 			            "State": "Suggested",
@@ -10287,16 +10307,6 @@ cultureInfo en-IN
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "Tier": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        },
-			        {
 			          "Revenue tier": {
 			            "State": "Suggested",
 			            "Source": {
@@ -10336,19 +10346,7 @@ cultureInfo en-IN
 			          "ConceptualProperty": "ParetoBand"
 			        }
 			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "Pareto band": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
-			        }
-			      ]
+			      "State": "Generated"
 			    }
 			  },
 			  "Relationships": {

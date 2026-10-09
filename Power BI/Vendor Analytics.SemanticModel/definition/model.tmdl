@@ -1,7 +1,7 @@
 model Model
 	culture: en-IN
 	defaultPowerBIDataSourceVersion: powerBI_V3
-	sourceQueryCulture: en-IN
+	sourceQueryCulture: en-GB
 	dataAccessOptions
 		legacyRedirects
 		returnErrorValuesAsNull
