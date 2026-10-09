@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Click a vendor in a chart or table, then press the button (or right-click > Drill through).",
+                    "value": "Select a vendor first, or right-click a vendor > Drill through.",
                     "textStyle": {
                       "fontSize": "8pt",
                       "color": "#5D6D7E"

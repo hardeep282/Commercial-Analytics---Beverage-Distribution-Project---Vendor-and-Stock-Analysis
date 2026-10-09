@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
   "name": "c7b60ab14d774eda3795",
   "position": {
     "x": 748,
@@ -108,6 +108,8 @@
             "queryRefs": [
               "Vendor_Revenue.TierLabel"
             ],
+            "isCollapsed": false,
+            "isPinned": true,
             "identityKeys": [
               {
                 "Column": {
@@ -119,8 +121,7 @@
                   "Property": "TierLabel"
                 }
               }
-            ],
-            "isPinned": true
+            ]
           },
           {
             "queryRefs": [
@@ -140,8 +141,7 @@
             ],
             "isCollapsed": true
           }
-        ],
-        "root": {}
+        ]
       }
     ],
     "objects": {
@@ -151,7 +151,7 @@
             "effectiveBarsPerLevel": {
               "expr": {
                 "Literal": {
-                  "Value": "3L"
+                  "Value": "5L"
                 }
               }
             }

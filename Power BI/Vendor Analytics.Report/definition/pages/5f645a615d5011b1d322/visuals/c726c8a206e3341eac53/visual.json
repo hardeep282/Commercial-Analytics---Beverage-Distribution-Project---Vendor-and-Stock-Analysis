@@ -3,9 +3,9 @@
   "name": "c726c8a206e3341eac53",
   "position": {
     "x": 16,
-    "y": 680,
+    "y": 682,
     "z": 10000,
-    "height": 30,
+    "height": 32,
     "width": 168,
     "tabOrder": 10000
   },
@@ -19,7 +19,19 @@
               {
                 "textRuns": [
                   {
-                    "value": "Source: SQL Server views | 126 vendors | 10,495 SKUs (outlier-cleaned)",
+                    "value": "Source: SQL Server views",
+                    "textStyle": {
+                      "fontSize": "7pt",
+                      "color": "#5D6D7E"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "126 vendors | 10,495 SKUs",
                     "textStyle": {
                       "fontSize": "7pt",
                       "color": "#5D6D7E"

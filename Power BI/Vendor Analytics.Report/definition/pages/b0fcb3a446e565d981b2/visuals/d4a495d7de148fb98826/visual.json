@@ -446,7 +446,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Bar colour = margin health: green 25%+, amber 15-25%, red under 15%. Click a bar, then ''Open vendor detail''.'"
+                  "Value": "'Colour = margin health: green 25%+, amber 15-25%, red under 15%'"
                 }
               }
             },
