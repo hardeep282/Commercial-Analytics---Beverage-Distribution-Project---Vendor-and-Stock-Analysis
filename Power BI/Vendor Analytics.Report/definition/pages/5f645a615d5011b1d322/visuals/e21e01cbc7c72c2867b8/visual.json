@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
-  "name": "bacf561e152080fde419",
+  "name": "e21e01cbc7c72c2867b8",
   "position": {
-    "x": 858.67,
-    "y": 72,
-    "z": 9000,
-    "height": 84,
-    "width": 194.67,
-    "tabOrder": 9000
+    "x": 1102.67,
+    "y": 76,
+    "z": 18000,
+    "height": 64,
+    "width": 161.33,
+    "tabOrder": 18000
   },
   "visual": {
     "visualType": "card",
@@ -20,15 +20,15 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "_Revenue Measures"
+                      "Entity": "_Commercial_Measures"
                     }
                   },
-                  "Property": "Total SKUs"
+                  "Property": "Controllable Leakage"
                 }
               },
-              "queryRef": "_Revenue Measures.Total SKUs",
-              "nativeQueryRef": "SKUs",
-              "displayName": "SKUs"
+              "queryRef": "_Commercial_Measures.Controllable Leakage",
+              "nativeQueryRef": "Controllable leakage",
+              "displayName": "Controllable leakage"
             }
           ]
         }
@@ -41,7 +41,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "22D"
+                  "Value": "17D"
                 }
               }
             },
@@ -55,14 +55,14 @@
             "labelDisplayUnits": {
               "expr": {
                 "Literal": {
-                  "Value": "1D"
+                  "Value": "0D"
                 }
               }
             },
             "labelPrecision": {
               "expr": {
                 "Literal": {
-                  "Value": "0L"
+                  "Value": "1L"
                 }
               }
             },
@@ -71,7 +71,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#1B4F8A'"
+                      "Value": "'#E67E22'"
                     }
                   }
                 }
@@ -93,7 +93,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "8D"
                 }
               }
             },
@@ -214,28 +214,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             }
@@ -248,7 +248,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'KPI: SKUs'"
+                  "Value": "'KPI: Controllable leakage'"
                 }
               }
             }

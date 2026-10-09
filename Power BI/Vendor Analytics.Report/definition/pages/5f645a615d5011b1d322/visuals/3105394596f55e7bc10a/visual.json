@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
-  "name": "266580fb8c9ee99cc9aa",
+  "name": "3105394596f55e7bc10a",
   "position": {
-    "x": 16.0,
-    "y": 72,
-    "z": 5000,
-    "height": 84,
-    "width": 194.67,
-    "tabOrder": 5000
+    "x": 748.0,
+    "y": 76,
+    "z": 16000,
+    "height": 64,
+    "width": 161.33,
+    "tabOrder": 16000
   },
   "visual": {
     "visualType": "card",
@@ -23,12 +23,12 @@
                       "Entity": "_Revenue Measures"
                     }
                   },
-                  "Property": "Total Revenue"
+                  "Property": "Blended Margin %"
                 }
               },
-              "queryRef": "_Revenue Measures.Total Revenue",
-              "nativeQueryRef": "Revenue",
-              "displayName": "Revenue"
+              "queryRef": "_Revenue Measures.Blended Margin %",
+              "nativeQueryRef": "Blended margin",
+              "displayName": "Blended margin"
             }
           ]
         }
@@ -41,7 +41,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "22D"
+                  "Value": "17D"
                 }
               }
             },
@@ -55,7 +55,7 @@
             "labelDisplayUnits": {
               "expr": {
                 "Literal": {
-                  "Value": "0D"
+                  "Value": "1D"
                 }
               }
             },
@@ -70,8 +70,13 @@
               "solid": {
                 "color": {
                   "expr": {
-                    "Literal": {
-                      "Value": "'#1B4F8A'"
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "_Conditional_Formatting"
+                        }
+                      },
+                      "Property": "Margin Colour"
                     }
                   }
                 }
@@ -93,7 +98,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "8D"
                 }
               }
             },
@@ -214,28 +219,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             }
@@ -248,7 +253,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'KPI: Revenue'"
+                  "Value": "'KPI: Blended margin'"
                 }
               }
             }

@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
-  "name": "085bdd245c533d1ee76e",
+  "name": "152b2f554a20f3e1d9a0",
   "position": {
-    "x": 648.0,
-    "y": 72,
-    "z": 8000,
-    "height": 84,
-    "width": 194.67,
-    "tabOrder": 8000
+    "x": 393.33,
+    "y": 76,
+    "z": 14000,
+    "height": 64,
+    "width": 161.33,
+    "tabOrder": 14000
   },
   "visual": {
     "visualType": "card",
@@ -20,15 +20,15 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "_Logistics and Cost Measures"
+                      "Entity": "_Revenue Measures"
                     }
                   },
-                  "Property": "Net Margin After All Costs %"
+                  "Property": "Revenue Share %"
                 }
               },
-              "queryRef": "_Logistics and Cost Measures.Net Margin After All Costs %",
-              "nativeQueryRef": "Net margin after all costs",
-              "displayName": "Net margin after all costs"
+              "queryRef": "_Revenue Measures.Revenue Share %",
+              "nativeQueryRef": "Share of portfolio revenue",
+              "displayName": "Share of portfolio revenue"
             }
           ]
         }
@@ -41,7 +41,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "22D"
+                  "Value": "17D"
                 }
               }
             },
@@ -93,7 +93,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "8D"
                 }
               }
             },
@@ -214,28 +214,28 @@
             "top": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             },
             "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             },
             "left": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             },
             "right": {
               "expr": {
                 "Literal": {
-                  "Value": "4D"
+                  "Value": "2D"
                 }
               }
             }
@@ -248,7 +248,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'KPI: Net margin after all costs'"
+                  "Value": "'KPI: Share of portfolio revenue'"
                 }
               }
             }

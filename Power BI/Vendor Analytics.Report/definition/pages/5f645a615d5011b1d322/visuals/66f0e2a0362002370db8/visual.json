@@ -1,96 +1,47 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
-  "name": "456b63e6cd02ebfdb77c",
+  "name": "66f0e2a0362002370db8",
   "position": {
     "x": 16,
-    "y": 12,
+    "y": 16,
     "z": 2000,
-    "height": 32,
-    "width": 32,
+    "height": 40,
+    "width": 40,
     "tabOrder": 2000
   },
   "visual": {
-    "visualType": "actionButton",
+    "visualType": "image",
     "objects": {
-      "icon": [
+      "general": [
         {
           "properties": {
-            "shapeType": {
+            "imageUrl": {
               "expr": {
-                "Literal": {
-                  "Value": "'back'"
-                }
-              }
-            },
-            "lineColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#FFFFFF'"
-                    }
-                  }
-                }
-              }
-            },
-            "lineWeight": {
-              "expr": {
-                "Literal": {
-                  "Value": "2D"
+                "ResourcePackageItem": {
+                  "PackageName": "RegisteredResources",
+                  "PackageType": 1,
+                  "ItemName": "vendor_analytics_logo.png"
                 }
               }
             }
-          },
-          "selector": {
-            "id": "default"
           }
         }
       ],
-      "outline": [
+      "imageScaling": [
         {
           "properties": {
-            "show": {
+            "imageScalingType": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
+                  "Value": "'Fit'"
                 }
               }
             }
-          },
-          "selector": {
-            "id": "default"
           }
         }
       ]
     },
     "visualContainerObjects": {
-      "visualLink": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "type": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Back'"
-                }
-              }
-            },
-            "tooltip": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Back to previous page'"
-                }
-              }
-            }
-          }
-        }
-      ],
       "background": [
         {
           "properties": {
@@ -105,6 +56,19 @@
         }
       ],
       "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
         {
           "properties": {
             "show": {
@@ -149,7 +113,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'Back button'"
+                  "Value": "'Vendor Analytics logo'"
                 }
               }
             }
