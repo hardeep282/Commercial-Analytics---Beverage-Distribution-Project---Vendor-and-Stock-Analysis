@@ -101,11 +101,11 @@
                       "Entity": "Vendor_Tiering"
                     }
                   },
-                  "Property": "AvgMargin"
+                  "Property": "BlendedMargin"
                 }
               },
-              "queryRef": "Vendor_Tiering.AvgMargin",
-              "nativeQueryRef": "AvgMargin",
+              "queryRef": "Vendor_Tiering.BlendedMargin",
+              "nativeQueryRef": "BlendedMargin",
               "active": false
             }
           ]
@@ -202,7 +202,7 @@
           },
           {
             "queryRefs": [
-              "Vendor_Tiering.AvgMargin"
+              "Vendor_Tiering.BlendedMargin"
             ],
             "isCollapsed": true
           }

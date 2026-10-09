@@ -12,8 +12,8 @@ table _Conditional_Formatting
 			)
 		lineageTag: 0344d377-1da3-4306-8126-aed446afe1d1
 
-	measure '-- Loss Making Colour-- Red if loss making SKUs above 15% of portfolio-- Amber if between 10-15%-- Green if below 10%Loss Making Colour' =
-			
+	measure 'Loss Making Colour' =
+			// Red if loss-making SKUs above 15% of portfolio, amber 10-15%, green below 10%
 			IF(
 			    [Loss Making Rate %] > 0.15, "#C0392B",
 			    IF(

@@ -8,7 +8,7 @@ table '_Logistics and Cost Measures'
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
 	measure 'Total Excise Tax' = SUM(vw_LogisticsCostSummary[TotalExciseTax])
-		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		formatString: \$#,0;(\$#,0);\$#,0
 		lineageTag: 1003d57f-8eb2-4fbf-ab3f-1c423716b04e
 
 	measure 'Total Profit Leakage' = ```
@@ -21,22 +21,24 @@ table '_Logistics and Cost Measures'
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
 	measure 'Leakage % of Revenue' = DIVIDE([Total Profit Leakage],[Total Revenue])
+		formatString: 0.0%
 		lineageTag: d5c40050-db28-4c07-831f-6775ab8ed183
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	measure 'Avg Net Margin After All Costs %' =
-			
-			AVERAGEX(
-			    FILTER(
-			        vw_LogisticsCostSummary,
-			        vw_LogisticsCostSummary[TotalRevenue] >= 10000
+			// Average vendor net margin after COGS, freight and excise, vendors with revenue >= $10K.
+			// Source column is in percent units (22.1), so divide by 100 to return a fraction.
+			DIVIDE(
+			    AVERAGEX(
+			        FILTER(
+			            vw_LogisticsCostSummary,
+			            vw_LogisticsCostSummary[TotalRevenue] >= 10000
+			        ),
+			        vw_LogisticsCostSummary[NetMarginAfterAllCostsPct]
 			    ),
-			    vw_LogisticsCostSummary[NetMarginAfterAllCostsPct]
+			    100
 			)
+		formatString: 0.0%
 		lineageTag: 23c0c3d2-a091-4a14-b41e-4e6889224480
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column Dummy
 		dataType: string

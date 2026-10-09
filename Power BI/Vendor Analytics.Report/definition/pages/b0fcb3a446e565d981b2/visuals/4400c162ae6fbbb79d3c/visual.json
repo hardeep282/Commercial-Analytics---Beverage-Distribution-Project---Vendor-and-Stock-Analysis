@@ -6,7 +6,7 @@
     "y": 1.4285714285714286,
     "z": 6000,
     "height": 102.85714285714286,
-    "width": 254.28571428571431,
+    "width": 254.2857142857143,
     "tabOrder": 6000
   },
   "visual": {
@@ -27,8 +27,7 @@
                 }
               },
               "queryRef": "_Pareto_Conc_Measures.Top 10 Revenue Concentration %",
-              "nativeQueryRef": "Top 10 Revenue Concentration %",
-              "format": "G"
+              "nativeQueryRef": "Top 10 Revenue Concentration %"
             }
           ]
         }

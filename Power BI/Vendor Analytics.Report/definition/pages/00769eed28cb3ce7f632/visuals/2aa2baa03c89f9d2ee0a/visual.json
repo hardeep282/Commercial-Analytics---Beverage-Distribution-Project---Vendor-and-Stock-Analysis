@@ -3,10 +3,10 @@
   "name": "2aa2baa03c89f9d2ee0a",
   "position": {
     "x": 17.313138429024303,
-    "y": 562.67699894328985,
+    "y": 562.6769989432898,
     "z": 7000,
-    "height": 517.23001056710109,
-    "width": 662.22754491017963,
+    "height": 517.2300105671011,
+    "width": 662.2275449101796,
     "tabOrder": 7000
   },
   "visual": {
@@ -51,7 +51,8 @@
                 }
               },
               "queryRef": "Sum(vw_ProfitLeakage.LossMakingLeakage)",
-              "nativeQueryRef": "Sum of LossMakingLeakage"
+              "nativeQueryRef": "Sum of LossMakingLeakage",
+              "displayName": "Loss-making SKU losses"
             },
             {
               "field": {
@@ -70,7 +71,8 @@
                 }
               },
               "queryRef": "Sum(vw_ProfitLeakage.ExciseLeakage)",
-              "nativeQueryRef": "Sum of ExciseLeakage"
+              "nativeQueryRef": "Sum of ExciseLeakage",
+              "displayName": "Excise tax"
             },
             {
               "field": {
@@ -89,7 +91,8 @@
                 }
               },
               "queryRef": "Sum(vw_ProfitLeakage.FreightLeakage)",
-              "nativeQueryRef": "Sum of FreightLeakage"
+              "nativeQueryRef": "Sum of FreightLeakage",
+              "displayName": "Freight"
             }
           ]
         }

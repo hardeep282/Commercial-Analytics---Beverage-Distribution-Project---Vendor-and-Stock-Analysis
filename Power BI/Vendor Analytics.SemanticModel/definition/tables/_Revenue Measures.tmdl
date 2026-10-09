@@ -2,18 +2,16 @@ table '_Revenue Measures'
 	lineageTag: a14b4fd6-cc08-4135-9ba8-f21ea182de39
 
 	measure 'Total Revenue' = SUM(Vendor_Revenue[TotalRevenue])
+		formatString: \$#,0
 		lineageTag: c8d5c9e4-6786-4e19-9fd5-bfd20ee11842
 
 		changedProperty = IsHidden
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	measure 'Total Gross Profit' = SUM(Vendor_Revenue[TotalGrossProfit])
+		formatString: \$#,0
 		lineageTag: 70399a2d-edc1-4e7e-bee3-fdc929f7cc03
 
 		changedProperty = IsHidden
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Avg Profit Margin %' = AVERAGE(Vendor_Revenue[AvgMarginPct])
 		lineageTag: 4cb4ff83-977e-4790-939d-71c7357bb40c
@@ -41,7 +39,7 @@ table '_Revenue Measures'
 			    SUM(Vendor_Revenue[TotalRevenue]),
 			    0
 			)
-		formatString: 0.00%;-0.00%;0.00%
+		formatString: 0.0%
 		lineageTag: 8a0cb035-9d77-47f0-a34e-d347462e7eb2
 
 	measure 'SKUs by Health Category' = ```

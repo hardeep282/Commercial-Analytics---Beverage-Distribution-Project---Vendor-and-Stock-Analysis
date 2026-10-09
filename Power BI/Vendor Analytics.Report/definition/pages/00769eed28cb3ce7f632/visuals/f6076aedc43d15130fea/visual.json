@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "_Commercial_Measures.Revenue_At_Risk",
-              "nativeQueryRef": "Revenue_SKUs_in_Loss"
+              "nativeQueryRef": "Revenue_SKUs_in_Loss",
+              "displayName": "Revenue in Loss-Making SKUs"
             }
           ]
         }

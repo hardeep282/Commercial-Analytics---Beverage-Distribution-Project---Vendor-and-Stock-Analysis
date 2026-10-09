@@ -10,29 +10,24 @@ table _Pareto_Conc_Measures
 			                                      )
 			                                    )
 			```
+		formatString: \$#,0
 		lineageTag: db3d2bd2-7c9d-4288-bf1f-b813f84bbc83
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	measure 'Top 10 Revenue Concentration %' =
-			DIVIDE([Top 10 Vendor Revenue],
-			                                        [Total Revenue],
-			                                        0)*100
-		formatString: 0.00%;-0.00%;0.00%
+			// Share of total portfolio revenue from the 10 largest vendors (fraction, shown as %).
+			// Denominator uses ALL so the KPI stays portfolio-level when a vendor is selected.
+			DIVIDE(
+			    [Top 10 Vendor Revenue],
+			    CALCULATE(SUM(Pareto_Analysis[TotalRevenue]), ALL(Pareto_Analysis))
+			)
+		formatString: 0.0%
 		lineageTag: e5ff92ad-b631-419c-a868-013bc6df594e
 
 	measure 'Healthy SKU %' =
-			DIVIDE(
-			                    CALCULATE(
-			                         COUNTROWS(vw_PortfolioHealth),
-			                         vw_PortfolioHealth[HealthStatus] = "Healthy"
-			                    ),
-			                    [Total SKUs],
-			                    0
-			) * 100
+			// Same base as the other health rates: outlier-cleaned vw_PortfolioHealth
+			DIVIDE([Healthy SKUs], [SKUs by Health Category])
+		formatString: 0.0%
 		lineageTag: 329cc954-d65c-47a0-8c5a-f278e03a0b1a
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column Dummy
 		dataType: string

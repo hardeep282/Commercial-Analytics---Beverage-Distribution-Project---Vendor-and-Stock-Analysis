@@ -6,7 +6,7 @@
     "y": 497.06666666666666,
     "z": 5000,
     "height": 582.4,
-    "width": 906.66666666666663,
+    "width": 906.6666666666666,
     "tabOrder": 5000
   },
   "visual": {
@@ -20,28 +20,30 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "vendor_sales_summary"
+                      "Entity": "vw_PortfolioHealth"
                     }
                   },
                   "Property": "VendorName"
                 }
               },
-              "queryRef": "vendor_sales_summary.VendorName",
-              "nativeQueryRef": "VendorName"
+              "queryRef": "vw_PortfolioHealth.VendorName",
+              "nativeQueryRef": "VendorName",
+              "displayName": "Vendor"
             },
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "vendor_sales_summary"
+                      "Entity": "vw_PortfolioHealth"
                     }
                   },
                   "Property": "Description"
                 }
               },
-              "queryRef": "vendor_sales_summary.Description",
-              "nativeQueryRef": "Description"
+              "queryRef": "vw_PortfolioHealth.Description",
+              "nativeQueryRef": "Description",
+              "displayName": "Product"
             },
             {
               "field": {
@@ -50,7 +52,7 @@
                     "Column": {
                       "Expression": {
                         "SourceRef": {
-                          "Entity": "vendor_sales_summary"
+                          "Entity": "vw_PortfolioHealth"
                         }
                       },
                       "Property": "TotalSalesDollars"
@@ -59,8 +61,9 @@
                   "Function": 0
                 }
               },
-              "queryRef": "Sum(vendor_sales_summary.TotalSalesDollars)",
-              "nativeQueryRef": "Sum of TotalSalesDollars"
+              "queryRef": "Sum(vw_PortfolioHealth.TotalSalesDollars)",
+              "nativeQueryRef": "Sum of TotalSalesDollars",
+              "displayName": "Revenue"
             },
             {
               "field": {
@@ -69,7 +72,7 @@
                     "Column": {
                       "Expression": {
                         "SourceRef": {
-                          "Entity": "vendor_sales_summary"
+                          "Entity": "vw_PortfolioHealth"
                         }
                       },
                       "Property": "GrossProfit"
@@ -78,22 +81,39 @@
                   "Function": 0
                 }
               },
-              "queryRef": "Sum(vendor_sales_summary.GrossProfit)",
-              "nativeQueryRef": "Sum of GrossProfit"
+              "queryRef": "Sum(vw_PortfolioHealth.GrossProfit)",
+              "nativeQueryRef": "Sum of GrossProfit",
+              "displayName": "Gross Profit"
             },
             {
               "field": {
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "vendor_sales_summary"
+                      "Entity": "vw_PortfolioHealth"
                     }
                   },
                   "Property": "StockTurnover"
                 }
               },
-              "queryRef": "Sum(vendor_sales_summary.StockTurnover)",
-              "nativeQueryRef": "StockTurnover"
+              "queryRef": "vw_PortfolioHealth.StockTurnover",
+              "nativeQueryRef": "StockTurnover",
+              "displayName": "Stock Turnover"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_PortfolioHealth"
+                    }
+                  },
+                  "Property": "HealthStatus"
+                }
+              },
+              "queryRef": "vw_PortfolioHealth.HealthStatus",
+              "nativeQueryRef": "HealthStatus",
+              "displayName": "Health Status"
             }
           ]
         }

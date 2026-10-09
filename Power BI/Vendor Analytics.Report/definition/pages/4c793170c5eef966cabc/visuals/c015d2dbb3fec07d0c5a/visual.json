@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "vw_LogisticsCostSummary.VendorName",
-              "nativeQueryRef": "VendorName"
+              "nativeQueryRef": "VendorName",
+              "displayName": "Vendor"
             },
             {
               "field": {
@@ -46,7 +47,8 @@
                 }
               },
               "queryRef": "Sum(vw_LogisticsCostSummary.TotalRevenue)",
-              "nativeQueryRef": "Sum of TotalRevenue"
+              "nativeQueryRef": "Sum of TotalRevenue",
+              "displayName": "Revenue"
             },
             {
               "field": {
@@ -65,7 +67,8 @@
                 }
               },
               "queryRef": "Sum(vw_LogisticsCostSummary.TotalExciseTax)",
-              "nativeQueryRef": "Sum of TotalExciseTax"
+              "nativeQueryRef": "Sum of TotalExciseTax",
+              "displayName": "Excise Tax"
             },
             {
               "field": {
@@ -84,7 +87,8 @@
                 }
               },
               "queryRef": "Sum(vw_LogisticsCostSummary.TotalFreight)",
-              "nativeQueryRef": "Sum of TotalFreight"
+              "nativeQueryRef": "Sum of TotalFreight",
+              "displayName": "Freight"
             },
             {
               "field": {
@@ -103,7 +107,8 @@
                 }
               },
               "queryRef": "Sum(vw_FullCostAnalysis.TotalGrossProfit)",
-              "nativeQueryRef": "Sum of TotalGrossProfit1"
+              "nativeQueryRef": "Sum of TotalGrossProfit1",
+              "displayName": "Gross Profit"
             },
             {
               "field": {
@@ -122,7 +127,8 @@
                 }
               },
               "queryRef": "Sum(vw_LogisticsCostSummary.TotalSKUs)",
-              "nativeQueryRef": "Sum of TotalSKUs"
+              "nativeQueryRef": "Sum of TotalSKUs",
+              "displayName": "SKUs"
             },
             {
               "field": {
@@ -132,11 +138,12 @@
                       "Entity": "Vendor_Revenue"
                     }
                   },
-                  "Property": "AvgMarginPct"
+                  "Property": "BlendedMarginPct"
                 }
               },
-              "queryRef": "Sum(Vendor_Revenue.AvgMarginPct)",
-              "nativeQueryRef": "AvgMarginPct"
+              "queryRef": "Vendor_Revenue.BlendedMarginPct",
+              "nativeQueryRef": "BlendedMarginPct",
+              "displayName": "Blended Margin %"
             },
             {
               "field": {
@@ -150,7 +157,8 @@
                 }
               },
               "queryRef": "Vendor_Tiering.TierLabel",
-              "nativeQueryRef": "TierLabel"
+              "nativeQueryRef": "TierLabel",
+              "displayName": "Revenue Tier"
             }
           ]
         }

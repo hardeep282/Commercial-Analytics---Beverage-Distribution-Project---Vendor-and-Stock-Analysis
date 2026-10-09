@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
   "name": "ced27635ebe296cc6db4",
   "position": {
-    "x": 767.14285714285722,
+    "x": 767.1428571428572,
     "y": 0,
     "z": 3000,
     "height": 102.85714285714286,
-    "width": 244.28571428571431,
+    "width": 244.2857142857143,
     "tabOrder": 3000
   },
   "visual": {
@@ -28,7 +28,7 @@
               },
               "queryRef": "_Commercial_Measures.Loss Making SKUs",
               "nativeQueryRef": "Loss-Making skus",
-              "displayName": "Loss-Making skus"
+              "displayName": "Loss-Making SKUs"
             }
           ]
         }

@@ -2,7 +2,7 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.7.0/schema.json",
   "name": "f01ba7e572bfc1340a13",
   "position": {
-    "x": 869.98520605847125,
+    "x": 869.9852060584712,
     "y": 138.50510743219442,
     "z": 8000,
     "height": 458.79816836914404,
@@ -27,7 +27,8 @@
                 }
               },
               "queryRef": "Portfolio_Health.VendorName",
-              "nativeQueryRef": "VendorName"
+              "nativeQueryRef": "VendorName",
+              "displayName": "Vendor"
             },
             {
               "field": {
@@ -41,7 +42,8 @@
                 }
               },
               "queryRef": "Portfolio_Health.Description",
-              "nativeQueryRef": "Description"
+              "nativeQueryRef": "Description",
+              "displayName": "Product"
             },
             {
               "field": {
@@ -60,7 +62,8 @@
                 }
               },
               "queryRef": "Sum(Portfolio_Health.TotalSalesDollars)",
-              "nativeQueryRef": "Sum of TotalSalesDollars"
+              "nativeQueryRef": "Sum of TotalSalesDollars",
+              "displayName": "Revenue"
             },
             {
               "field": {
@@ -79,45 +82,38 @@
                 }
               },
               "queryRef": "Sum(Portfolio_Health.GrossProfit)",
-              "nativeQueryRef": "Sum of GrossProfit"
+              "nativeQueryRef": "Sum of GrossProfit",
+              "displayName": "Gross Profit"
             },
             {
               "field": {
-                "Aggregation": {
+                "Column": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "vw_PortfolioHealth"
-                        }
-                      },
-                      "Property": "ProfitMargin"
+                    "SourceRef": {
+                      "Entity": "vw_PortfolioHealth"
                     }
                   },
-                  "Function": 0
+                  "Property": "ProfitMargin"
                 }
               },
-              "queryRef": "Sum(Portfolio_Health.ProfitMargin)",
-              "nativeQueryRef": "Sum of ProfitMargin"
+              "queryRef": "vw_PortfolioHealth.ProfitMargin",
+              "nativeQueryRef": "ProfitMargin",
+              "displayName": "Margin %"
             },
             {
               "field": {
-                "Aggregation": {
+                "Column": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "vw_PortfolioHealth"
-                        }
-                      },
-                      "Property": "StockTurnover"
+                    "SourceRef": {
+                      "Entity": "vw_PortfolioHealth"
                     }
                   },
-                  "Function": 0
+                  "Property": "StockTurnover"
                 }
               },
-              "queryRef": "Sum(Portfolio_Health.StockTurnover)",
-              "nativeQueryRef": "Sum of StockTurnover"
+              "queryRef": "vw_PortfolioHealth.StockTurnover",
+              "nativeQueryRef": "StockTurnover",
+              "displayName": "Stock Turnover"
             },
             {
               "field": {
@@ -131,7 +127,8 @@
                 }
               },
               "queryRef": "Portfolio_Health.HealthStatus",
-              "nativeQueryRef": "HealthStatus"
+              "nativeQueryRef": "HealthStatus",
+              "displayName": "Health Status"
             },
             {
               "field": {
@@ -145,7 +142,8 @@
                 }
               },
               "queryRef": "_Revenue Measures.SKUs by Health Category",
-              "nativeQueryRef": "SKUs by Health Category"
+              "nativeQueryRef": "SKUs by Health Category",
+              "displayName": "SKUs"
             }
           ]
         }

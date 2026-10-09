@@ -26,7 +26,7 @@
                   "Property": "Total Gross Profit"
                 }
               },
-              "queryRef": "_Revenue Measures.Total Gross PRofit",
+              "queryRef": "_Revenue Measures.Total Gross Profit",
               "nativeQueryRef": "Total Gross Profit"
             }
           ]
