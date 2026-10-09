@@ -68,6 +68,11 @@
           "name": "Custom7198522599674821.json",
           "path": "Custom7198522599674821.json",
           "type": "CustomTheme"
+        },
+        {
+          "name": "vendor_analytics_logo.png",
+          "path": "vendor_analytics_logo.png",
+          "type": "Image"
         }
       ]
     }
