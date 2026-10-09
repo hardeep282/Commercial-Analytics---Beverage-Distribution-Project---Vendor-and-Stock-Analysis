@@ -106,8 +106,11 @@ The raw dataset was purchased via Topmate and is not redistributed here, out of 
 **Excel — Pricing and Margin Analysis**
 ![Excel Pricing and Margin Analysis](Screenshots/Pricing_Excel.png)
 
-**Excel — Demand Forecast**
-![Demand Forecast](Screenshots/Demand_Forecast.png)
+**Excel — Demand Forecast** (best out-of-sample method is the 6-month moving average; the ETS figures are an in-sample fit, see [Forecast Accuracy](#forecast-accuracy))
+![Excel Demand Forecast](Screenshots/Demand_Forecast_Excel.png)
+
+**Excel — 2025 Forecast Table and 2024 Fit by Month**
+![Excel Forecast Detail](Screenshots/Forecast_Detail_Excel.png)
 
 ## Forecast Accuracy
 
