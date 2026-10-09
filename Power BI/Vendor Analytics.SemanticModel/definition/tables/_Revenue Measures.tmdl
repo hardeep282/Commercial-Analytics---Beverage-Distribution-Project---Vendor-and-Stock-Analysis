@@ -56,8 +56,7 @@ table '_Revenue Measures'
 		formatString: 0.0%
 		lineageTag: 8e92df15-52c5-43fe-aa36-687f345cf475
 
-	measure 'Vendor Revenue Rank' =
-			IF(HASONEVALUE(Vendor_Revenue[VendorName]), RANKX(ALL(Vendor_Revenue), [Total Revenue]))
+	measure 'Vendor Revenue Rank' = IF(HASONEVALUE(Vendor_Revenue[VendorName]), RANKX(ALL(Vendor_Revenue), [Total Revenue]))
 		formatString: 0
 		lineageTag: b878877e-56d0-44f5-b1c2-899572a23499
 
