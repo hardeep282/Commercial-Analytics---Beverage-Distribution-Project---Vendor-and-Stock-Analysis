@@ -372,7 +372,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'How concentrated is revenue? Top 30 vendors'"
+                  "Value": "'How concentrated is revenue? Top 20 vendors'"
                 }
               }
             },
@@ -462,7 +462,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'How concentrated is revenue? Top 30 vendors'"
+                  "Value": "'How concentrated is revenue? Top 20 vendors'"
                 }
               }
             }
@@ -475,7 +475,7 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "top30",
+        "name": "top20",
         "field": {
           "Column": {
             "Expression": {
@@ -536,7 +536,7 @@
                         }
                       }
                     ],
-                    "Top": 30
+                    "Top": 20
                   }
                 }
               },

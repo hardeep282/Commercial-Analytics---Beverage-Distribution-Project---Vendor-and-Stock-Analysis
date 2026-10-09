@@ -42,7 +42,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'<  Back to previous page'"
+                  "Value": "'<  Back'"
                 }
               }
             },
@@ -95,7 +95,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'<  Back to previous page'"
+                  "Value": "'<  Back'"
                 }
               }
             },
@@ -148,7 +148,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'<  Back to previous page'"
+                  "Value": "'<  Back'"
                 }
               }
             },
@@ -201,7 +201,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'<  Back to previous page'"
+                  "Value": "'<  Back'"
                 }
               }
             },

@@ -32,21 +32,6 @@
             },
             {
               "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Vendor_Revenue"
-                    }
-                  },
-                  "Property": "TierLabel"
-                }
-              },
-              "queryRef": "Vendor_Revenue.TierLabel",
-              "nativeQueryRef": "Tier",
-              "displayName": "Tier"
-            },
-            {
-              "field": {
                 "Measure": {
                   "Expression": {
                     "SourceRef": {

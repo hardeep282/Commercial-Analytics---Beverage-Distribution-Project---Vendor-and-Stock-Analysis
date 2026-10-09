@@ -559,7 +559,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'41 vendors with revenue >= $1M (97.5% of revenue); darker = higher tier; size = gross profit'"
+                  "Value": "'41 vendors with revenue >= $1M; darker = higher tier; size = gross profit'"
                 }
               }
             },
