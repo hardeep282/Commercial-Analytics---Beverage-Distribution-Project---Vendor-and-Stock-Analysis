@@ -9,22 +9,21 @@
     "background": [
       {
         "properties": {
-          "transparency": {
-            "expr": {
-              "Literal": {
-                "Value": "38D"
-              }
-            }
-          },
           "color": {
             "solid": {
               "color": {
                 "expr": {
-                  "ThemeDataColor": {
-                    "ColorId": 7,
-                    "Percent": 0.4
+                  "Literal": {
+                    "Value": "'#F4F6F8'"
                   }
                 }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
               }
             }
           }
@@ -39,7 +38,7 @@
               "color": {
                 "expr": {
                   "Literal": {
-                    "Value": "'#E6E6E6'"
+                    "Value": "'#F4F6F8'"
                   }
                 }
               }
@@ -48,5 +47,37 @@
         }
       }
     ]
-  }
+  },
+  "visualInteractions": [
+    {
+      "source": "3ced91c977c47ce5ee10",
+      "target": "c73b3de6f4109ff3efd2",
+      "type": "NoFilter"
+    },
+    {
+      "source": "c6ce847c9eadcbcae04b",
+      "target": "c73b3de6f4109ff3efd2",
+      "type": "NoFilter"
+    },
+    {
+      "source": "05dc1921e2dfe69d421f",
+      "target": "c73b3de6f4109ff3efd2",
+      "type": "NoFilter"
+    },
+    {
+      "source": "37c18dade0151e6f0178",
+      "target": "c73b3de6f4109ff3efd2",
+      "type": "NoFilter"
+    },
+    {
+      "source": "31946d34c6d02b0e7642",
+      "target": "c73b3de6f4109ff3efd2",
+      "type": "NoFilter"
+    },
+    {
+      "source": "6786dada2323f1b59123",
+      "target": "c73b3de6f4109ff3efd2",
+      "type": "NoFilter"
+    }
+  ]
 }

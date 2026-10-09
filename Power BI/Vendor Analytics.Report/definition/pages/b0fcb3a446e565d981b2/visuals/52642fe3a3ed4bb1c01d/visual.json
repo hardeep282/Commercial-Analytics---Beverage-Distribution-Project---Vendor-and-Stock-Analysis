@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
-  "name": "611fd1e0083ac1c0b436",
+  "name": "52642fe3a3ed4bb1c01d",
   "position": {
-    "x": 515.71428571428578,
-    "y": 0,
-    "z": 2000,
-    "height": 104.28571428571429,
-    "width": 241.42857142857144,
-    "tabOrder": 2000
+    "x": 774.4,
+    "y": 116,
+    "z": 12000,
+    "height": 84,
+    "width": 236.8,
+    "tabOrder": 12000
   },
   "visual": {
     "visualType": "card",
@@ -23,32 +23,15 @@
                       "Entity": "_Revenue Measures"
                     }
                   },
-                  "Property": "Blended Margin %"
+                  "Property": "Total Vendors"
                 }
               },
-              "queryRef": "_Revenue Measures.Blended Margin %",
-              "nativeQueryRef": "Blended Margin %"
+              "queryRef": "_Revenue Measures.Total Vendors",
+              "nativeQueryRef": "Vendors",
+              "displayName": "Vendors"
             }
           ]
         }
-      },
-      "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Measure": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "_Revenue Measures"
-                  }
-                },
-                "Property": "Blended Margin %"
-              }
-            },
-            "direction": "Descending"
-          }
-        ],
-        "isDefaultSort": true
       }
     },
     "objects": {
@@ -58,7 +41,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "28D"
+                  "Value": "22D"
                 }
               }
             },
@@ -69,20 +52,6 @@
                 }
               }
             },
-            "italic": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
-                }
-              }
-            },
-            "labelPrecision": {
-              "expr": {
-                "Literal": {
-                  "Value": "1L"
-                }
-              }
-            },
             "labelDisplayUnits": {
               "expr": {
                 "Literal": {
@@ -90,13 +59,19 @@
                 }
               }
             },
+            "labelPrecision": {
+              "expr": {
+                "Literal": {
+                  "Value": "0L"
+                }
+              }
+            },
             "color": {
               "solid": {
                 "color": {
                   "expr": {
-                    "ThemeDataColor": {
-                      "ColorId": 1,
-                      "Percent": 0
+                    "Literal": {
+                      "Value": "'#1B4F8A'"
                     }
                   }
                 }
@@ -108,6 +83,13 @@
       "categoryLabels": [
         {
           "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
             "fontSize": {
               "expr": {
                 "Literal": {
@@ -120,23 +102,9 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#7F8C8D'"
+                      "Value": "'#5D6D7E'"
                     }
                   }
-                }
-              }
-            },
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "bold": {
-              "expr": {
-                "Literal": {
-                  "Value": "false"
                 }
               }
             }
@@ -145,6 +113,88 @@
       ]
     },
     "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
+                }
+              }
+            },
+            "transparency": {
+              "expr": {
+                "Literal": {
+                  "Value": "0D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#E1E5EA'"
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "width": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
       "title": [
         {
           "properties": {
@@ -158,38 +208,47 @@
           }
         }
       ],
-      "border": [
+      "padding": [
         {
           "properties": {
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#E67E22'"
-                    }
-                  }
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "4D"
                 }
               }
             },
-            "radius": {
+            "bottom": {
               "expr": {
                 "Literal": {
-                  "Value": "10D"
+                  "Value": "4D"
                 }
               }
             },
-            "width": {
+            "left": {
               "expr": {
                 "Literal": {
-                  "Value": "3D"
+                  "Value": "4D"
                 }
               }
             },
-            "show": {
+            "right": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "4D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'KPI: Vendors'"
                 }
               }
             }
