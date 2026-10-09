@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Tip: right-click a vendor > Drill through > Vendor Detail",
+                    "value": "Right-click a vendor to drill through",
                     "textStyle": {
                       "fontSize": "9pt",
                       "color": "#5D6D7E",
