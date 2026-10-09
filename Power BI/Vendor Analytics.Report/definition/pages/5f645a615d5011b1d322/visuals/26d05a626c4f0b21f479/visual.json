@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
-  "name": "7b9ffb49d89d931f1580",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
+  "name": "26d05a626c4f0b21f479",
   "position": {
-    "x": 29.866666666666667,
-    "y": 64,
-    "z": 1000,
-    "height": 125.86666666666666,
-    "width": 409.6,
-    "tabOrder": 1000
+    "x": 64,
+    "y": 4,
+    "z": 3000,
+    "height": 48,
+    "width": 704,
+    "tabOrder": 3000
   },
   "visual": {
     "visualType": "card",
@@ -20,35 +20,17 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "_Revenue Measures"
+                      "Entity": "_Dynamic_Title_Measure"
                     }
                   },
-                  "Property": "Total Revenue"
+                  "Property": "Selected Vendor Title"
                 }
               },
-              "queryRef": "_Revenue Measures.Total Revenue",
-              "nativeQueryRef": "Total Revenue"
+              "queryRef": "_Dynamic_Title_Measure.Selected Vendor Title",
+              "nativeQueryRef": "Selected Vendor Title"
             }
           ]
         }
-      },
-      "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Measure": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "_Revenue Measures"
-                  }
-                },
-                "Property": "Total Revenue"
-              }
-            },
-            "direction": "Descending"
-          }
-        ],
-        "isDefaultSort": true
       }
     },
     "objects": {
@@ -58,7 +40,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "28D"
+                  "Value": "18D"
                 }
               }
             },
@@ -69,21 +51,10 @@
                 }
               }
             },
-            "italic": {
+            "labelDisplayUnits": {
               "expr": {
                 "Literal": {
-                  "Value": "false"
-                }
-              }
-            },
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#1B4F8A'"
-                    }
-                  }
+                  "Value": "1D"
                 }
               }
             },
@@ -94,10 +65,14 @@
                 }
               }
             },
-            "labelDisplayUnits": {
-              "expr": {
-                "Literal": {
-                  "Value": "1000000D"
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "Literal": {
+                      "Value": "'#FFFFFF'"
+                    }
+                  }
                 }
               }
             }
@@ -107,10 +82,17 @@
       "categoryLabels": [
         {
           "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "15D"
+                  "Value": "10D"
                 }
               }
             },
@@ -119,16 +101,9 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#7F8C8D'"
+                      "Value": "'#5D6D7E'"
                     }
                   }
-                }
-              }
-            },
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
                 }
               }
             }
@@ -137,7 +112,7 @@
       ]
     },
     "visualContainerObjects": {
-      "title": [
+      "background": [
         {
           "properties": {
             "show": {
@@ -153,35 +128,49 @@
       "border": [
         {
           "properties": {
-            "color": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#1B4F8A'"
-                    }
-                  }
-                }
-              }
-            },
-            "radius": {
-              "expr": {
-                "Literal": {
-                  "Value": "10D"
-                }
-              }
-            },
-            "width": {
-              "expr": {
-                "Literal": {
-                  "Value": "3D"
-                }
-              }
-            },
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "general": [
+        {
+          "properties": {
+            "altText": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Selected vendor'"
                 }
               }
             }

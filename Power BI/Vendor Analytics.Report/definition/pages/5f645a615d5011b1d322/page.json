@@ -3,8 +3,8 @@
   "name": "5f645a615d5011b1d322",
   "displayName": "Vendor Detail",
   "displayOption": "FitToPage",
-  "height": 1080,
-  "width": 1920,
+  "height": 720,
+  "width": 1280,
   "filterConfig": {
     "filters": [
       {
@@ -83,6 +83,8 @@
       }
     ]
   },
+  "type": "Drillthrough",
+  "visibility": "HiddenInViewMode",
   "objects": {
     "background": [
       {
@@ -91,9 +93,32 @@
             "solid": {
               "color": {
                 "expr": {
-                  "ThemeDataColor": {
-                    "ColorId": 0,
-                    "Percent": -0.3
+                  "Literal": {
+                    "Value": "'#F4F6F8'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspace": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F4F6F8'"
                   }
                 }
               }
@@ -102,6 +127,5 @@
         }
       }
     ]
-  },
-  "type": "Drillthrough"
+  }
 }
