@@ -2469,16 +2469,6 @@ cultureInfo en-IN
 			            },
 			            "Weight": 0.491
 			          }
-			        },
-			        {
-			          "Filter by Vendor": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
-			          }
 			        }
 			      ]
 			    },
@@ -7630,6 +7620,16 @@ cultureInfo en-IN
 			            },
 			            "Weight": 0.492
 			          }
+			        },
+			        {
+			          "Gross profit": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
 			        }
 			      ]
 			    },
@@ -8030,6 +8030,16 @@ cultureInfo en-IN
 			            },
 			            "Weight": 0.748
 			          }
+			        },
+			        {
+			          "Loss-making SKU rate": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
 			        }
 			      ]
 			    },
@@ -8057,16 +8067,6 @@ cultureInfo en-IN
 			          "making SKUs": {
 			            "State": "Generated",
 			            "Weight": 0.97
-			          }
-			        },
-			        {
-			          "Loss-Making skus": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -8156,6 +8156,16 @@ cultureInfo en-IN
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.714
+			          }
+			        },
+			        {
+			          "Revenue in loss-making SKUs": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -8250,6 +8260,16 @@ cultureInfo en-IN
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "Dead stock rate (turnover < 1)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -8611,6 +8631,26 @@ cultureInfo en-IN
 			            },
 			            "Weight": 0.476
 			          }
+			        },
+			        {
+			          "Freight cost": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Freight": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
 			        }
 			      ]
 			    },
@@ -8738,6 +8778,16 @@ cultureInfo en-IN
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.491
+			          }
+			        },
+			        {
+			          "Excise tax (non-controllable)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -8936,6 +8986,16 @@ cultureInfo en-IN
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "Total leakage % of revenue": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -9382,6 +9442,16 @@ cultureInfo en-IN
 			            },
 			            "Weight": 0.605
 			          }
+			        },
+			        {
+			          "Top 10 vendors' share": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
 			        }
 			      ]
 			    },
@@ -9815,6 +9885,16 @@ cultureInfo en-IN
 			            },
 			            "Weight": 0.739
 			          }
+			        },
+			        {
+			          "Blended margin": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
 			        }
 			      ]
 			    },
@@ -9890,6 +9970,382 @@ cultureInfo en-IN
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "SKUs": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_revenue_measures.revenue_share_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Revenue Measures",
+			          "ConceptualProperty": "Revenue Share %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Share of revenue": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Share of portfolio revenue": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_pareto_conc_measures.cumulative_revenue_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Pareto_Conc_Measures",
+			          "ConceptualProperty": "Cumulative Revenue %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Cumulative share": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_commercial_measures.controllable_leakage": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Commercial_Measures",
+			          "ConceptualProperty": "Controllable Leakage"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Controllable leakage": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_commercial_measures.profit_leakage": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Commercial_Measures",
+			          "ConceptualProperty": "Profit Leakage"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Profit leakage": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Total profit leakage": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_commercial_measures.lossmaking_sku_losses": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Commercial_Measures",
+			          "ConceptualProperty": "Loss-Making SKU Losses"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Loss-making SKU losses": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_commercial_measures.noncontrollable_cost_excise": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Commercial_Measures",
+			          "ConceptualProperty": "Non-Controllable Cost (Excise)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Excise (non-controllable)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "vw_portfoliohealth.margincategory": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "vw_PortfolioHealth",
+			          "ConceptualProperty": "MarginCategory"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Margin category": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "vw_portfoliohealth.description": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "vw_PortfolioHealth",
+			          "ConceptualProperty": "Description"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Product": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "vw_portfoliohealth.profitmargin": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "vw_PortfolioHealth",
+			          "ConceptualProperty": "ProfitMargin"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Margin %": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "vw_portfoliohealth.stockturnover": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "vw_PortfolioHealth",
+			          "ConceptualProperty": "StockTurnover"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Stock turnover": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "vw_portfoliohealth.healthstatus": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "vw_PortfolioHealth",
+			          "ConceptualProperty": "HealthStatus"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Health status": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_logistics_and_cost_measures.avg_net_margin_after_all_costs_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Logistics and Cost Measures",
+			          "ConceptualProperty": "Avg Net Margin After All Costs %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Avg vendor net margin (revenue >= $10K)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_logistics_and_cost_measures.net_margin_after_all_costs_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Logistics and Cost Measures",
+			          "ConceptualProperty": "Net Margin After All Costs %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Net margin after all costs": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "vendor_revenue.tierlabel": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Vendor_Revenue",
+			          "ConceptualProperty": "TierLabel"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Tier": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Revenue tier": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "vendor_revenue.leakageseverity": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Vendor_Revenue",
+			          "ConceptualProperty": "LeakageSeverity"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Leakage severity": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "vendor_revenue.paretoband": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Vendor_Revenue",
+			          "ConceptualProperty": "ParetoBand"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Pareto band": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
 			          }
 			        }
 			      ]
