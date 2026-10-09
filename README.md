@@ -12,7 +12,7 @@ End-to-end commercial analytics project analysing a beverage distributor's vendo
 - **20.3% of SKUs are loss-making** (2,127 SKUs), running a blended margin of -42.6%
 - **Pareto concentration:** 17 of 126 vendors (13.5%) generate 80% of revenue ($360.4M); the 91-vendor tail contributes 5%
 - **Top 10 vendors = 65.0% of revenue**; Diageo alone accounts for 15.2%, a notable concentration risk
-- Demand forecasting (Holt-Winters ETS, built in Excel) achieved **9.84% MAPE**, rated Excellent
+- **Demand forecast, tested out of sample:** one-month-ahead error is **15–19% MAPE** at SKU level, and the best simple method beats a naive forecast by only about 2 points on one year of history (see [Forecast Accuracy](#forecast-accuracy)). The Excel ETS figure of 9.84% is an in-sample fit and is not used as an accuracy claim
 - Random Forest classification: **95% accuracy, 0.86 F1** (after resolving data leakage from profit-margin features)
 
 ## SQL Architecture
@@ -57,8 +57,8 @@ The raw dataset was purchased via Topmate and is not redistributed here, out of 
 ## Tools Used
 
 - **SQL Server:** layered view architecture, CTEs, window functions (NTILE, DENSE_RANK, LAG, running SUM OVER), NULLIF/COALESCE data-quality guards, built-in validation checks
-- **Python** (pandas, scikit-learn, statsmodels): exploratory analysis, vendor segmentation (clustering) and Random Forest classification
-- **Excel:** interactive workbook including the Holt-Winters (ETS) demand forecast with seasonal index and MAPE tracker, plus Executive Summary, Vendor Analysis, Risk Dashboard, Pricing and Ad Hoc Analysis sheets. Dashboards report blended margins (gross profit ÷ revenue) and separate controllable leakage from non-controllable excise
+- **Python** (pandas, scikit-learn, statsmodels): exploratory analysis, vendor segmentation (clustering), Random Forest classification and an out-of-sample forecast backtest
+- **Excel:** interactive workbook including a demand forecast (moving averages and ETS) with seasonal index and accuracy tracker, plus Executive Summary, Vendor Analysis, Risk Dashboard, Pricing and Ad Hoc Analysis sheets. Dashboards report blended margins (gross profit ÷ revenue) and separate controllable leakage from non-controllable excise
 - **Power BI:** 4-page interactive report (Executive Summary, Commercial Deep Dive, Risk Dashboard, Vendor Detail drillthrough) on a star-schema model with DAX measures, version-controlled as a Power BI Project (PBIP)
 - **Anthropic Claude API:** generates evidence-based commercial insight summaries from live vendor data
 
@@ -106,8 +106,22 @@ The raw dataset was purchased via Topmate and is not redistributed here, out of 
 **Excel — Pricing and Margin Analysis**
 ![Excel Pricing and Margin Analysis](Screenshots/Pricing_Excel.png)
 
-**Excel — Demand Forecast (Holt-Winters ETS)**
+**Excel — Demand Forecast**
 ![Demand Forecast](Screenshots/Demand_Forecast.png)
+
+## Forecast Accuracy
+
+The Excel forecast tab fits `FORECAST.ETS` with a 12-month season, but the data covers only one year (Jan–Dec 2024). One cycle is not enough to estimate seasonality, so Excel sets the seasonal weight to about zero and the projection becomes a straight trend line (the 2025 total is +60% on 2024 only because the trend is extrapolated). Its 9.84% MAPE is also measured on the same months the model was fitted to.
+
+`forecast_backtest.py` measures accuracy properly: each forecast uses only the months before it.
+
+| Series | Best method | Rolling one-month-ahead MAPE (Jul–Dec) | Naive forecast |
+|---|---|---|---|
+| Jack Daniels No 7 Black (flagship SKU) | 6-month moving average | 15.7% | 17.9% |
+| Portfolio total | Naive (last month) | 11.8% | 11.8% |
+| Top 50 SKUs by volume (median) | 6-month moving average | 15.4% | 17.5% |
+
+**What this means for planning:** one year of history supports short-term replenishment with a simple moving average and a safety-stock buffer, not a 12-month seasonal forecast. Seasonality is shown descriptively instead: for the flagship SKU, December and July run at 1.36× and 1.35× the monthly average. A second year of data would allow a seasonal model to be fitted and tested.
 
 ## GenAI Insight Tool
 
@@ -124,9 +138,9 @@ The API key is read from a local `.env` file and never stored in code.
 
 1. Clone this repo
 2. Install dependencies: `pip install -r requirements.txt`
-3. Copy `.env.example` to `.env` and add your own Anthropic API key
+3. Copy `.env.example` to `.env` and add your own Anthropic API key (database connections are also set there; no credentials are stored in code or notebooks)
 4. Load a similarly structured dataset into SQL Server Express and run `SQL Analysis/Vendor_analysis.sql` to create the views
-5. Run `python vendor_insights.py` to generate an AI commercial summary
+5. Run `python vendor_insights.py` to generate an AI commercial summary, and `python forecast_backtest.py` to reproduce the forecast accuracy test
 6. Open `Power BI/Vendor Analytics.pbip` in Power BI Desktop and select **Refresh** to load the report from your SQL Server
 
 ## Folder Guide
@@ -136,10 +150,11 @@ The API key is read from a local `.env` file and never stored in code.
 | `Data/` | Not included; the raw dataset was purchased via Topmate and is not redistributed (see Note on Data) |
 | `SQL Analysis/` | Full SQL script: data profiling, view definitions and validation checks |
 | `Notebooks/` | EDA, vendor performance analysis, and segmentation/prediction notebooks |
-| `Excel Analysis/` | Interactive Excel workbook, including the Holt-Winters demand forecast |
+| `Excel Analysis/` | Interactive Excel workbook, including the demand forecast and seasonal index |
 | `Power BI/` | Power BI Project: open `Vendor Analytics.pbip`; model in `.SemanticModel` (TMDL), report in `.Report` (PBIR); no data included |
 | `Screenshots/` | Dashboard and output screenshots |
 | `vendor_insights.py` | GenAI commercial insight generator (Claude API) |
 | `vendor_insight_output.txt` | Verified sample output from the GenAI tool |
+| `forecast_backtest.py` | Out-of-sample backtest of the demand forecast (rolling one-month-ahead and three-month holdout) |
 | `requirements.txt` | Python dependencies (`pip install -r requirements.txt`) |
-| `.env.example` | Template for the Anthropic API key; copy to `.env` and add your own key |
+| `.env.example` | Template for local settings (Anthropic API key, optional database URLs); copy to `.env` |
