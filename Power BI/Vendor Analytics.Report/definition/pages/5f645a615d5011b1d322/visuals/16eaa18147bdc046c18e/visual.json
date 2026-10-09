@@ -23,7 +23,7 @@
                     "textStyle": {
                       "fontSize": "8pt",
                       "fontWeight": "bold",
-                      "color": "#AFC3DC"
+                      "color": "#5D6D7E"
                     }
                   }
                 ],
@@ -35,7 +35,7 @@
                     "value": "Everything here is filtered to the vendor you drilled through from. The SKU table lists dead-stock-risk products that are at risk, loss-making or profitable but slow.",
                     "textStyle": {
                       "fontSize": "8pt",
-                      "color": "#FFFFFF"
+                      "color": "#1F2D3D"
                     }
                   }
                 ],

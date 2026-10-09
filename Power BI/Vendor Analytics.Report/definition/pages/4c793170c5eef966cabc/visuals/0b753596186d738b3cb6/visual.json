@@ -23,7 +23,7 @@
                     "textStyle": {
                       "fontSize": "12pt",
                       "fontWeight": "bold",
-                      "color": "#FFFFFF"
+                      "color": "#1B4F8A"
                     }
                   }
                 ],
@@ -35,7 +35,7 @@
                     "value": "Beverage distribution",
                     "textStyle": {
                       "fontSize": "8pt",
-                      "color": "#AFC3DC"
+                      "color": "#5D6D7E"
                     }
                   }
                 ],

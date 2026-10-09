@@ -3,11 +3,11 @@
   "name": "e838d1c46eeda2ab7f0b",
   "position": {
     "x": 16,
-    "y": 552,
-    "z": 16000,
+    "y": 608,
+    "z": 17000,
     "height": 44,
     "width": 168,
-    "tabOrder": 16000
+    "tabOrder": 17000
   },
   "visual": {
     "visualType": "textbox",
@@ -22,7 +22,7 @@
                     "value": "Click a vendor bar or row, then press the button. Or right-click any vendor > Drill through.",
                     "textStyle": {
                       "fontSize": "8pt",
-                      "color": "#AFC3DC"
+                      "color": "#5D6D7E"
                     }
                   }
                 ],
