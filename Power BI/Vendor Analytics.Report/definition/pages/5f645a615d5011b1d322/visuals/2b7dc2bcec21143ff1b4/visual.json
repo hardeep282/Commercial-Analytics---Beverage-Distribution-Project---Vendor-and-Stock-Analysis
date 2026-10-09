@@ -1,133 +1,36 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
-  "name": "54502400d4cb47566f65",
+  "name": "2b7dc2bcec21143ff1b4",
   "position": {
     "x": 16,
-    "y": 274,
-    "z": 11000,
-    "height": 58,
-    "width": 168,
-    "tabOrder": 11000
+    "y": 206,
+    "z": 8000,
+    "height": 32,
+    "width": 4,
+    "tabOrder": 8000
   },
   "visual": {
-    "visualType": "slicer",
-    "query": {
-      "queryState": {
-        "Values": {
-          "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "Vendor_Revenue"
-                    }
-                  },
-                  "Property": "VendorName"
-                }
-              },
-              "queryRef": "Vendor_Revenue.VendorName",
-              "nativeQueryRef": "VendorName",
-              "active": true
-            }
-          ]
-        }
-      }
-    },
+    "visualType": "textbox",
     "objects": {
-      "data": [
-        {
-          "properties": {
-            "mode": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Dropdown'"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "header": [
-        {
-          "properties": {
-            "show": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
-              }
-            },
-            "text": {
-              "expr": {
-                "Literal": {
-                  "Value": "'Vendor'"
-                }
-              }
-            },
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#5D6D7E'"
-                    }
-                  }
-                }
-              }
-            },
-            "textSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "8D"
-                }
-              }
-            }
-          }
-        }
-      ],
-      "items": [
-        {
-          "properties": {
-            "fontColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#1F2D3D'"
-                    }
-                  }
-                }
-              }
-            },
-            "textSize": {
-              "expr": {
-                "Literal": {
-                  "Value": "9D"
-                }
-              }
-            }
-          }
-        }
-      ],
       "general": [
         {
           "properties": {
-            "selfFilterEnabled": {
-              "expr": {
-                "Literal": {
-                  "Value": "true"
-                }
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ],
+                "horizontalTextAlignment": "left"
               }
-            }
+            ]
           }
         }
       ]
-    },
-    "syncGroup": {
-      "groupName": "sync_vendor",
-      "fieldChanges": true,
-      "filterChanges": true
     },
     "visualContainerObjects": {
       "background": [
@@ -145,7 +48,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#1B4F8A'"
                     }
                   }
                 }
@@ -167,7 +70,7 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             },
@@ -244,7 +147,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'Vendor slicer'"
+                  "Value": "'Current page marker'"
                 }
               }
             }

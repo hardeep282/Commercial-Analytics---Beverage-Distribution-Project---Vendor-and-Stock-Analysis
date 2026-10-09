@@ -1,13 +1,13 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.8.0/schema.json",
-  "name": "b30ece36341bd7523b13",
+  "name": "a89fef193e0711edf9df",
   "position": {
-    "x": 16,
-    "y": 460,
-    "z": 14000,
-    "height": 30,
-    "width": 168,
-    "tabOrder": 14000
+    "x": 22,
+    "y": 206,
+    "z": 9000,
+    "height": 32,
+    "width": 162,
+    "tabOrder": 9000
   },
   "visual": {
     "visualType": "actionButton",
@@ -42,7 +42,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Clear filters'"
+                  "Value": "'Vendor Detail'"
                 }
               }
             },
@@ -60,7 +60,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "9D"
+                  "Value": "10D"
                 }
               }
             },
@@ -95,7 +95,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Clear filters'"
+                  "Value": "'Vendor Detail'"
                 }
               }
             },
@@ -113,7 +113,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "9D"
+                  "Value": "10D"
                 }
               }
             },
@@ -148,7 +148,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Clear filters'"
+                  "Value": "'Vendor Detail'"
                 }
               }
             },
@@ -166,7 +166,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "9D"
+                  "Value": "10D"
                 }
               }
             },
@@ -201,7 +201,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Clear filters'"
+                  "Value": "'Vendor Detail'"
                 }
               }
             },
@@ -219,7 +219,7 @@
             "fontSize": {
               "expr": {
                 "Literal": {
-                  "Value": "9D"
+                  "Value": "10D"
                 }
               }
             },
@@ -269,32 +269,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
-                    }
-                  }
-                }
-              }
-            },
-            "transparency": {
-              "expr": {
-                "Literal": {
-                  "Value": "100D"
-                }
-              }
-            }
-          },
-          "selector": {
-            "id": "default"
-          }
-        },
-        {
-          "properties": {
-            "fillColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#F0F4F9'"
+                      "Value": "'#E3ECF7'"
                     }
                   }
                 }
@@ -309,7 +284,7 @@
             }
           },
           "selector": {
-            "id": "hover"
+            "id": "default"
           }
         }
       ],
@@ -319,42 +294,10 @@
             "show": {
               "expr": {
                 "Literal": {
-                  "Value": "true"
+                  "Value": "false"
                 }
               }
             }
-          }
-        },
-        {
-          "properties": {
-            "lineColor": {
-              "solid": {
-                "color": {
-                  "expr": {
-                    "Literal": {
-                      "Value": "'#1B4F8A'"
-                    }
-                  }
-                }
-              }
-            },
-            "weight": {
-              "expr": {
-                "Literal": {
-                  "Value": "1D"
-                }
-              }
-            },
-            "roundEdge": {
-              "expr": {
-                "Literal": {
-                  "Value": "6D"
-                }
-              }
-            }
-          },
-          "selector": {
-            "id": "default"
           }
         }
       ]
@@ -373,14 +316,21 @@
             "type": {
               "expr": {
                 "Literal": {
-                  "Value": "'ClearAllSlicers'"
+                  "Value": "'PageNavigation'"
+                }
+              }
+            },
+            "navigationSection": {
+              "expr": {
+                "Literal": {
+                  "Value": "'5f645a615d5011b1d322'"
                 }
               }
             },
             "tooltip": {
               "expr": {
                 "Literal": {
-                  "Value": "'Reset every slicer'"
+                  "Value": "'Go to Vendor Detail'"
                 }
               }
             }
@@ -458,7 +408,7 @@
             "altText": {
               "expr": {
                 "Literal": {
-                  "Value": "'Clear all slicers'"
+                  "Value": "'Go to Vendor Detail'"
                 }
               }
             }

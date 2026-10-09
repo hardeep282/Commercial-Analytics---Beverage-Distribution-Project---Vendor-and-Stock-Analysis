@@ -3,11 +3,11 @@
   "name": "029f2c5d3f679d4e1eaa",
   "position": {
     "x": 16,
-    "y": 220,
-    "z": 8000,
+    "y": 250,
+    "z": 10000,
     "height": 32,
     "width": 168,
-    "tabOrder": 8000
+    "tabOrder": 10000
   },
   "visual": {
     "visualType": "actionButton",
@@ -42,7 +42,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'< Back'"
+                  "Value": "'<  Back to previous page'"
                 }
               }
             },
@@ -95,7 +95,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'< Back'"
+                  "Value": "'<  Back to previous page'"
                 }
               }
             },
@@ -148,7 +148,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'< Back'"
+                  "Value": "'<  Back to previous page'"
                 }
               }
             },
@@ -201,7 +201,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'< Back'"
+                  "Value": "'<  Back to previous page'"
                 }
               }
             },
@@ -269,7 +269,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#FFFFFF'"
+                      "Value": "'#E3ECF7'"
                     }
                   }
                 }
@@ -278,7 +278,7 @@
             "transparency": {
               "expr": {
                 "Literal": {
-                  "Value": "100D"
+                  "Value": "0D"
                 }
               }
             }
@@ -294,7 +294,7 @@
                 "color": {
                   "expr": {
                     "Literal": {
-                      "Value": "'#F0F4F9'"
+                      "Value": "'#D3E1F2'"
                     }
                   }
                 }
