@@ -19,12 +19,36 @@ from sqlalchemy.engine import Engine
 load_dotenv()  # reads .env in the project folder, if there is one
 
 # The same local database vendor_insights.py uses: SQL Server Express, Windows login.
-DEFAULT_ODBC = (
-    "DRIVER={SQL Server};"
-    "SERVER=.\\SQLEXPRESS;"
-    "DATABASE=Vendor_sales;"
-    "Trusted_Connection=yes;"
-)
+SERVER = ".\\SQLEXPRESS"
+DATABASE = "Vendor_sales"
+LEGACY_DRIVER = "SQL Server"  # ships with Windows; fine for reading, too old for writing
+
+
+def best_driver() -> str:
+    """The newest SQL Server ODBC driver installed on this machine.
+
+    Windows always has the old 'SQL Server' driver. It can read, but it fails when
+    SQLAlchemy creates a table (error HY104). 'ODBC Driver 17/18 for SQL Server' is the
+    current one, so we use it whenever it is installed.
+    """
+    try:
+        import pyodbc
+
+        modern = sorted((d for d in pyodbc.drivers() if d.startswith("ODBC Driver")), reverse=True)
+    except Exception:
+        modern = []
+    return modern[0] if modern else LEGACY_DRIVER
+
+
+def odbc_string() -> str:
+    driver = best_driver()
+    # Driver 18 encrypts by default and rejects a local server's self-signed certificate
+    # unless told to trust it. Harmless on Driver 17.
+    trust = "" if driver == LEGACY_DRIVER else "TrustServerCertificate=yes;"
+    return (
+        f"DRIVER={{{driver}}};SERVER={SERVER};DATABASE={DATABASE};"
+        f"Trusted_Connection=yes;{trust}"
+    )
 
 # The only views the pack is allowed to read. A name that isn't here is refused, so no
 # typo or stray input can ever be pasted into a SQL statement.
@@ -35,12 +59,13 @@ PACK_VIEWS = (
     "vw_ParetoAnalysis",        # cumulative revenue share (the 80/20 view)
     "vw_LogisticsCostSummary",  # freight and excise as % of revenue
     "vw_PortfolioHealth",       # one row per SKU: loss-making, dead stock, etc.
+    "monthly_demand",           # table loaded by load_monthly.py: one row per sku per month
 )
 
 
 def connection_url() -> str:
     """DB_URL from .env if set, otherwise the local SQL Server Express database."""
-    return os.environ.get("DB_URL") or "mssql+pyodbc:///?odbc_connect=" + quote_plus(DEFAULT_ODBC)
+    return os.environ.get("DB_URL") or "mssql+pyodbc:///?odbc_connect=" + quote_plus(odbc_string())
 
 
 def get_engine() -> Engine:
@@ -77,6 +102,7 @@ def inventory(engine: Engine) -> pd.DataFrame:
 if __name__ == "__main__":
     engine = get_engine()
     inv = inventory(engine)
+    print(f"Driver: {best_driver()}")
     print(f"Connected. dbo has {len(inv)} tables and views:\n")
     print(inv.to_string(index=False))
 
