@@ -1,0 +1,1 @@
+"""Monthly management pack: pull -> check -> compute -> size -> explain -> pack -> deliver."""
