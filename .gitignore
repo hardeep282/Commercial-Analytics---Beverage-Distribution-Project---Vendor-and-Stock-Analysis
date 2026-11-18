@@ -14,3 +14,5 @@ Data/
 **/.pbi/cache.abf
 **/.pbi/localSettings.json
 *.pbix
+
+pack_output/
