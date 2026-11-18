@@ -1,11 +1,10 @@
-
-
 """Step 6 - build the pack. The one command that runs everything.
 
     python -m monthly_pack.build_pack 7            -> July's pack, with the AI memo
     python -m monthly_pack.build_pack 7 --no-ai    -> July's pack, no AI call, no cost
 
 Piece 1: run steps 1-5 in order and write the CSV files Power BI will read.
+Piece 2: also write the PDF pack for management (monthly_pack/pdf.py).
 """
 from __future__ import annotations
 
@@ -16,6 +15,7 @@ from pathlib import Path
 import pandas as pd
 
 from monthly_pack import checks, kpis, memo, plays
+from monthly_pack.pdf import write_pdf
 
 OUT_DIR = Path("pack_output")
 MATERIAL_CHANGE = 10_000  # a vendor's month-on-month change must be at least this to be listed
@@ -72,9 +72,11 @@ def collect(month: int) -> dict:
     k = kpis.build_kpis(data, month)
     play_list = plays.all_plays(data)
     diagnosis = plays.diagnose_loss_makers(data["vw_PortfolioHealth"])
+    trend = data["monthly_demand"].groupby("SalesMonth")["MonthlyRevenue"].sum().loc[:month]
     return {
         "results": results,
         "kpis": k,
+        "trend": trend,
         "movers": material_movers(k["movers"]),
         "plays": play_list,
         "diagnosis": diagnosis,
@@ -108,15 +110,19 @@ if __name__ == "__main__":
     print(f"  4    {len(pack['plays'])} plays sized and ranked")
     print(f"       {len(pack['movers'])} material movers (at least ${MATERIAL_CHANGE:,} change)")
 
+    memo_text = None
     if use_ai:
         result = memo.produce_memo(pack["facts"], calendar.month_name[month])
         if result["unknown"]:
             print(f"  5    memo REJECTED: numbers not in the fact sheet: {result['unknown']}")
             sys.exit(1)
+        memo_text = result["text"]
         print(f"  5    memo written and checked: {result['path']}")
     else:
         print("  5    memo skipped (--no-ai)")
 
     for path in write_csvs(pack, month):
         print(f"  6    wrote {path}")
+    pdf_path = write_pdf(pack, month, memo_text, OUT_DIR / f"2024-{month:02d}_pack.pdf")
+    print(f"  6    wrote {pdf_path}")
     print("Done.")
