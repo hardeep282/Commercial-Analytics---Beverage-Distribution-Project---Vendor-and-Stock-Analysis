@@ -1,6 +1,3 @@
-
-
-
 """Step 4 tests, on made-up SKUs where the answers can be checked by hand."""
 import pandas as pd
 
@@ -25,3 +22,20 @@ def test_overbought_and_underpriced_are_told_apart():
     assert d["priced_below_cost"] == 1 and d["priced_above_cost"] == 1
     assert d["loss_on_priced_above_cost"] == 700.0
     assert d["unsold_units"] == 80 and d["unsold_stock_at_cost"] == 800.0
+
+
+def test_excess_by_vendor_ranks_and_splits_the_unsold_stock():
+    skus = pd.DataFrame({
+        "VendorName": ["ALPHA", "ALPHA", "BETA", "GAMMA"],
+        "Brand": [1, 2, 3, 4],
+        "PurchasePrice": [10.0, 5.0, 10.0, 10.0],
+        "TotalPurchaseQuantity": [100, 10, 30, 10],
+        "TotalSalesQuantity": [20, 10, 10, 10],     # GAMMA sold everything: no excess
+        "GrossProfit": [-500.0, 20.0, 50.0, 30.0],  # only ALPHA's first SKU is a loss-maker
+    })
+    table = plays.excess_by_vendor(skus).set_index("VendorName")
+    assert list(table.index) == ["ALPHA", "BETA"]              # GAMMA has nothing unsold
+    assert table.loc["ALPHA", "UnsoldCost"] == 800.0            # 80 units x $10
+    assert table.loc["ALPHA", "LossMakingCost"] == 800.0
+    assert table.loc["BETA", "UnsoldCost"] == 200.0 and table.loc["BETA", "LossMakingCost"] == 0.0
+    assert table.loc["ALPHA", "SharePct"] == 80.0 and table.loc["BETA", "CumulativePct"] == 100.0

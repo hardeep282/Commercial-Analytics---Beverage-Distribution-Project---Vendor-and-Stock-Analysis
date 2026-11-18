@@ -1,9 +1,7 @@
-
-
-
 """Step 4 - size the strategy plays.
 
 Piece 1: before putting a value on any play, check what its number really means.
+Piece 2: which vendors hold the unsold stock, so a manager knows who to call first.
 """
 from __future__ import annotations
 
@@ -37,6 +35,33 @@ def diagnose_loss_makers(skus: pd.DataFrame) -> dict:
     }
 
 
+def unsold_stock(skus: pd.DataFrame) -> pd.DataFrame:
+    """Add two columns to each SKU: units bought but not sold in 2024, and their cost."""
+    out = skus.copy()
+    out["UnsoldUnits"] = (out["TotalPurchaseQuantity"] - out["TotalSalesQuantity"]).clip(lower=0)
+    out["UnsoldCost"] = out["UnsoldUnits"] * out["PurchasePrice"]
+    return out
+
+
+def excess_by_vendor(skus: pd.DataFrame) -> pd.DataFrame:
+    """Unsold stock (at cost) per vendor, biggest first, with a running share of the total.
+
+    'LossMakingCost' is the part sitting on SKUs that already show a loss for the year:
+    the most urgent part, because it hasn't even earned back its purchase cost.
+    """
+    stock = unsold_stock(skus)
+    stock = stock[stock["UnsoldCost"] > 0].copy()
+    stock["LossMakingCost"] = stock["UnsoldCost"].where(stock["GrossProfit"] < 0, 0.0)
+    table = stock.groupby("VendorName").agg(
+        SKUs=("Brand", "size"),
+        UnsoldCost=("UnsoldCost", "sum"),
+        LossMakingCost=("LossMakingCost", "sum"),
+    ).sort_values("UnsoldCost", ascending=False)
+    table["SharePct"] = table["UnsoldCost"] / table["UnsoldCost"].sum() * 100
+    table["CumulativePct"] = table["SharePct"].cumsum()
+    return table.reset_index()
+
+
 if __name__ == "__main__":
     data = checks.load_sources()
     if not checks.gate_passes(checks.run_checks(data)):
@@ -50,3 +75,13 @@ if __name__ == "__main__":
     print(f"  bought but not sold:       {d['unsold_units']:,} units, "
           f"${d['unsold_stock_at_cost']:,.0f} at cost")
     print(f"  median stock turnover:     {d['median_turnover']:.2f}  (1.00 = sold what was bought)")
+
+    by_vendor = excess_by_vendor(data["vw_PortfolioHealth"])
+    total = by_vendor["UnsoldCost"].sum()
+    for_80 = int((by_vendor["CumulativePct"].round(6) < 80).sum()) + 1
+    print(f"\nAll overbought SKUs:         {int(by_vendor['SKUs'].sum()):,} SKUs, "
+          f"${total:,.0f} unsold at cost, across {len(by_vendor)} vendors")
+    print(f"  {for_80} vendors hold 80% of it. Top 10:")
+    for row in by_vendor.head(10).itertuples():
+        print(f"    {row.VendorName:<30} ${row.UnsoldCost:>11,.0f}  {row.SharePct:5.1f}%  "
+              f"(cumulative {row.CumulativePct:5.1f}%)  on loss-makers ${row.LossMakingCost:>10,.0f}")
