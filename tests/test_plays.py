@@ -59,3 +59,31 @@ def test_buying_discipline_targets_the_biggest_excess_and_scales_with_the_assump
     assert play.details["focus_skus"] == 1 and play.pool == 600.0
     assert play.scenarios == {"cautious": 150.0, "base": 300.0, "stretch": 450.0}
     assert play.details["no_sales_skus"] == 1 and play.details["no_sales_stock_at_cost"] == 100.0
+
+
+def test_discount_review_finds_below_cost_sales_on_the_achieved_price():
+    skus = pd.DataFrame({
+        "VendorName": ["ALPHA", "BETA", "BETA"],
+        "Brand": [1, 2, 3],
+        "PurchasePrice": [10.0, 10.0, 10.0],
+        "ActualPrice": [20.0, 20.0, 20.0],              # every list price is above cost
+        "TotalSalesQuantity": [10, 100, 0],
+        "TotalSalesDollars": [80.0, 2000.0, 0.0],       # ALPHA achieved $8, BETA $20, last sold none
+    })
+    play = plays.size_discount_review(skus)
+    assert play.details["skus"] == 1 and play.pool == 20.0   # ALPHA: ($10 - $8) x 10 bottles
+    assert play.scenarios["base"] == 10.0
+
+
+def test_freight_terms_values_a_share_of_the_freight_bill():
+    vendors = pd.DataFrame({
+        "VendorName": ["ALPHA", "BETA", "GAMMA"],
+        "TotalRevenue": [100_000.0, 50_000.0, 50_000.0],
+        "TotalFreight": [400.0, 300.0, 300.0],
+        "FreightPctOfRevenue": [0.4, 0.6, 0.6],
+    })
+    play = plays.size_freight_terms(vendors)
+    assert play.pool == 1000.0
+    assert play.scenarios == {"cautious": 50.0, "base": 100.0, "stretch": 150.0}
+    assert play.details["vendors_for_80_percent"] == 3        # 40%, 70%, then 100%
+    assert play.details["largest_bill"] == "ALPHA $400"

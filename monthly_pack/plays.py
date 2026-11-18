@@ -4,6 +4,7 @@ Piece 1: before putting a value on any play, check what its number really means.
 Piece 2: which vendors hold the unsold stock, so a manager knows who to call first.
 Piece 3: correct piece 1 to use the price actually achieved, not the list price.
 Piece 4: put a value on the first play, buying discipline, in three scenarios.
+Piece 5: two smaller plays, discount review and freight terms.
 """
 from __future__ import annotations
 
@@ -82,6 +83,11 @@ def excess_by_vendor(skus: pd.DataFrame) -> pd.DataFrame:
 # avoids by ordering closer to what actually sells. Change them here and every number follows.
 AVOIDED_SHARE = {"cautious": 0.25, "base": 0.50, "stretch": 0.75}
 FOCUS_SHARE_PCT = 60.0  # the play targets the fewest SKUs that hold this share of the excess
+# Share of below-cost selling stopped. Lower than it looks: some discounts may be deliberate
+# clearance of overbought stock, which is better handled by buying discipline.
+DISCOUNT_STOP_SHARE = {"cautious": 0.25, "base": 0.50, "stretch": 0.75}
+# Share of the freight bill saved by better rates or fewer, fuller deliveries.
+FREIGHT_SAVING_SHARE = {"cautious": 0.05, "base": 0.10, "stretch": 0.15}
 
 
 @dataclass
@@ -95,6 +101,11 @@ class Play:
     scenarios: dict[str, float]      # cautious / base / stretch value
     assumptions: list[str] = field(default_factory=list)
     details: dict = field(default_factory=dict)
+
+
+def scenario_values(pool: float, shares: dict[str, float]) -> dict[str, float]:
+    """The play's value in each scenario: the pool times that scenario's share."""
+    return {name: pool * share for name, share in shares.items()}
 
 
 def focus_skus(skus: pd.DataFrame, share_pct: float = FOCUS_SHARE_PCT) -> pd.DataFrame:
@@ -120,7 +131,7 @@ def size_buying_discipline(skus: pd.DataFrame) -> Play:
         owner="Buying / category managers",
         kpi="Stock turnover on the focus SKUs (target: 1.0 or above)",
         pool=pool,
-        scenarios={name: pool * share for name, share in AVOIDED_SHARE.items()},
+        scenarios=scenario_values(pool, AVOIDED_SHARE),
         assumptions=[
             "Value = cash not tied up in excess stock next year (working capital), not profit.",
             "Avoided share of the excess: " + ", ".join(
@@ -136,6 +147,80 @@ def size_buying_discipline(skus: pd.DataFrame) -> Play:
     )
 
 
+def below_cost_sales(skus: pd.DataFrame) -> pd.DataFrame:
+    """SKUs whose achieved price was below unit cost, biggest loss first."""
+    sold = skus[skus["TotalSalesQuantity"] > 0].copy()
+    sold["AchievedPrice"] = sold["TotalSalesDollars"] / sold["TotalSalesQuantity"]
+    below = sold[sold["AchievedPrice"] < sold["PurchasePrice"]].copy()
+    below["BelowCostLoss"] = (below["PurchasePrice"] - below["AchievedPrice"]) * below["TotalSalesQuantity"]
+    below["DiscountOffListPct"] = (1 - below["AchievedPrice"] / below["ActualPrice"]) * 100
+    return below.sort_values("BelowCostLoss", ascending=False)
+
+
+def size_discount_review(skus: pd.DataFrame) -> Play:
+    """Play 2: stop selling bottles for less than they cost, unless it is planned clearance."""
+    below = below_cost_sales(skus)
+    pool = float(below["BelowCostLoss"].sum())
+    top_10_pct = float(below.head(10)["BelowCostLoss"].sum() / pool * 100) if pool else 0.0
+    return Play(
+        name="Discount review",
+        problem=(f"{len(below)} SKUs sold below cost on average in 2024, at a median "
+                 f"{below['DiscountOffListPct'].median():.0f}% off list; "
+                 f"${pool:,.0f} lost on those bottles."),
+        action=(f"Review the 10 biggest first ({top_10_pct:.0f}% of the loss). If a discount "
+                "was clearing overbought stock, handle it under buying discipline; if not, set "
+                "a price floor so no bottle sells below cost."),
+        owner="Pricing / category managers",
+        kpi="Bottles sold below cost (target: none outside planned clearance)",
+        pool=pool,
+        scenarios=scenario_values(pool, DISCOUNT_STOP_SHARE),
+        assumptions=[
+            "Value = the below-cost part of the loss avoided each year (profit).",
+            "Share stopped: " + ", ".join(
+                f"{k} {v:.0%}" for k, v in DISCOUNT_STOP_SHARE.items()) + " (our assumption).",
+            "Achieved price = 2024 sales dollars / bottles sold; the data doesn't say why it was lower.",
+        ],
+        details={
+            "skus": int(len(below)),
+            "vendors": int(below["VendorName"].nunique()),
+            "top_10_skus_share_pct": top_10_pct,
+        },
+    )
+
+
+def size_freight_terms(vendors: pd.DataFrame) -> Play:
+    """Play 3: lower the freight bill, starting with the vendors that cost the most to ship."""
+    pool = float(vendors["TotalFreight"].sum())
+    revenue = float(vendors["TotalRevenue"].sum())
+    ranked = vendors.sort_values("TotalFreight", ascending=False)
+    running = ranked["TotalFreight"].cumsum() / pool * 100
+    for_80 = int((running.round(6) < 80).sum()) + 1
+    sizeable = vendors[vendors["TotalRevenue"] >= 10_000]["FreightPctOfRevenue"]
+    largest = ranked.iloc[0]
+    return Play(
+        name="Freight terms",
+        problem=(f"Freight cost ${pool:,.0f} in 2024, {pool / revenue * 100:.2f}% of revenue; "
+                 f"{for_80} vendors account for 80% of it."),
+        action="Renegotiate rates or consolidate deliveries with the vendors carrying the biggest freight bills.",
+        owner="Logistics / procurement",
+        kpi=f"Freight as % of revenue (now {pool / revenue * 100:.2f}%)",
+        pool=pool,
+        scenarios=scenario_values(pool, FREIGHT_SAVING_SHARE),
+        assumptions=[
+            "Value = freight cost saved each year (profit).",
+            "Saving: " + ", ".join(
+                f"{k} {v:.0%}" for k, v in FREIGHT_SAVING_SHARE.items()) + " (our assumption).",
+            (f"Freight is already similar across vendors ({sizeable.min():.2f}% to "
+             f"{sizeable.max():.2f}% of revenue for vendors over $10K), so there are no "
+             "outliers to fix; any saving comes from rates or delivery volume."),
+        ],
+        details={
+            "vendors_for_80_percent": for_80,
+            "largest_bill": f"{largest['VendorName']} ${largest['TotalFreight']:,.0f}",
+        },
+    )
+
+
 def print_play(play: Play) -> None:
     print(f"\nPLAY: {play.name}")
     print(f"  Problem   {play.problem}")
@@ -146,7 +231,14 @@ def print_play(play: Play) -> None:
     for name, value in play.scenarios.items():
         print(f"    {name:<9} ${value:>12,.0f}")
     for key, value in play.details.items():
-        shown = f"${value:,.0f}" if isinstance(value, float) else f"{value:,}"
+        if isinstance(value, str):
+            shown = value
+        elif key.endswith("_pct"):
+            shown = f"{value:.1f}%"
+        elif isinstance(value, float):
+            shown = f"${value:,.0f}"
+        else:
+            shown = f"{value:,}"
         print(f"  {key.replace('_', ' '):<23} {shown}")
     print("  Assumptions")
     for line in play.assumptions:
@@ -180,3 +272,5 @@ if __name__ == "__main__":
               f"(cumulative {row.CumulativePct:5.1f}%)  on loss-makers ${row.LossMakingCost:>10,.0f}")
 
     print_play(size_buying_discipline(data["vw_PortfolioHealth"]))
+    print_play(size_discount_review(data["vw_PortfolioHealth"]))
+    print_play(size_freight_terms(data["vw_LogisticsCostSummary"]))
