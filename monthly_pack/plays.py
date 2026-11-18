@@ -5,6 +5,7 @@ Piece 2: which vendors hold the unsold stock, so a manager knows who to call fir
 Piece 3: correct piece 1 to use the price actually achieved, not the list price.
 Piece 4: put a value on the first play, buying discipline, in three scenarios.
 Piece 5: two smaller plays, discount review and freight terms.
+Piece 6: vendor concentration (a risk), excise (not controllable), and one ranked table.
 """
 from __future__ import annotations
 
@@ -90,8 +91,17 @@ DISCOUNT_STOP_SHARE = {"cautious": 0.25, "base": 0.50, "stretch": 0.75}
 FREIGHT_SAVING_SHARE = {"cautious": 0.05, "base": 0.10, "stretch": 0.15}
 
 
+# What kind of value a play has. Different kinds can't be added together.
+CASH = "Cash freed (one-off)"
+PROFIT = "Profit (every year)"
+RISK = "Risk to manage (no dollar value)"
+FIXED = "Not controllable"
+KIND_ORDER = [CASH, PROFIT, RISK, FIXED]
+
+
 @dataclass
 class Play:
+    kind: str
     name: str
     problem: str
     action: str
@@ -123,6 +133,7 @@ def size_buying_discipline(skus: pd.DataFrame) -> Play:
     pool = float(focus["UnsoldCost"].sum())
     no_sales = unsold_stock(skus).query("TotalSalesQuantity == 0")
     return Play(
+        kind=CASH,
         name="Buying discipline",
         problem=(f"${unsold_stock(skus)['UnsoldCost'].sum():,.0f} of 2024 purchases was still "
                  f"unsold at year end; {len(focus):,} SKUs hold {FOCUS_SHARE_PCT:.0f}% of it."),
@@ -163,6 +174,7 @@ def size_discount_review(skus: pd.DataFrame) -> Play:
     pool = float(below["BelowCostLoss"].sum())
     top_10_pct = float(below.head(10)["BelowCostLoss"].sum() / pool * 100) if pool else 0.0
     return Play(
+        kind=PROFIT,
         name="Discount review",
         problem=(f"{len(below)} SKUs sold below cost on average in 2024, at a median "
                  f"{below['DiscountOffListPct'].median():.0f}% off list; "
@@ -198,6 +210,7 @@ def size_freight_terms(vendors: pd.DataFrame) -> Play:
     sizeable = vendors[vendors["TotalRevenue"] >= 10_000]["FreightPctOfRevenue"]
     largest = ranked.iloc[0]
     return Play(
+        kind=PROFIT,
         name="Freight terms",
         problem=(f"Freight cost ${pool:,.0f} in 2024, {pool / revenue * 100:.2f}% of revenue; "
                  f"{for_80} vendors account for 80% of it."),
@@ -221,12 +234,108 @@ def size_freight_terms(vendors: pd.DataFrame) -> Play:
     )
 
 
+def size_vendor_concentration(vendors: pd.DataFrame) -> Play:
+    """Play 4: a risk, not a saving. Too much of the business depends on a few vendors."""
+    ranked = vendors.sort_values("TotalRevenue", ascending=False)
+    revenue = float(ranked["TotalRevenue"].sum())
+    profit = float(ranked["TotalGrossProfit"].sum())
+    top, top_10 = ranked.iloc[0], ranked.head(10)
+    return Play(
+        kind=RISK,
+        name="Vendor concentration",
+        problem=(f"The top 10 vendors make {top_10['TotalRevenue'].sum() / revenue:.0%} of revenue "
+                 f"and {top_10['TotalGrossProfit'].sum() / profit:.0%} of gross profit; "
+                 f"{top['VendorName']} alone makes {top['TotalRevenue'] / revenue:.1%} of revenue."),
+        action=("Agree a joint business plan with each top-10 vendor (volumes, terms, supply "
+                "cover), and keep a second source for the key lines of the largest ones."),
+        owner="Commercial director",
+        kpi="Revenue share of the top 10 vendors (now "
+            f"{top_10['TotalRevenue'].sum() / revenue:.1%}), reviewed each quarter",
+        pool=float(top_10["TotalRevenue"].sum()),
+        scenarios={},
+        assumptions=[
+            "No dollar value: concentration is a risk to manage, not a cost to cut.",
+            "Being dependent also gives bargaining power both ways; the plan is to manage it, not reduce it at any price.",
+        ],
+        details={
+            "top_vendor": f"{top['VendorName']} ${top['TotalRevenue']:,.0f}",
+            "top_10_revenue": float(top_10["TotalRevenue"].sum()),
+        },
+    )
+
+
+def excise_note(leakage: pd.DataFrame) -> Play:
+    """Not a play: the biggest cost, shown so nobody mistakes it for an opportunity."""
+    excise = float(leakage["ExciseLeakage"].sum())
+    revenue = float(leakage["TotalRevenue"].sum())
+    return Play(
+        kind=FIXED,
+        name="Excise tax",
+        problem=f"Excise tax ${excise:,.0f}, {excise / revenue:.1%} of revenue: by far the largest cost after buying the stock itself.",
+        action="None. It is a tax set by government; listed so it isn't mistaken for an opportunity.",
+        owner="-",
+        kpi="-",
+        pool=excise,
+        scenarios={},
+        assumptions=["Excise depends on what is sold, not on how the business negotiates."],
+    )
+
+
+def all_plays(data: dict[str, pd.DataFrame]) -> list[Play]:
+    skus = data["vw_PortfolioHealth"]
+    return [
+        size_buying_discipline(skus),
+        size_discount_review(skus),
+        size_freight_terms(data["vw_LogisticsCostSummary"]),
+        size_vendor_concentration(data["vw_VendorRevenueSummary"]),
+        excise_note(data["vw_ProfitLeakage"]),
+    ]
+
+
+def rank_plays(plays: list[Play]) -> pd.DataFrame:
+    """One table, ordered by kind first (cash, profit, risk, not controllable), then by base value.
+
+    Kinds are never added together: $4.7M of cash freed once is not the same as $0.16M of
+    profit every year, so the table keeps them in separate groups.
+    """
+    rows = [{
+        "Kind": p.kind,
+        "Play": p.name,
+        "Cautious": p.scenarios.get("cautious"),
+        "Base": p.scenarios.get("base"),
+        "Stretch": p.scenarios.get("stretch"),
+        "WorksOn": p.pool,
+        "Owner": p.owner,
+    } for p in plays]
+    table = pd.DataFrame(rows)
+    table["KindOrder"] = table["Kind"].map(KIND_ORDER.index)
+    table = table.sort_values(["KindOrder", "Base"], ascending=[True, False], na_position="last")
+    valued = table["Base"].notna()
+    table["Priority"] = ""
+    table.loc[valued, "Priority"] = [str(i) for i in range(1, int(valued.sum()) + 1)]
+    table.loc[table["Kind"] == RISK, "Priority"] = "watch"
+    table.loc[table["Kind"] == FIXED, "Priority"] = "-"
+    return table.drop(columns="KindOrder").reset_index(drop=True)
+
+
+def print_ranking(table: pd.DataFrame) -> None:
+    def cell(value) -> str:
+        return "" if pd.isna(value) else f"${value / 1e6:,.2f}M"
+
+    print("\nPLAYS, RANKED")
+    print(f"  {'#':<6}{'Play':<22}{'Cautious':>10}{'Base':>10}{'Stretch':>10}   Kind")
+    for row in table.itertuples():
+        print(f"  {row.Priority:<6}{row.Play:<22}{cell(row.Cautious):>10}{cell(row.Base):>10}"
+              f"{cell(row.Stretch):>10}   {row.Kind}")
+
+
 def print_play(play: Play) -> None:
     print(f"\nPLAY: {play.name}")
     print(f"  Problem   {play.problem}")
     print(f"  Action    {play.action}")
     print(f"  Owner     {play.owner}")
     print(f"  KPI       {play.kpi}")
+    print(f"  Kind      {play.kind}")
     print(f"  Works on  ${play.pool:,.0f}")
     for name, value in play.scenarios.items():
         print(f"    {name:<9} ${value:>12,.0f}")
@@ -271,6 +380,7 @@ if __name__ == "__main__":
         print(f"    {row.VendorName:<30} ${row.UnsoldCost:>11,.0f}  {row.SharePct:5.1f}%  "
               f"(cumulative {row.CumulativePct:5.1f}%)  on loss-makers ${row.LossMakingCost:>10,.0f}")
 
-    print_play(size_buying_discipline(data["vw_PortfolioHealth"]))
-    print_play(size_discount_review(data["vw_PortfolioHealth"]))
-    print_play(size_freight_terms(data["vw_LogisticsCostSummary"]))
+    plays = all_plays(data)
+    for play in plays:
+        print_play(play)
+    print_ranking(rank_plays(plays))

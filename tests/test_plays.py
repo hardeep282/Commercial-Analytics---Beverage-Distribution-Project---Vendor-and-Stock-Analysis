@@ -87,3 +87,33 @@ def test_freight_terms_values_a_share_of_the_freight_bill():
     assert play.scenarios == {"cautious": 50.0, "base": 100.0, "stretch": 150.0}
     assert play.details["vendors_for_80_percent"] == 3        # 40%, 70%, then 100%
     assert play.details["largest_bill"] == "ALPHA $400"
+
+
+def test_concentration_is_a_risk_with_no_dollar_value():
+    vendors = pd.DataFrame({
+        "VendorName": [f"V{i}" for i in range(12)],
+        "TotalRevenue": [300.0, 200.0] + [50.0] * 10,      # total 1,000
+        "TotalGrossProfit": [60.0, 40.0] + [10.0] * 10,    # total 200
+    })
+    play = plays.size_vendor_concentration(vendors)
+    assert play.kind == plays.RISK and play.scenarios == {}
+    assert play.pool == 900.0                               # top 10: 300 + 200 + 8 x 50
+    assert play.details["top_vendor"] == "V0 $300"
+
+
+def test_ranking_keeps_kinds_apart_and_orders_by_base_value():
+    def make(kind, name, base):
+        scen = {} if base is None else {"cautious": base / 2, "base": base, "stretch": base * 1.5}
+        return plays.Play(kind=kind, name=name, problem="", action="", owner="", kpi="",
+                          pool=0.0, scenarios=scen)
+
+    table = plays.rank_plays([
+        make(plays.FIXED, "Tax", None),
+        make(plays.PROFIT, "Small yearly", 100.0),
+        make(plays.RISK, "Risk", None),
+        make(plays.PROFIT, "Big yearly", 300.0),
+        make(plays.CASH, "Cash", 50.0),
+    ])
+    # Cash first (even though smaller), then profit by size, then risk, then not controllable.
+    assert list(table["Play"]) == ["Cash", "Big yearly", "Small yearly", "Risk", "Tax"]
+    assert list(table["Priority"]) == ["1", "2", "3", "watch", "-"]
