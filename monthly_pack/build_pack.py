@@ -2,14 +2,17 @@
 
     python -m monthly_pack.build_pack 7            -> July's pack, with the AI memo
     python -m monthly_pack.build_pack 7 --no-ai    -> July's pack, no AI call, no cost
+    python -m monthly_pack.build_pack --previous-month -> last month's pack (what the scheduler runs)
 
 Piece 1: run steps 1-5 in order and write the CSV files Power BI will read.
 Piece 2: also write the PDF pack for management (monthly_pack/pdf.py).
+Step 7:  --previous-month, so a scheduled run picks the month by itself.
 """
 from __future__ import annotations
 
 import calendar
 import sys
+from datetime import date
 from pathlib import Path
 
 import pandas as pd
@@ -19,6 +22,15 @@ from monthly_pack.pdf import write_pdf
 
 OUT_DIR = Path("pack_output")
 MATERIAL_CHANGE = 10_000  # a vendor's month-on-month change must be at least this to be listed
+
+
+def previous_month(today: date) -> int:
+    """The month before today's, as a month number: run in November -> 10, in January -> 12.
+
+    The data covers 2024 only, so a run in November 2026 builds the October 2024 pack:
+    the monthly rhythm is real, the data is historical.
+    """
+    return 12 if today.month == 1 else today.month - 1
 
 
 def material_movers(movers: pd.DataFrame, threshold: float = MATERIAL_CHANGE) -> pd.DataFrame:
@@ -99,7 +111,10 @@ def write_csvs(pack: dict, month: int, out_dir: Path = OUT_DIR) -> list[Path]:
 
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    month = int(args[0]) if args else 12
+    if "--previous-month" in sys.argv:
+        month = previous_month(date.today())
+    else:
+        month = int(args[0]) if args else 12
     use_ai = "--no-ai" not in sys.argv
     print(f"Building the {calendar.month_name[month]} 2024 pack...")
 
