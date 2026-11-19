@@ -73,8 +73,9 @@ class FakeClaude:
     Give it one reply to get the same memo every time, or several to get them in turn.
     """
 
-    def __init__(self, *replies: str):
+    def __init__(self, *replies: str, stop_reason: str = "end_turn"):
         self.replies = list(replies)
+        self.stop_reason = stop_reason
         self.messages = self
         self.calls = 0
         self.last_user_message = ""
@@ -84,7 +85,12 @@ class FakeClaude:
         reply = self.replies[min(self.calls, len(self.replies) - 1)]
         self.calls += 1
         return SimpleNamespace(content=[SimpleNamespace(type="text", text=reply)],
-                               usage=SimpleNamespace(input_tokens=700, output_tokens=400))
+                               usage=SimpleNamespace(input_tokens=700, output_tokens=400),
+                               stop_reason=self.stop_reason)
+
+
+# A complete memo has all four section headings; the tests below build on it.
+SECTIONS = "This month. Full year. Recommended actions. Data notes. "
 
 
 def test_numbers_copied_from_the_fact_sheet_pass():
@@ -102,15 +108,15 @@ def test_list_numbers_top_10_and_the_year_are_allowed():
 
 
 def test_a_clean_memo_is_saved(tmp_path):
-    fake = FakeClaude("July revenue was $49.70M.")
+    fake = FakeClaude(SECTIONS + "July revenue was $49.70M.")
     result = memo.produce_memo(FACTS, "July", client=fake, out_dir=tmp_path)
-    assert fake.calls == 1 and result["unknown"] == []
+    assert fake.calls == 1 and result["unknown"] == [] and result["passed"]
     assert result["path"].name == "memo_2024_july.md"
     assert "Number check: passed" in result["path"].read_text(encoding="utf-8")
 
 
 def test_a_memo_with_an_invented_number_is_rejected(tmp_path):
-    fake = FakeClaude("Revenue hit $51M.")
+    fake = FakeClaude(SECTIONS + "Revenue hit $51M.")
     result = memo.produce_memo(FACTS, "July", client=fake, out_dir=tmp_path)
     assert fake.calls == 2                                  # one rewrite was asked for
     assert result["unknown"] == ["$51M"] and not result["passed"]
@@ -120,26 +126,43 @@ def test_a_memo_with_an_invented_number_is_rejected(tmp_path):
 # --- R7: wording checks -------------------------------------------------------------------
 
 def test_target_talk_is_caught():
-    problems = memo.check_wording("July sales are running well ahead of pace and beat the budget.")
+    problems = memo.check_wording(SECTIONS + "July sales are running well ahead of pace and beat the budget.")
     assert problems == ["compares with a target the data doesn't have: budget, pace"]
 
 
 def test_a_numbered_watch_item_is_caught_and_an_unnumbered_one_passes():
     numbered = "1. Buying discipline\n2. Freight terms\n3. Discount review\n4. Watch vendor concentration"
-    assert memo.check_wording(numbered) == ["the watch item is numbered like an action"]
-    assert memo.check_wording("3. Discount review\nWatch: vendor concentration") == []
+    assert memo.check_wording(SECTIONS + numbered) == ["the watch item is numbered like an action"]
+    assert memo.check_wording(SECTIONS + "3. Discount review\nWatch: vendor concentration") == []
 
 
 def test_word_limit():
     assert memo.word_count("July revenue was $49.70M, up +26.5%.") == 6
-    assert memo.check_wording("word " * 351) == ["351 words, over the 350-word limit"]
-    assert memo.check_wording("word " * 350) == []
+    assert memo.check_wording(SECTIONS + "word " * 343) == ["351 words, over the 350-word limit"]
+    assert memo.check_wording(SECTIONS + "word " * 342) == []          # 8 heading words + 342 = 350
 
 
 def test_a_bad_first_draft_is_rewritten_once_and_then_saved(tmp_path):
-    fake = FakeClaude("July revenue of $49.70M is well ahead of pace.", "July revenue was $49.70M.")
+    fake = FakeClaude(SECTIONS + "July revenue of $49.70M is well ahead of pace.",
+                      SECTIONS + "July revenue was $49.70M.")
     result = memo.produce_memo(FACTS, "July", client=fake, out_dir=tmp_path)
     assert fake.calls == 2 and result["passed"] and result["attempts"] == 2
     assert "compares with a target the data doesn't have: pace" in fake.last_user_message
     assert result["tokens_in"] == 1400                      # both calls are counted in the cost
     assert result["path"].name == "memo_2024_july.md"
+
+
+def test_a_memo_cut_off_at_the_token_limit_fails_even_if_short():
+    # What really happened on 20 Nov: thinking used the token budget and the memo stopped mid-sentence.
+    cut = "July revenue was $49.70M. **Full year** The top"
+    problems = memo.check_wording(cut, stop_reason="max_tokens")
+    assert problems[0] == "cut off at the token limit before the end"
+    assert problems[1] == "missing sections: This month, Recommended actions, Data notes"
+
+
+def test_a_cut_off_memo_is_rewritten_and_the_history_records_both_attempts(tmp_path):
+    fake = FakeClaude(SECTIONS + "July revenue was $49.70M.", stop_reason="max_tokens")
+    result = memo.produce_memo(FACTS, "July", client=fake, out_dir=tmp_path)
+    assert fake.calls == 2 and not result["passed"]
+    assert len(result["history"]) == 2 and "stopped: max_tokens" in result["history"][0]
+    assert "cut off at the token limit" in fake.last_user_message

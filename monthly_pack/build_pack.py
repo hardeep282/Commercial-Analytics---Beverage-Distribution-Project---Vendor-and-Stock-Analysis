@@ -128,11 +128,15 @@ if __name__ == "__main__":
     memo_text = None
     if use_ai:
         result = memo.produce_memo(pack["facts"], calendar.month_name[month])
-        if result["unknown"]:
-            print(f"  5    memo REJECTED: numbers not in the fact sheet: {result['unknown']}")
+        if not result["passed"]:
+            problems = [f"number not in the fact sheet: {n}" for n in result["unknown"]] + result["wording"]
+            print(f"  5    memo REJECTED after {result['attempts']} attempts: {'; '.join(problems)}")
+            for line in result["history"]:
+                print(f"         {line}")
             sys.exit(1)
         memo_text = result["text"]
-        print(f"  5    memo written and checked: {result['path']}")
+        print(f"  5    memo written and checked (attempt {result['attempts']}, "
+              f"{memo.word_count(memo_text)} words): {result['path']}")
     else:
         print("  5    memo skipped (--no-ai)")
 

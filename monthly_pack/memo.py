@@ -107,6 +107,9 @@ TARGET_TALK = re.compile(
 NUMBERED_WATCH = re.compile(r"^\s*\d+[.)]\s.*\b(watch|concentration)\b",
                             re.IGNORECASE | re.MULTILINE)
 
+# The four sections rule 6 asks for. A memo missing one is incomplete (or was cut off).
+REQUIRED_SECTIONS = ("This month", "Full year", "Recommended actions", "Data notes")
+
 # One word: letters/digits with $ or %, joined by . , ' or - inside (so $49.70M is one word).
 WORD = re.compile(r"[\w$%]+(?:[.,'’-][\w%]+)*")
 
@@ -115,9 +118,17 @@ def word_count(text: str) -> int:
     return len(WORD.findall(text))
 
 
-def check_wording(memo_text: str) -> list[str]:
-    """Rule breaks that a number check can't see. An empty list means it passed."""
+def check_wording(memo_text: str, stop_reason: str | None = "end_turn") -> list[str]:
+    """Rule breaks that a number check can't see. An empty list means it passed.
+
+    stop_reason comes from the API: "max_tokens" means the memo was cut off before the end.
+    """
     problems = []
+    if stop_reason == "max_tokens":
+        problems.append("cut off at the token limit before the end")
+    missing = [s for s in REQUIRED_SECTIONS if s.lower() not in memo_text.lower()]
+    if missing:
+        problems.append("missing sections: " + ", ".join(missing))
     words = word_count(memo_text)
     if words > MAX_WORDS:
         problems.append(f"{words} words, over the {MAX_WORDS}-word limit")
@@ -150,7 +161,10 @@ def gather(month: int) -> tuple[str, list]:
 # --- piece 2: the AI call and the number check ---------------------------------------------
 
 MODEL = os.environ.get("MEMO_MODEL", "claude-sonnet-5")
-MAX_TOKENS = 1200
+# Room for Claude's thinking AND the memo. Sonnet 5 thinks by default, and thinking counts
+# toward this limit (Anthropic docs, "Adaptive thinking"). 1,200 was too small: the memo was
+# cut off mid-sentence. 8,000 caps the worst case at about 8 cents per call.
+MAX_TOKENS = 8000
 # USD per million tokens, from Anthropic's pricing page. Used only to print the cost.
 PRICE_PER_MILLION = {"claude-sonnet-5": (2.0, 10.0)}
 OUT_DIR = Path("pack_output")
@@ -181,8 +195,8 @@ def check_numbers(memo_text: str, facts: str) -> list[str]:
     return unknown
 
 
-def ask_claude(system: str, user: str, client=None) -> tuple[str, int, int]:
-    """One call to Claude. Returns the memo text and the input and output token counts.
+def ask_claude(system: str, user: str, client=None) -> dict:
+    """One call to Claude. Returns the memo text, token counts, and why Claude stopped.
 
     The real client reads ANTHROPIC_API_KEY from your .env. Tests pass a fake client,
     so running the tests never calls the API and never costs anything.
@@ -197,8 +211,14 @@ def ask_claude(system: str, user: str, client=None) -> tuple[str, int, int]:
         system=system,
         messages=[{"role": "user", "content": user}],
     )
+    # Thinking comes back in separate blocks; the memo is only the "text" blocks.
     text = "".join(block.text for block in response.content if block.type == "text")
-    return text, response.usage.input_tokens, response.usage.output_tokens
+    details = getattr(response.usage, "output_tokens_details", None)
+    return {"text": text,
+            "tokens_in": response.usage.input_tokens,
+            "tokens_out": response.usage.output_tokens,           # thinking + memo, as billed
+            "thinking": getattr(details, "thinking_tokens", None),  # the thinking part, if reported
+            "stop_reason": getattr(response, "stop_reason", None)}
 
 
 def cost_usd(input_tokens: int, output_tokens: int) -> float | None:
@@ -211,9 +231,10 @@ def cost_usd(input_tokens: int, output_tokens: int) -> float | None:
 MAX_ATTEMPTS = 2  # the first draft, plus one rewrite if a check fails
 
 
-def review(text: str, facts: str) -> tuple[list[str], list[str]]:
-    """Both checks: numbers not in the fact sheet, and wording rule breaks."""
-    return check_numbers(text, facts), check_wording(text)
+def review(text: str, facts: str, stop_reason: str | None = "end_turn") -> tuple[list[str], list[str]]:
+    """Both checks: numbers not in the fact sheet, and everything else (cut off, missing
+    sections, word limit, target talk, numbered watch)."""
+    return check_numbers(text, facts), check_wording(text, stop_reason)
 
 
 def produce_memo(facts: str, month_name: str, client=None, out_dir: Path = OUT_DIR) -> dict:
@@ -221,13 +242,19 @@ def produce_memo(facts: str, month_name: str, client=None, out_dir: Path = OUT_D
     (or save it as REJECTED)."""
     system, user = build_prompt(facts)
     tokens_in = tokens_out = 0
+    history = []  # one line per attempt, so a rewrite is never hidden
     for attempt in range(1, MAX_ATTEMPTS + 1):
-        text, used_in, used_out = ask_claude(system, user, client)
-        tokens_in, tokens_out = tokens_in + used_in, tokens_out + used_out
-        unknown, wording = review(text, facts)
-        if not unknown and not wording:
-            break
+        reply = ask_claude(system, user, client)
+        text = reply["text"]
+        tokens_in, tokens_out = tokens_in + reply["tokens_in"], tokens_out + reply["tokens_out"]
+        unknown, wording = review(text, facts, reply["stop_reason"])
         problems = [f"number not in the fact sheet: {n}" for n in unknown] + wording
+        history.append(f"attempt {attempt}: {reply['tokens_out']:,} tokens out"
+                       + (f" ({reply['thinking']:,} thinking)" if reply["thinking"] else "")
+                       + f", stopped: {reply['stop_reason']}, {word_count(text)} words, "
+                       + ("passed" if not problems else "failed: " + "; ".join(problems)))
+        if not problems:
+            break
         # Same rules and facts, plus the list of what went wrong last time.
         user = (build_prompt(facts)[1] + "\n\nYour previous draft broke these rules. "
                 "Write it again and fix them:\n" + "\n".join(f"- {p}" for p in problems))
@@ -238,10 +265,12 @@ def produce_memo(facts: str, month_name: str, client=None, out_dir: Path = OUT_D
     header = (f"<!-- Written by {MODEL} from a fact sheet built by Python. "
               f"Number check: {'FAILED ' + ', '.join(unknown) if unknown else 'passed'}. "
               f"Wording check: {'FAILED ' + '; '.join(wording) if wording else 'passed'}. "
-              f"Attempts: {attempt}. Words: {word_count(text)}. -->\n\n")
+              f"Attempts: {attempt}. Words: {word_count(text)}.\n"
+              + "\n".join(history) + " -->\n\n")
     path.write_text(header + text, encoding="utf-8")
     return {"text": text, "unknown": unknown, "wording": wording, "passed": passed,
-            "attempts": attempt, "path": path, "tokens_in": tokens_in, "tokens_out": tokens_out}
+            "attempts": attempt, "history": history, "path": path,
+            "tokens_in": tokens_in, "tokens_out": tokens_out}
 
 
 if __name__ == "__main__":
@@ -261,6 +290,8 @@ if __name__ == "__main__":
     cost = cost_usd(result["tokens_in"], result["tokens_out"])
     print(f"Tokens: {result['tokens_in']:,} in, {result['tokens_out']:,} out"
           + (f"   cost about ${cost:.4f}" if cost is not None else ""))
+    for line in result["history"]:
+        print("  " + line)
     if not result["passed"]:
         print(f"REJECTED after {result['attempts']} attempts.")
         if result["unknown"]:
@@ -270,6 +301,7 @@ if __name__ == "__main__":
         print(f"Saved for inspection only: {result['path']}")
         sys.exit(1)
     print(f"Checks passed on attempt {result['attempts']}: every number is in the fact sheet, "
-          f"no target talk, watch item unnumbered, {word_count(result['text'])} words.")
+          f"complete with all four sections, no target talk, watch item unnumbered, "
+          f"{word_count(result['text'])} words.")
     print(f"Saved: {result['path']}\n")
     print(result["text"])
