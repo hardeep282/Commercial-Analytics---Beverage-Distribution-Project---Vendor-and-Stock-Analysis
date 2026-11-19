@@ -1,6 +1,3 @@
-
-
-
 """Step 6 tests, on made-up data. No database, no AI."""
 import pandas as pd
 
@@ -36,3 +33,10 @@ def test_plays_csv_carries_the_assumptions():
     table = build_pack.plays_csv([play])
     assert table.loc[0, "Assumptions"] == "Value = cash | Shares are ours"
     assert table.loc[0, "Priority"] == "1"
+
+
+def test_previous_month_wraps_round_the_year():
+    from datetime import date
+
+    assert build_pack.previous_month(date(2026, 11, 19)) == 10
+    assert build_pack.previous_month(date(2027, 1, 1)) == 12
