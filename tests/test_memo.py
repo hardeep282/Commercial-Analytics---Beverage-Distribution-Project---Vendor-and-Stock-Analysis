@@ -68,16 +68,22 @@ FACTS = ("- Revenue in July: $49.70M\n- Change vs previous month: +26.5% ($10.41
 
 
 class FakeClaude:
-    """Stands in for the real Anthropic client: returns a fixed memo, never calls the API."""
+    """Stands in for the real Anthropic client: returns fixed memos, never calls the API.
 
-    def __init__(self, reply: str):
-        self.reply = reply
+    Give it one reply to get the same memo every time, or several to get them in turn.
+    """
+
+    def __init__(self, *replies: str):
+        self.replies = list(replies)
         self.messages = self
         self.calls = 0
+        self.last_user_message = ""
 
     def create(self, **kwargs):
+        self.last_user_message = kwargs["messages"][0]["content"]
+        reply = self.replies[min(self.calls, len(self.replies) - 1)]
         self.calls += 1
-        return SimpleNamespace(content=[SimpleNamespace(type="text", text=self.reply)],
+        return SimpleNamespace(content=[SimpleNamespace(type="text", text=reply)],
                                usage=SimpleNamespace(input_tokens=700, output_tokens=400))
 
 
@@ -104,6 +110,36 @@ def test_a_clean_memo_is_saved(tmp_path):
 
 
 def test_a_memo_with_an_invented_number_is_rejected(tmp_path):
-    result = memo.produce_memo(FACTS, "July", client=FakeClaude("Revenue hit $51M."), out_dir=tmp_path)
-    assert result["unknown"] == ["$51M"]
+    fake = FakeClaude("Revenue hit $51M.")
+    result = memo.produce_memo(FACTS, "July", client=fake, out_dir=tmp_path)
+    assert fake.calls == 2                                  # one rewrite was asked for
+    assert result["unknown"] == ["$51M"] and not result["passed"]
     assert result["path"].name == "memo_2024_july_REJECTED.md"
+
+
+# --- R7: wording checks -------------------------------------------------------------------
+
+def test_target_talk_is_caught():
+    problems = memo.check_wording("July sales are running well ahead of pace and beat the budget.")
+    assert problems == ["compares with a target the data doesn't have: budget, pace"]
+
+
+def test_a_numbered_watch_item_is_caught_and_an_unnumbered_one_passes():
+    numbered = "1. Buying discipline\n2. Freight terms\n3. Discount review\n4. Watch vendor concentration"
+    assert memo.check_wording(numbered) == ["the watch item is numbered like an action"]
+    assert memo.check_wording("3. Discount review\nWatch: vendor concentration") == []
+
+
+def test_word_limit():
+    assert memo.word_count("July revenue was $49.70M, up +26.5%.") == 6
+    assert memo.check_wording("word " * 351) == ["351 words, over the 350-word limit"]
+    assert memo.check_wording("word " * 350) == []
+
+
+def test_a_bad_first_draft_is_rewritten_once_and_then_saved(tmp_path):
+    fake = FakeClaude("July revenue of $49.70M is well ahead of pace.", "July revenue was $49.70M.")
+    result = memo.produce_memo(FACTS, "July", client=fake, out_dir=tmp_path)
+    assert fake.calls == 2 and result["passed"] and result["attempts"] == 2
+    assert "compares with a target the data doesn't have: pace" in fake.last_user_message
+    assert result["tokens_in"] == 1400                      # both calls are counted in the cost
+    assert result["path"].name == "memo_2024_july.md"

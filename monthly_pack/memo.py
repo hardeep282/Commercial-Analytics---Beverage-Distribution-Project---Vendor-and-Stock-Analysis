@@ -86,7 +86,47 @@ Rules, all of them strict:
 5. Mention every data-quality warning in one plain sentence each.
 6. Plain English for a busy reader: a 2-sentence summary, then short sections for
    This month, Full year, Recommended actions (in priority order), Data notes.
-   Under 350 words. No tables."""
+   Under 350 words. No tables.
+7. There are no targets, budgets, forecasts or plans in the data. Never say a figure is
+   ahead of, behind, on track, on pace, above or below plan or expectations. Compare only
+   with the previous month and with the months so far, as the fact sheet does.
+8. Number only the priority 1, 2, 3 actions. Put the "watch" item after them on its own
+   line starting "Watch:", without a number."""
+
+# --- R7: checks on the wording, done by code after the AI writes --------------------------
+
+MAX_WORDS = 350
+
+# Words that compare against a target, which the data doesn't have.
+TARGET_TALK = re.compile(
+    r"\b(pace|on track|off track|target\w*|budget\w*|"
+    r"forecast\w*|expectations?|expected|outperform\w*|underperform\w*)\b",
+    re.IGNORECASE)
+
+# A numbered line ("4. ..." or "4) ...") that is about the watch item.
+NUMBERED_WATCH = re.compile(r"^\s*\d+[.)]\s.*\b(watch|concentration)\b",
+                            re.IGNORECASE | re.MULTILINE)
+
+# One word: letters/digits with $ or %, joined by . , ' or - inside (so $49.70M is one word).
+WORD = re.compile(r"[\w$%]+(?:[.,'’-][\w%]+)*")
+
+
+def word_count(text: str) -> int:
+    return len(WORD.findall(text))
+
+
+def check_wording(memo_text: str) -> list[str]:
+    """Rule breaks that a number check can't see. An empty list means it passed."""
+    problems = []
+    words = word_count(memo_text)
+    if words > MAX_WORDS:
+        problems.append(f"{words} words, over the {MAX_WORDS}-word limit")
+    talk = sorted({m.group(0).lower() for m in TARGET_TALK.finditer(memo_text)})
+    if talk:
+        problems.append("compares with a target the data doesn't have: " + ", ".join(talk))
+    if NUMBERED_WATCH.search(memo_text):
+        problems.append("the watch item is numbered like an action")
+    return problems
 
 
 def build_prompt(facts: str) -> tuple[str, str]:
@@ -168,19 +208,40 @@ def cost_usd(input_tokens: int, output_tokens: int) -> float | None:
     return (input_tokens * price_in + output_tokens * price_out) / 1_000_000
 
 
+MAX_ATTEMPTS = 2  # the first draft, plus one rewrite if a check fails
+
+
+def review(text: str, facts: str) -> tuple[list[str], list[str]]:
+    """Both checks: numbers not in the fact sheet, and wording rule breaks."""
+    return check_numbers(text, facts), check_wording(text)
+
+
 def produce_memo(facts: str, month_name: str, client=None, out_dir: Path = OUT_DIR) -> dict:
-    """Ask Claude for the memo, check every number, and save it (or save it as REJECTED)."""
+    """Ask Claude for the memo, check it, ask for one rewrite if needed, then save it
+    (or save it as REJECTED)."""
     system, user = build_prompt(facts)
-    text, tokens_in, tokens_out = ask_claude(system, user, client)
-    unknown = check_numbers(text, facts)
+    tokens_in = tokens_out = 0
+    for attempt in range(1, MAX_ATTEMPTS + 1):
+        text, used_in, used_out = ask_claude(system, user, client)
+        tokens_in, tokens_out = tokens_in + used_in, tokens_out + used_out
+        unknown, wording = review(text, facts)
+        if not unknown and not wording:
+            break
+        problems = [f"number not in the fact sheet: {n}" for n in unknown] + wording
+        # Same rules and facts, plus the list of what went wrong last time.
+        user = (build_prompt(facts)[1] + "\n\nYour previous draft broke these rules. "
+                "Write it again and fix them:\n" + "\n".join(f"- {p}" for p in problems))
+    passed = not unknown and not wording
     out_dir.mkdir(exist_ok=True)
     name = f"memo_2024_{month_name.lower()}"
-    path = out_dir / (f"{name}_REJECTED.md" if unknown else f"{name}.md")
+    path = out_dir / (f"{name}.md" if passed else f"{name}_REJECTED.md")
     header = (f"<!-- Written by {MODEL} from a fact sheet built by Python. "
-              f"Number check: {'FAILED ' + ', '.join(unknown) if unknown else 'passed'}. -->\n\n")
+              f"Number check: {'FAILED ' + ', '.join(unknown) if unknown else 'passed'}. "
+              f"Wording check: {'FAILED ' + '; '.join(wording) if wording else 'passed'}. "
+              f"Attempts: {attempt}. Words: {word_count(text)}. -->\n\n")
     path.write_text(header + text, encoding="utf-8")
-    return {"text": text, "unknown": unknown, "path": path,
-            "tokens_in": tokens_in, "tokens_out": tokens_out}
+    return {"text": text, "unknown": unknown, "wording": wording, "passed": passed,
+            "attempts": attempt, "path": path, "tokens_in": tokens_in, "tokens_out": tokens_out}
 
 
 if __name__ == "__main__":
@@ -200,10 +261,15 @@ if __name__ == "__main__":
     cost = cost_usd(result["tokens_in"], result["tokens_out"])
     print(f"Tokens: {result['tokens_in']:,} in, {result['tokens_out']:,} out"
           + (f"   cost about ${cost:.4f}" if cost is not None else ""))
-    if result["unknown"]:
-        print(f"REJECTED: the memo used numbers that are not in the fact sheet: {result['unknown']}")
+    if not result["passed"]:
+        print(f"REJECTED after {result['attempts']} attempts.")
+        if result["unknown"]:
+            print(f"  numbers not in the fact sheet: {result['unknown']}")
+        for problem in result["wording"]:
+            print(f"  {problem}")
         print(f"Saved for inspection only: {result['path']}")
         sys.exit(1)
-    print(f"Number check passed: every number in the memo is in the fact sheet.")
+    print(f"Checks passed on attempt {result['attempts']}: every number is in the fact sheet, "
+          f"no target talk, watch item unnumbered, {word_count(result['text'])} words.")
     print(f"Saved: {result['path']}\n")
     print(result["text"])
