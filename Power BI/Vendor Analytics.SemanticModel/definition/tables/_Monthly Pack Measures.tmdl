@@ -1,0 +1,68 @@
+table '_Monthly Pack Measures'
+	lineageTag: 41445f2e-4c8d-4293-854b-8fc62c44ff52
+
+	/// Revenue in each month, from the pack's monthly KPI files
+	measure 'Monthly Revenue' =
+			CALCULATE (
+			    SUM ( PackKPIs[Value] ),
+			    PackKPIs[Section] = "Monthly",
+			    PackKPIs[Metric] = "Revenue"
+			)
+		formatString: \$#,0
+		lineageTag: 8efa7983-8174-4084-82e0-192fc75a90a4
+
+	/// The newest month the pack has been built for, e.g. 2024-12
+	measure 'Latest Month' =
+			MAX ( PackKPIs[Month] )
+		formatString: General
+		lineageTag: 89f986c3-b8d8-4b06-bbda-78714dcbebbb
+
+	/// Revenue in the newest month only
+	measure 'Latest Month Revenue' =
+			VAR LatestMonth = [Latest Month]
+			RETURN
+			    CALCULATE ( [Monthly Revenue], PackKPIs[Month] = LatestMonth )
+		formatString: \$#,0
+		lineageTag: 208e46ca-c5ee-4c50-9d01-619dbb9f2a72
+
+	/// Full-year 2024 gross margin (all rows)
+	measure 'Full-year Gross Margin %' =
+			// The same full-year value is in every month's file, so AVERAGE, not SUM
+			DIVIDE (
+			    CALCULATE (
+			        AVERAGE ( PackKPIs[Value] ),
+			        PackKPIs[Section] = "Full year",
+			        PackKPIs[Metric] = "Gross margin %"
+			    ),
+			    100
+			)
+		formatString: 0.0%
+		lineageTag: ed21ca92-9bde-4e6e-8798-d57619193f8b
+
+	/// Base-case cash freed by the top play
+	measure 'Buying Discipline (base)' =
+			CALCULATE ( SUM ( PackPlays[Base] ), PackPlays[Play] = "Buying discipline" )
+		formatString: \$#,0
+		lineageTag: b334973b-46c3-4ccd-8123-c5bd7d3fbd3f
+
+	column Dummy
+		dataType: string
+		isHidden
+		lineageTag: 7a3c69e2-2fd7-41c7-9144-800f757f9b21
+		summarizeBy: none
+		sourceColumn: Dummy
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition '_Monthly Pack Measures' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Dummy = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Dummy", type text}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,106 @@
+table PackPlays
+	lineageTag: 966ec019-0b52-4d8f-a95e-16759d5b80c3
+
+	column Order
+		dataType: int64
+		formatString: 0
+		lineageTag: 3c7e9a6d-ecbc-420f-ae5a-07cae9d5ca92
+		summarizeBy: none
+		sourceColumn: Order
+
+		annotation SummarizationSetBy = Automatic
+
+	column Priority
+		dataType: string
+		lineageTag: 893d84cc-c822-490c-9efc-e211725a8969
+		summarizeBy: none
+		sourceColumn: Priority
+
+		annotation SummarizationSetBy = Automatic
+
+	column Play
+		dataType: string
+		lineageTag: 44955a78-fca9-46eb-a135-dfc66602dfe9
+		summarizeBy: none
+		sourceColumn: Play
+
+		annotation SummarizationSetBy = Automatic
+
+	column Kind
+		dataType: string
+		lineageTag: 589f1bef-eb90-4c3f-9f6f-da6f5bc10447
+		summarizeBy: none
+		sourceColumn: Kind
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cautious
+		dataType: double
+		formatString: \$#,0
+		lineageTag: 8fc7c2ff-463e-4193-86db-47287660b2f4
+		summarizeBy: none
+		sourceColumn: Cautious
+
+		annotation SummarizationSetBy = Automatic
+
+	column Base
+		dataType: double
+		formatString: \$#,0
+		lineageTag: b589a7d3-9aba-4170-9fe6-be519d0f1da9
+		summarizeBy: none
+		sourceColumn: Base
+
+		annotation SummarizationSetBy = Automatic
+
+	column Stretch
+		dataType: double
+		formatString: \$#,0
+		lineageTag: 70c56c6b-d869-4434-86c7-fed5ee409f12
+		summarizeBy: none
+		sourceColumn: Stretch
+
+		annotation SummarizationSetBy = Automatic
+
+	column WorksOn
+		dataType: double
+		formatString: \$#,0
+		lineageTag: 651dcd39-1052-4433-af23-dba33ca0df80
+		summarizeBy: none
+		sourceColumn: WorksOn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Owner
+		dataType: string
+		lineageTag: 47ccfc60-df19-47e2-8168-ad4e3f81c74f
+		summarizeBy: none
+		sourceColumn: Owner
+
+		annotation SummarizationSetBy = Automatic
+
+	column Assumptions
+		dataType: string
+		lineageTag: 6e0469f3-035c-48e5-aaed-e2ebf22e8b04
+		summarizeBy: none
+		sourceColumn: Assumptions
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PackPlays = m
+		mode: import
+		source =
+				let
+				    // The newest plays file: the plays are full-year, so the latest month's file is current
+				    Source = Folder.Files("C:\Projects\Vendor_Performance_Analysis\pack_output"),
+				    PlayFiles = Table.SelectRows(Source, each Text.EndsWith([Name], "_plays.csv")),
+				    Newest = Table.First(Table.Sort(PlayFiles, {{"Name", Order.Descending}})),
+				    Parsed = Table.PromoteHeaders(Csv.Document(Newest[Content], [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true]),
+				    // The risk and excise rows have no dollar values: make those proper blanks
+				    Blanks = Table.ReplaceValue(Parsed, "", null, Replacer.ReplaceValue, {"Cautious", "Base", "Stretch"}),
+				    Typed = Table.TransformColumnTypes(Blanks, {{"Kind", type text}, {"Play", type text}, {"Cautious", type number}, {"Base", type number}, {"Stretch", type number}, {"WorksOn", type number}, {"Owner", type text}, {"Priority", type text}, {"Assumptions", type text}}, "en-US"),
+				    // Keep the ranked order from the pack: 1 = first row
+				    Ordered = Table.AddIndexColumn(Typed, "Order", 1, 1, Int64.Type)
+				in
+				    Ordered
+
+	annotation PBI_ResultType = Table

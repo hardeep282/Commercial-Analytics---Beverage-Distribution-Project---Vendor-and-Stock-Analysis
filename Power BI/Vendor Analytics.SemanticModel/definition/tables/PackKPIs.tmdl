@@ -1,0 +1,59 @@
+table PackKPIs
+	lineageTag: ced33c93-9981-4a21-8bdf-1e251aa40bc5
+
+	column Month
+		dataType: string
+		lineageTag: d34d7f3d-d5d8-4cee-9162-ebcc17957486
+		summarizeBy: none
+		sourceColumn: Month
+
+		annotation SummarizationSetBy = Automatic
+
+	column Section
+		dataType: string
+		lineageTag: 0bda2b95-9c99-4b8b-9dda-fda00e09c0ad
+		summarizeBy: none
+		sourceColumn: Section
+
+		annotation SummarizationSetBy = Automatic
+
+	column Metric
+		dataType: string
+		lineageTag: ea05d653-cc12-48f5-ae17-33009349806d
+		summarizeBy: none
+		sourceColumn: Metric
+
+		annotation SummarizationSetBy = Automatic
+
+	column Value
+		dataType: double
+		lineageTag: d68c6ee0-33da-47a9-b506-a8607d3987b9
+		summarizeBy: none
+		sourceColumn: Value
+
+		annotation SummarizationSetBy = Automatic
+
+	column Unit
+		dataType: string
+		lineageTag: 891e8873-3a3f-4fd9-90a0-524a11928eb0
+		summarizeBy: none
+		sourceColumn: Unit
+
+		annotation SummarizationSetBy = Automatic
+
+	partition PackKPIs = m
+		mode: import
+		source =
+				let
+				    // Every month's KPI file the pack wrote: 2024-01_kpis.csv ... 2024-12_kpis.csv
+				    Source = Folder.Files("C:\Projects\Vendor_Performance_Analysis\pack_output"),
+				    KpiFiles = Table.SelectRows(Source, each Text.EndsWith([Name], "_kpis.csv")),
+				    Parsed = Table.AddColumn(KpiFiles, "Data", each Table.PromoteHeaders(Csv.Document([Content], [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]), [PromoteAllScalars = true])),
+				    Combined = Table.Combine(Parsed[Data]),
+				    // January has no "previous month", so that value is empty: make it a proper blank
+				    Blanks = Table.ReplaceValue(Combined, "", null, Replacer.ReplaceValue, {"Value"}),
+				    Typed = Table.TransformColumnTypes(Blanks, {{"Month", type text}, {"Section", type text}, {"Metric", type text}, {"Value", type number}, {"Unit", type text}}, "en-US")
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

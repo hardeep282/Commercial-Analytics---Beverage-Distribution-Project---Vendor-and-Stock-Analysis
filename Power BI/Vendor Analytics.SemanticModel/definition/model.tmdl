@@ -8,7 +8,7 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 1
 
-annotation PBI_QueryOrder = ["vendor_sales_summary","Vendor_Revenue","Vendor_Tiering","Vendor_Rankings","Pareto_Analysis","Loss_Making_Analysis","_Revenue Measures","_Commercial_Measures","_Logistics and Cost Measures","_Pareto_Conc_Measures","_Dynamic_Title_Measure","vw_PortfolioHealth","vw_ProfitLeakage","vw_CleanAnalysis","vw_FullCostAnalysis","vw_LogisticsCostSummary","_Conditional_Formatting"]
+annotation PBI_QueryOrder = ["vendor_sales_summary","Vendor_Revenue","Vendor_Tiering","Vendor_Rankings","Pareto_Analysis","Loss_Making_Analysis","_Revenue Measures","_Commercial_Measures","_Logistics and Cost Measures","_Pareto_Conc_Measures","_Dynamic_Title_Measure","vw_PortfolioHealth","vw_ProfitLeakage","vw_CleanAnalysis","vw_FullCostAnalysis","vw_LogisticsCostSummary","_Conditional_Formatting","PackKPIs","PackPlays","_Monthly Pack Measures"]
 
 annotation PBI_ProTooling = ["MCP-PBIModeling","DevMode"]
 
@@ -29,6 +29,9 @@ ref table vw_CleanAnalysis
 ref table vw_FullCostAnalysis
 ref table vw_LogisticsCostSummary
 ref table _Conditional_Formatting
+ref table PackKPIs
+ref table PackPlays
+ref table '_Monthly Pack Measures'
 
 ref cultureInfo en-IN
 
