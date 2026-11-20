@@ -1,5 +1,3 @@
-
-
 """Step 2 - the data-quality gate.
 
 Every check looks at the data and returns PASS, WARN or FAIL with a one-line reason.
@@ -43,9 +41,35 @@ class Check:
 
 
 def load_sources() -> dict[str, pd.DataFrame]:
-    """Read every source the pack uses, once."""
+    """Read every source the pack uses, once, and give the monthly table the views' vendor names."""
     engine = db.get_engine()
-    return {name: db.read_view(name, engine) for name in db.PACK_VIEWS}
+    return standardise_vendor_names({name: db.read_view(name, engine) for name in db.PACK_VIEWS})
+
+
+def vendor_aliases(raw: pd.DataFrame, known: set[str]) -> dict[str, str]:
+    """Other names of the same vendor number -> the one name the yearly views use.
+
+    The SQL (vw_VendorSalesBase) gives each vendor number one name. The monthly table has no
+    vendor number, so without this map a renamed vendor looks like an unknown one (R3).
+    """
+    aliases = {}
+    names = raw.assign(VendorName=raw["VendorName"].str.strip())[["VendorNumber", "VendorName"]]
+    for _, group in names.drop_duplicates().groupby("VendorNumber"):
+        in_views = [n for n in group["VendorName"] if n in known]
+        if len(in_views) == 1:
+            aliases.update({n: in_views[0] for n in group["VendorName"] if n != in_views[0]})
+    return aliases
+
+
+def standardise_vendor_names(data: dict[str, pd.DataFrame]) -> dict[str, pd.DataFrame]:
+    """Rename monthly vendors to the names the yearly views use (no-op without the raw table)."""
+    if "vendor_sales_summary" not in data:
+        return data
+    known = set(data["vw_VendorRevenueSummary"]["VendorName"])
+    aliases = vendor_aliases(data["vendor_sales_summary"], known)
+    monthly = data["monthly_demand"]
+    data["monthly_demand"] = monthly.assign(VendorName=monthly["VendorName"].str.strip().replace(aliases))
+    return data
 
 
 # --- checks on the yearly views ----------------------------------------------------------
@@ -161,8 +185,8 @@ def check_vendor_names_match(data: dict[str, pd.DataFrame]) -> Check:
         return Check(name, "PASS", "every monthly vendor name is in the views")
     share = unknown.sum() / by_vendor.sum() * 100
     detail = (
-        f"{len(unknown)} names not in the views, ${unknown.sum():,.0f} ({share:.2f}% of revenue); "
-        f"largest: {unknown.index[0]}"
+        f"{len(unknown)} vendor names in the monthly data are not in the yearly views, "
+        f"${unknown.sum():,.0f} ({share:.2f}% of revenue); largest: {unknown.index[0]}"
     )
     return Check(name, "FAIL" if share > UNMATCHED_NAMES_FAIL_PCT else "WARN", detail)
 
@@ -178,10 +202,12 @@ def check_vendor_drift(data: dict[str, pd.DataFrame]) -> Check:
     if off.empty:
         return Check(name, "PASS", f"all {len(both)} matched vendors within {VENDOR_DRIFT_PCT:g}%")
     biggest = (both["monthly"] - both["yearly"]).abs().idxmax()
+    gap = both.loc[biggest, "monthly"] - both.loc[biggest, "yearly"]
     return Check(
         name, "WARN",
-        f"{len(off)} of {len(both)} vendors differ by more than {VENDOR_DRIFT_PCT:g}%; "
-        f"largest in dollars: {biggest} (${both.loc[biggest, 'monthly'] - both.loc[biggest, 'yearly']:+,.0f})",
+        f"{len(off)} of {len(both)} vendors' monthly totals differ from their yearly totals by more "
+        f"than {VENDOR_DRIFT_PCT:g}%; largest in dollars: {biggest} "
+        f"(${abs(gap):,.0f} {'more' if gap > 0 else 'less'} in the monthly data)",
     )
 
 

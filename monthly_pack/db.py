@@ -60,6 +60,7 @@ PACK_VIEWS = (
     "vw_LogisticsCostSummary",  # freight and excise as % of revenue
     "vw_PortfolioHealth",       # one row per SKU: loss-making, dead stock, etc.
     "monthly_demand",           # table loaded by load_monthly.py: one row per sku per month
+    "vendor_sales_summary",     # raw yearly SKU table: vendor numbers (to match other names) and R3 tracing
 )
 
 
