@@ -12,8 +12,7 @@ table '_Monthly Pack Measures'
 		lineageTag: 8efa7983-8174-4084-82e0-192fc75a90a4
 
 	/// The newest month the pack has been built for, e.g. 2024-12
-	measure 'Latest Month' =
-			MAX ( PackKPIs[Month] )
+	measure 'Latest Month' = MAX ( PackKPIs[Month] )
 		formatString: General
 		lineageTag: 89f986c3-b8d8-4b06-bbda-78714dcbebbb
 
@@ -40,8 +39,7 @@ table '_Monthly Pack Measures'
 		lineageTag: ed21ca92-9bde-4e6e-8798-d57619193f8b
 
 	/// Base-case cash freed by the top play
-	measure 'Buying Discipline (base)' =
-			CALCULATE ( SUM ( PackPlays[Base] ), PackPlays[Play] = "Buying discipline" )
+	measure 'Buying Discipline (base)' = CALCULATE ( SUM ( PackPlays[Base] ), PackPlays[Play] = "Buying discipline" )
 		formatString: \$#,0
 		lineageTag: b334973b-46c3-4ccd-8123-c5bd7d3fbd3f
 
@@ -66,3 +64,4 @@ table '_Monthly Pack Measures'
 				    #"Changed Type"
 
 	annotation PBI_ResultType = Table
+

@@ -10064,6 +10064,16 @@ cultureInfo en-IN
 			            },
 			            "Weight": 0.9
 			          }
+			        },
+			        {
+			          "Controllable": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
 			        }
 			      ]
 			    },
@@ -10328,7 +10338,7 @@ cultureInfo en-IN
 			      "State": "Generated",
 			      "Terms": [
 			        {
-			          "Leakage severity": {
+			          "Severity": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -10347,6 +10357,342 @@ cultureInfo en-IN
 			        }
 			      },
 			      "State": "Generated"
+			    },
+			    "vw_portfoliohealth.sku_revenue": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "vw_PortfolioHealth",
+			          "ConceptualProperty": "SKU Revenue"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Revenue": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "vw_portfoliohealth.sku_gross_profit": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "vw_PortfolioHealth",
+			          "ConceptualProperty": "SKU Gross Profit"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gross profit": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_monthly_pack_measures.latest_month": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Monthly Pack Measures",
+			          "ConceptualProperty": "Latest Month"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Latest month built": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_monthly_pack_measures.fullyear_gross_margin_": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Monthly Pack Measures",
+			          "ConceptualProperty": "Full-year Gross Margin %"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Gross margin, full year 2024": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_monthly_pack_measures.monthly_revenue": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Monthly Pack Measures",
+			          "ConceptualProperty": "Monthly Revenue"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Monthly revenue": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_monthly_pack_measures.latest_month_revenue": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Monthly Pack Measures",
+			          "ConceptualProperty": "Latest Month Revenue"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Revenue, latest month": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "table_monthly_pack_measures.buying_discipline_base": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Monthly Pack Measures",
+			          "ConceptualProperty": "Buying Discipline (base)"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Buying discipline, base case": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "packkpis.month": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "PackKPIs",
+			          "ConceptualProperty": "Month"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Month": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "packplays.order": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "PackPlays",
+			          "ConceptualProperty": "Order"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "#": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "packplays.priority": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "PackPlays",
+			          "ConceptualProperty": "Priority"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Priority": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "packplays.play": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "PackPlays",
+			          "ConceptualProperty": "Play"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Play": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "packplays.kind": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "PackPlays",
+			          "ConceptualProperty": "Kind"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Kind of value": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "packplays.cautious": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "PackPlays",
+			          "ConceptualProperty": "Cautious"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Cautious": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "packplays.base": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "PackPlays",
+			          "ConceptualProperty": "Base"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Base": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "packplays.stretch": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "PackPlays",
+			          "ConceptualProperty": "Stretch"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Stretch": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "packplays.owner": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "PackPlays",
+			          "ConceptualProperty": "Owner"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Owner": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
 			    }
 			  },
 			  "Relationships": {

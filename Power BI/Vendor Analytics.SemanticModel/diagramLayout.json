@@ -228,6 +228,45 @@
             "width": 234
           },
           "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2384.0317852011922,
+            "y": 534.03071051873144
+          },
+          "nodeIndex": "_Monthly Pack Measures",
+          "nodeLineageTag": "41445f2e-4c8d-4293-854b-8fc62c44ff52",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2668.0317852011922,
+            "y": 546.03071051873144
+          },
+          "nodeIndex": "PackKPIs",
+          "nodeLineageTag": "ced33c93-9981-4a21-8bdf-1e251aa40bc5",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 2952.0317852011922,
+            "y": 496.03071051873144
+          },
+          "nodeIndex": "PackPlays",
+          "nodeLineageTag": "966ec019-0b52-4d8f-a95e-16759d5b80c3",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
         }
       ],
       "name": "All tables",

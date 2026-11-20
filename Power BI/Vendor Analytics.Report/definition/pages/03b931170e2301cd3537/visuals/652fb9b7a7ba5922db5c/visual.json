@@ -287,7 +287,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Revenue by month (from the pack\u2019s monthly KPI files)'"
+                  "Value": "'Revenue by month (from the pack’s monthly KPI files)'"
                 }
               }
             },
