@@ -1,13 +1,13 @@
-pyodbc==5.1.0
-anthropic==0.97.0
-python-dotenv==0.21.0
-pandas==2.2.2
-numpy==1.26.4
-matplotlib==3.9.2
-seaborn==0.13.2
-scikit-learn==1.7.1
-statsmodels==0.14.2
+# Monthly management pack (monthly_pack/), run_pack.ps1 and vendor_insights.py
+# Exact versions the pack and its 59 tests were run with (project .venv, Python 3.12, Nov 2026).
+# Install:  python -m pip install -r requirements.txt
+# Notebooks, ML and forecast_backtest.py use a different set: see requirements-notebooks.txt
+pandas==3.1.1
+numpy==2.5.5
+SQLAlchemy==2.1.8
+pyodbc==5.3.0
+python-dotenv==1.2.4
 openpyxl==3.1.5
-SQLAlchemy==2.0.36
-scipy==1.14.1
-mysql-connector-python==9.1.0
+anthropic==0.97.0
+reportlab==5.1.0
+pytest==9.2.0
